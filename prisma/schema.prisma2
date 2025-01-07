@@ -1,0 +1,30 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Carta {
+    id              Int         @id @default(autoincrement())
+    nombre          String
+    tipo            String
+    subtipo1        String
+    subtipo2        String
+    subtipo3?       String
+    subtipo4?       String
+    supertipo?      String
+    rareza          String
+    coste?          Int
+    expansion       String
+    imagen          String
+    text            String      @db.VarChar(1000)
+    costeBoveda?    Int
+    prohibida       Boolean     @default(false)
+    createdAt       DateTime?   @default(now())
+    updated_at      DateTime?   @default(now())
+    idLairen        Int
+}
+
