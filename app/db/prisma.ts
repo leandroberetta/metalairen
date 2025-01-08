@@ -1,8 +1,6 @@
-import { cartas, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-export type Card = cartas;
 
 export const prisma =
   globalForPrisma.prisma ||

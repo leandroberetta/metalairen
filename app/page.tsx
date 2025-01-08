@@ -1,14 +1,14 @@
 import { prisma } from "./db/prisma";
-import CardsSearch from "./components/CardsSearch";
 import { Suspense } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
+import CartaSearch from "./components/CartaSearch";
 
 export default async function Home() {
-  const cartas = await prisma.cartas.findMany();
+  const cartas = await prisma.carta.findMany();
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <CardsSearch cards={cartas} />
+      <CartaSearch cartas={cartas} />
     </Suspense>
   );
 }

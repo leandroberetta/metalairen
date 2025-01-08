@@ -1,193 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model cache {
-  key        String @id @db.VarChar(255)
-  value      String @db.MediumText
-  expiration Int
+model Carta {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  tipo        String
+  subtipo1    String?
+  subtipo2    String?
+  subtipo3    String?
+  subtipo4    String?
+  supertipo   String?
+  rareza      String
+  coste       Int
+  expansion   String
+  imagen      String
+  text        String    @db.VarChar(1000)
+  costeBoveda Int?
+  prohibida   Boolean   @default(false)
+  createdAt   DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+  idLairen    Int
+
+  @@map("cartas")
 }
 
-model cache_locks {
-  key        String @id @db.VarChar(255)
-  owner      String @db.VarChar(255)
-  expiration Int
-}
-
-model carta_mazo {
-  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  carta_id   BigInt    @db.UnsignedBigInt
-  mazo_id    BigInt    @db.UnsignedBigInt
-  seccion    String    @db.VarChar(255)
-  cantidad   Int
-  created_at DateTime? @db.Timestamp(0)
-  updated_at DateTime? @db.Timestamp(0)
-  cartas     cartas    @relation(fields: [carta_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "carta_mazo_carta_id_foreign")
-  mazos      mazos     @relation(fields: [mazo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "carta_mazo_mazo_id_foreign")
-
-  @@index([carta_id], map: "carta_mazo_carta_id_foreign")
-  @@index([mazo_id], map: "carta_mazo_mazo_id_foreign")
-}
-
-model cartas {
-  id           BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre       String       @db.VarChar(255)
-  tipo         String       @db.VarChar(255)
-  subtipo1     String       @db.VarChar(255)
-  subtipo2     String       @db.VarChar(255)
-  subtipo3     String?      @db.VarChar(255)
-  subtipo4     String?      @db.VarChar(255)
-  supertipo    String       @db.VarChar(255)
-  rareza       String       @db.VarChar(255)
-  coste        String       @db.VarChar(255)
-  expansion    String       @db.VarChar(255)
-  imagen       String       @db.VarChar(255)
-  texto        String       @db.VarChar(10000)
-  idLairen     Int
-  numeroTesoro Int?
-  created_at   DateTime?    @db.Timestamp(0)
-  updated_at   DateTime?    @db.Timestamp(0)
-  prohibida    Boolean?
-  carta_mazo   carta_mazo[]
-  stocks       stocks[]
-}
-
-model failed_jobs {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
-  connection String   @db.Text
-  queue      String   @db.Text
-  payload    String   @db.LongText
-  exception  String   @db.LongText
-  failed_at  DateTime @default(now()) @db.Timestamp(0)
-}
-
-model job_batches {
-  id             String  @id @db.VarChar(255)
-  name           String  @db.VarChar(255)
-  total_jobs     Int
-  pending_jobs   Int
-  failed_jobs    Int
-  failed_job_ids String  @db.LongText
-  options        String? @db.MediumText
-  cancelled_at   Int?
-  created_at     Int
-  finished_at    Int?
-}
-
-model jobs {
-  id           BigInt @id @default(autoincrement()) @db.UnsignedBigInt
-  queue        String @db.VarChar(255)
-  payload      String @db.LongText
-  attempts     Int    @db.UnsignedTinyInt
-  reserved_at  Int?   @db.UnsignedInt
-  available_at Int    @db.UnsignedInt
-  created_at   Int    @db.UnsignedInt
-
-  @@index([queue], map: "jobs_queue_index")
-}
-
-model mazos {
-  id             BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre         String           @db.VarChar(255)
-  user_id        BigInt           @db.UnsignedBigInt
-  created_at     DateTime?        @db.Timestamp(0)
-  updated_at     DateTime?        @db.Timestamp(0)
-  publico        Boolean
-  subtipo1       String           @db.VarChar(255)
-  subtipo2       String           @db.VarChar(255)
-  formato        String?          @db.VarChar(255)
-  carta_mazo     carta_mazo[]
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mazos_user_id_foreign")
-  torneo_usuario torneo_usuario[]
-
-  @@index([user_id], map: "mazos_user_id_foreign")
-}
-
-model migrations {
-  id        Int    @id @default(autoincrement()) @db.UnsignedInt
-  migration String @db.VarChar(255)
-  batch     Int
-}
-
-model password_reset_tokens {
-  email      String    @id @db.VarChar(255)
-  token      String    @db.VarChar(255)
-  created_at DateTime? @db.Timestamp(0)
-}
-
-model sessions {
-  id            String  @id @db.VarChar(255)
-  user_id       BigInt? @db.UnsignedBigInt
-  ip_address    String? @db.VarChar(45)
-  user_agent    String? @db.Text
-  payload       String  @db.LongText
-  last_activity Int
-
-  @@index([last_activity], map: "sessions_last_activity_index")
-  @@index([user_id], map: "sessions_user_id_index")
-}
-
-model stocks {
-  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  idLairen   Int
-  carta_id   BigInt    @db.UnsignedBigInt
-  user_id    BigInt    @db.UnsignedBigInt
-  variante   String    @db.VarChar(255)
-  cantidad   Int
-  created_at DateTime? @db.Timestamp(0)
-  updated_at DateTime? @db.Timestamp(0)
-  cartas     cartas    @relation(fields: [carta_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stocks_carta_id_foreign")
-  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stocks_user_id_foreign")
-
-  @@index([carta_id], map: "stocks_carta_id_foreign")
-  @@index([user_id], map: "stocks_user_id_foreign")
-}
-
-model torneo_usuario {
-  id           BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  torneo_id    BigInt    @db.UnsignedBigInt
-  participante String    @db.VarChar(255)
-  puesto       String    @db.VarChar(255)
-  mazo_id      BigInt    @db.UnsignedBigInt
-  created_at   DateTime? @db.Timestamp(0)
-  updated_at   DateTime? @db.Timestamp(0)
-  mazos        mazos     @relation(fields: [mazo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "torneo_usuario_mazo_id_foreign")
-  torneos      torneos   @relation(fields: [torneo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "torneo_usuario_torneo_id_foreign")
-
-  @@index([mazo_id], map: "torneo_usuario_mazo_id_foreign")
-  @@index([torneo_id], map: "torneo_usuario_torneo_id_foreign")
-}
-
-model torneos {
-  id             BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre         String           @db.VarChar(255)
-  fecha          DateTime         @db.Date
-  descripcion    String           @db.VarChar(255)
-  created_at     DateTime?        @db.Timestamp(0)
-  updated_at     DateTime?        @db.Timestamp(0)
-  lugar          String?          @db.VarChar(255)
-  provincia      String?          @db.VarChar(255)
-  torneo_usuario torneo_usuario[]
-}
-
-model users {
-  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre            String    @db.VarChar(255)
-  apellido          String    @db.VarChar(255)
-  username          String    @unique(map: "users_username_unique") @db.VarChar(255)
-  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
-  email_verified_at DateTime? @db.Timestamp(0)
-  last_login        DateTime? @db.Timestamp(0)
-  password          String    @db.VarChar(255)
-  remember_token    String?   @db.VarChar(100)
-  created_at        DateTime? @db.Timestamp(0)
-  updated_at        DateTime? @db.Timestamp(0)
-  mazos             mazos[]
-  stocks            stocks[]
-}
