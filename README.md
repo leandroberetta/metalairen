@@ -14,7 +14,7 @@ docker run -d \
   -e POSTGRES_USER=metalairen \
   -e POSTGRES_PASSWORD=metalairen \
   -e POSTGRES_DB=metalairen \
-   -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql \
+   -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
   -p 5432:5432 \
   postgres:latest
 ```
