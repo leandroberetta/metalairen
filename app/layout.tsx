@@ -18,8 +18,10 @@ export default function RootLayout({
   return (
     <html className="dark">
       <body className="dark:bg-gray-900 dark:text-white">
-        <NavBar />     
-        {children}   
+        <div className="container mx-auto">
+          <NavBar />
+          {children}   
+          </div>     
       </body>
     </html>
   );

@@ -21,8 +21,8 @@ export default function SearchBar({ filters }: { filters: React.ReactNode }) {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="container mx-auto flex">
+        <div className="mx-auto">
+            <div className=" mx-auto flex pb-4">
                 <div className="grow">
                     <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">

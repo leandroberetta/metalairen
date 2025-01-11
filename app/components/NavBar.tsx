@@ -8,7 +8,7 @@ export default function Navbar() {
     const pathName = usePathname();
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="mx-auto p-4">
             <nav className="dark:bg-gray-900">
                 <div className="flex flex-wrap items-center justify-between">
                     <h1 className="text-4xl font-extrabold dark:text-white md:text-4xl lg:text-4xl">
@@ -22,13 +22,13 @@ export default function Navbar() {
                     <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                         <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
-                                <Link href="/" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white', { 'md:dark:text-yellow-400': pathName === '/' })}>Cartas</Link>
+                                <Link href="/" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/' })}>Cartas</Link>
                             </li>
                             <li>
-                                <Link href="/mazos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white', { 'md:dark:text-yellow-400': pathName === '/mazos' })}>Mazos</Link>
+                                <Link href="/mazos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/mazos' })}>Mazos</Link>
                             </li>
                             <li>
-                                <Link href="/torneos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white', { 'md:dark:text-yellow-400': pathName === '/torneos' })}>Torneos</Link>
+                                <Link href="/torneos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/torneos' })}>Torneos</Link>
                             </li>
                         </ul>
                     </div>

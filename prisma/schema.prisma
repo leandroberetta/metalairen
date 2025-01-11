@@ -31,8 +31,26 @@ model Carta {
   prohibida   Boolean   @default(false)
   createdAt   DateTime? @default(now())
   updated_at  DateTime? @default(now())
-  idLairen    Int
+  idLairen    Int       @unique
 
   @@map("cartas")
 }
 
+model Mazo {
+  id       Int     @id @default(autoincrement())
+  nombre   String
+  cartas   MazoCarta[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MazoCarta {
+  id        Int    @id @default(autoincrement())
+  mazoId    Int
+  cartaId   Int
+  seccion   String
+
+  mazo      Mazo   @relation(fields: [mazoId], references: [id])
+
+  @@unique([mazoId, cartaId, seccion])
+}
