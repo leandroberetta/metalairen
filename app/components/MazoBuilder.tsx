@@ -101,13 +101,69 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     const handleImportClick = async () => {
         const text = await navigator.clipboard.readText();
         console.log(text);
+        const mazo = procesarListaMazo(text, cartas);
+        console.log(mazo);
+        setMazo(mazo);
+    }
+
+    function procesarListaMazo(mazo: string, cartas: Carta[]): Mazo {
+        const lines = mazo.trim().split(/\r\n|\n|\r/);
+        const sections: Mazo = {
+            reino: [],
+            boveda: [],
+            sideboard: []
+        };
+        let currentSection: keyof Mazo | '' = '';
+
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+
+            if (trimmedLine.startsWith('Reino:')) {
+                currentSection = 'reino';
+                continue;
+            }
+
+            if (trimmedLine.startsWith('Bóveda:')) {
+                currentSection = 'boveda';
+                continue;
+            }
+
+            if (trimmedLine.startsWith('Side Deck:')) {
+                currentSection = 'sideboard';
+                continue;
+            }
+
+            if (currentSection) {
+                const cartasProcesadas = procesarCarta(trimmedLine, cartas);
+                if (cartasProcesadas) {
+                    sections[currentSection].push(...cartasProcesadas);
+                }
+            }
+        }
+
+        return sections;
+    }
+
+    function procesarCarta(line: string, cartas: Carta[]): Carta[] | undefined {
+        const match = line.match(/(.+?)\s+x(\d+)/);
+        if (match) {
+            const nombre = match[1].trim();
+            const cantidad = parseInt(match[2].trim(), 10);
+            const carta = cartas.find((c) => c.nombre === nombre);
+
+            if (carta) {
+                // Devuelve un array con `cantidad` copias de la carta
+                return Array(cantidad).fill(carta);
+            }
+        }
+        return undefined;
     }
 
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4">
                 <SearchBar filters={CartaFilters()} />
-                <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-4">
+                <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-8">
                     <div className="md:col-span-2 lg:col-span-1">
                         <MazoSections
                             mazo={mazo}
