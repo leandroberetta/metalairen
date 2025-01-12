@@ -8,7 +8,7 @@ import { Carta } from "@prisma/client";
 import SearchBar from "./SearchBar";
 import CartaFilters from "./CartaFilters";
 import { CartaCantidad } from "./MazoSection";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export interface Mazo {
     reino: Carta[];
@@ -19,7 +19,6 @@ export interface Mazo {
 export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     const [mazo, setMazo] = useState<Mazo>({ reino: [], boveda: [], sideboard: [] });
     const searchParams = useSearchParams();
-    const router = useRouter();
 
     useEffect(() => {
         const reinoQueryParamCartas = searchParams.get('reino')?.split(';');

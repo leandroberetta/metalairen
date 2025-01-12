@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useRouter, ReadonlyURLSearchParams } from 'next/navigation';
+import { useSearchParams, ReadonlyURLSearchParams } from 'next/navigation';
 
 const Select = ({ options, label, parameter, allowMultipleSelections = true, setQueryParameter = true }: { options: { [id: string]: string }, label: string, parameter: string, allowMultipleSelections?: boolean, setQueryParameter?: boolean }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
