@@ -8,13 +8,15 @@ import { useState } from "react";
 import clsx from "clsx";
 import Select from "./Select";
 
-export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, onImportClick, onExportClick, onDownloadClick }: {
+export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, onImportClick, onExportClick, onDownloadClick, validationErrors, bovedaPuntos}: {
     mazo: Mazo, onPlusClick: (carta: Carta) => void,
     onMinusClick: (carta: Carta) => void,
     onSideboardClick: (carta: Carta, fromSection: string) => void
     onImportClick: () => void,
     onExportClick: () => void,
-    onDownloadClick: () => void
+    onDownloadClick: () => void,
+    validationErrors: string[]
+    bovedaPuntos?: number,
 }) {
     const [mostrarChart, setMostrarChart] = useState(false);
 
@@ -87,6 +89,19 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
                     }} label={"Subtipo"} parameter={"subtipo2"} allowMultipleSelections={false} />
                 </div>
             </div>
+            <div>
+                {validationErrors && validationErrors.length > 0 &&
+                    <div className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <div>
+                            <span className="font-medium">Errores de validación:</span>
+                            <ul className="mt-1.5 list-disc list-inside">
+                                {validationErrors.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>}
+            </div>
             {mostrarChart && <MazoChart mazo={mazo} />}
             <div>
                 <MazoSection nombre="Reino" sectionKey="reino" section={mazo.reino} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onSideboardClick={onSideboardClick} />
@@ -95,7 +110,7 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
                 <MazoSection nombre="Sidedeck" sectionKey="sidedeck" section={mazo.sideboard} onSideboardClick={onSideboardClick} />
             </div>
             <div>
-                <MazoSection nombre="Bóveda" sectionKey="boveda" section={mazo.boveda} onMinusClick={onMinusClick} />
+                <MazoSection nombre="Bóveda" sectionKey="boveda" section={mazo.boveda} onMinusClick={onMinusClick} bovedaPuntos={bovedaPuntos} />
             </div>
         </div>
     );

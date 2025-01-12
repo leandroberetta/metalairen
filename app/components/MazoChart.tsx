@@ -108,7 +108,10 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
 
     return (
         <div id="column-chart">
-            <ReactApexChart options={options} series={series} type="bar" height={250} />
+            <div className="flex py-4">
+                <h4 className="text-xl font-bold dark:text-white flex-grow">Composición del reino por costes</h4>
+            </div>
+            <ReactApexChart options={options} series={series} type="bar" height={150} />
         </div>
     );
 }

@@ -18,6 +18,8 @@ export interface Mazo {
 
 export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     const [mazo, setMazo] = useState<Mazo>({ reino: [], boveda: [], sideboard: [] });
+    const [bovedaPuntos, setBovedaPuntos] = useState(0);
+    const [errors, setErrors] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -29,6 +31,11 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
         const bovedaQueryParamCartas = searchParams.get('boveda')?.split(';');
         const bovedaCartas = bovedaQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+        
+        if (bovedaCartas) {
+            const bovedaPuntos = bovedaCartas.reduce((acc, carta) => acc + carta.coste, 0);
+            setBovedaPuntos(bovedaPuntos);
+        }
 
         setMazo({
             reino: reinoCartas || [],
@@ -39,29 +46,42 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
-            setMazo((prevMazo) => ({
-                ...prevMazo,
-                boveda: [...prevMazo.boveda, carta],
-            }));
+            const cartaFound = mazo.boveda.find((c) => c.id === carta.id);
+            if (!cartaFound) {
+                setMazo((prevMazo) => ({
+                    ...prevMazo,
+                    boveda: [...prevMazo.boveda, carta],
+                }));
+                setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
+            }
         } else {
-            setMazo((prevMazo) => ({
-                ...prevMazo,
-                reino: [...prevMazo.reino, carta],
-            }));
+            const cartaAmount = mazo.reino.filter((c) => c.id === carta.id).length;
 
-            addCartaQueryParams(carta, 'reino');
+            if (cartaAmount < 4) {
+                setMazo((prevMazo) => ({
+                    ...prevMazo,
+                    reino: [...prevMazo.reino, carta],
+                }));
+                addCartaQueryParams(carta, 'reino');
+            }
         }
     }
 
     const handleCartaPlusClick = (carta: Carta) => {
         if (carta.tipo !== 'TESORO') {
-            setMazo((prevMazo) => ({
-                ...prevMazo,
-                reino: [...prevMazo.reino, carta],
-            }));
+            const cartaReinoAmount = mazo.reino.filter((c) => c.id === carta.id).length;
+            const cartaSidedeckAmount = mazo.sideboard.filter((c) => c.id === carta.id).length;
+            const cartaAmount = cartaReinoAmount + cartaSidedeckAmount;
+            if (cartaAmount < 4) {
+                console.log("menor a 4");
+                setMazo((prevMazo) => ({
+                    ...prevMazo,
+                    reino: [...prevMazo.reino, carta],
+                }));
+                addCartaQueryParams(carta, 'reino');
+            }
         }
 
-        addCartaQueryParams(carta, 'reino');
     }
 
     const handleCartaMinusClick = (carta: Carta) => {
@@ -85,6 +105,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 ...prevMazo,
                 boveda: prevMazo.boveda.filter((c) => c.id !== carta.id),
             }));
+            setBovedaPuntos((prevPuntos) => prevPuntos - carta.coste);
         }
     }
 
@@ -127,13 +148,21 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     const handleImportClick = async () => {
         const text = await navigator.clipboard.readText();
         const mazo = procesarListaMazo(text, cartas);
+        const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + carta.coste, 0);
+        setBovedaPuntos(bovedaPuntos);
         addBulkCartaQueryParams(mazo);
         setMazo(mazo);
     }
 
     const handleExportClick = () => {
-        const mazoString = exportarListaMazo(mazo);
-        navigator.clipboard.writeText(mazoString);
+        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+        console.log(errors);
+        setErrors(errors);
+        if (errors.length === 0) {
+            console.log("exporto");
+            const mazoString = exportarListaMazo(mazo);
+            navigator.clipboard.writeText(mazoString);
+        }
     }
 
     const getFormattedDate = () => {
@@ -199,7 +228,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 }
             }
         }
-        
+
         window.history.replaceState(null, '', `?${params.toString()}`);
     }
 
@@ -348,6 +377,53 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         return undefined;
     }
 
+    const validateMazo = (mazo: Mazo, subtipo1: string, subtipo2: string): string[] => {
+        const REINO_MAX = 60;
+        const REINO_MIN = 45;
+        const SIDEDECK_MAX = 7;
+        const BOVEDA_MAX = 15;
+        const REINO_CARD_LIMIT = 4;
+        const BOVEDA_CARD_LIMIT = 1;
+        const BOVEDA_PUNTOS_MAX = 30;
+
+        const errors: string[] = [];
+
+        if (mazo.reino.length < REINO_MIN) {
+            errors.push(`El mazo debe tener al menos ${REINO_MIN} cartas en el reino.`);
+        }
+
+        if (mazo.reino.length > REINO_MAX) {
+            errors.push(`El mazo no puede tener más de ${REINO_MAX} cartas en el reino.`);
+        }
+
+        if (mazo.sideboard.length < SIDEDECK_MAX) {
+            errors.push(`El mazo debe tener al menos ${SIDEDECK_MAX} cartas en el sidedeck.`);
+        }
+
+        if (mazo.sideboard.length > SIDEDECK_MAX) {
+            errors.push(`El mazo no puede tener más de ${SIDEDECK_MAX} cartas en el sidedeck.`);
+        }
+
+        if (mazo.boveda.length < BOVEDA_MAX) {
+            errors.push(`El mazo debe tener al menos ${BOVEDA_MAX} cartas en la bóveda.`);
+        }
+
+        if (mazo.boveda.length > BOVEDA_MAX) {
+            errors.push(`El mazo no puede tener más de ${BOVEDA_MAX} cartas en la bóveda.`);
+        }
+
+        if (!subtipo1 || !subtipo2) {
+            errors.push('Los subtipos son requeridos.');
+        }
+
+        if (bovedaPuntos > BOVEDA_PUNTOS_MAX) {
+            errors.push(`La bóveda no puede tener más de ${BOVEDA_PUNTOS_MAX} puntos.`);
+        }
+
+        return errors;
+    }
+
+
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4">
@@ -361,7 +437,9 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                             onSideboardClick={handleCartaSideboardClick}
                             onImportClick={handleImportClick}
                             onExportClick={handleExportClick}
-                            onDownloadClick={handleDownloadClick} />
+                            onDownloadClick={handleDownloadClick}
+                            validationErrors={errors}
+                            bovedaPuntos={bovedaPuntos} />
                     </div>
                     <div className="md:col-span-3 lg:col-span-2">
                         <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} />
