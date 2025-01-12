@@ -103,6 +103,8 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                     sideboard: [...prevMazo.sideboard, carta]
                 };
             });
+
+            switchCartaQueryParams(carta, 'reino', 'sideboard');
         } else {
             setMazo((prevMazo) => {
                 const index = prevMazo.sideboard.findIndex((c) => c.id === carta.id);
@@ -117,6 +119,8 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                     reino: [...prevMazo.reino, carta]
                 };
             });
+
+            switchCartaQueryParams(carta, 'sideboard', 'reino');
         }
     }
 
@@ -171,6 +175,32 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         link.click();
 
         URL.revokeObjectURL(url);
+    }
+
+    const switchCartaQueryParams = (carta: Carta, fromSection: string, toSection: string) => {
+        const currentParams = searchParams?.toString() || '';
+        const params = new URLSearchParams(currentParams);
+
+        const fromSectionParams = searchParams.get(fromSection);
+        const toSectionParams = searchParams.get(toSection);
+
+        const toSectionArray = toSectionParams ? toSectionParams.split(';') : [];
+        toSectionArray.push(carta.nombre);
+        params.set(toSection, toSectionArray.join(';'));
+
+        if (fromSectionParams) {
+            const fromSectionArray = fromSectionParams.split(';');
+            const index = fromSectionArray.findIndex((c) => c === carta.nombre);
+            if (index !== -1) {
+                fromSectionArray.splice(index, 1);
+                params.set(fromSection, fromSectionArray.join(';'));
+                if (fromSectionArray.length === 0) {
+                    params.delete(fromSection);
+                }
+            }
+        }
+        
+        window.history.replaceState(null, '', `?${params.toString()}`);
     }
 
     const addCartaQueryParams = (carta: Carta, section: string) => {
