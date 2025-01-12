@@ -182,11 +182,11 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             const reinoArray = sectionParams.split(';');
             reinoArray.push(carta.nombre);
             params.set(section, reinoArray.join(';'));
-            router.push(`?${params.toString()}`, { scroll: false });
+            router.replace(`?${params.toString()}`, { scroll: false });
         } else {
             const params = new URLSearchParams(searchParams?.toString() || '');
             params.set(section, carta.nombre);
-            router.push(`?${params.toString()}`, { scroll: false });
+            router.replace(`?${params.toString()}`, { scroll: false });
         }
     }
 
@@ -211,7 +211,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             params.set('boveda', bovedaArray.join(';'));
         }
 
-        router.push(`?${params.toString()}`, { scroll: false });
+        router.replace(`?${params.toString()}`, { scroll: false });
     }
 
     const removeCartaQueryParams = (carta: Carta, section: string) => {
@@ -227,7 +227,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 if (reinoArray.length === 0) {
                     params.delete(section);
                 }
-                router.push(`?${params.toString()}`, { scroll: false });
+                router.replace(`?${params.toString()}`, { scroll: false });
             }
         }
     }
