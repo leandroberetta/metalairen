@@ -16,15 +16,16 @@ export function MazoSection({ nombre, sectionKey, section, onPlusClick, onMinusC
     onSideboardClick?: (carta: Carta, fromSection: string) => void
 }) {
 
-    const sectionReduced = section.reduce((acc: CartaCantidad[], carta) => {
+    const sectionReduced = Object.values(
+        section.reduce((acc: Record<number, CartaCantidad>, carta) => {
         if (acc[carta.id]) {
             acc[carta.id].cantidad++;
         } else {
             acc[carta.id] = { ...carta, cantidad: 1 };
         }
         return acc;
-    }, []);
-
+    }, {})
+    );
     return (
         <>
             <div className="flex pb-4">

@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CartaSearch from "../components/CartaSearch";
 import { MazoSections } from "./MazoSections";
 import { Carta } from "@prisma/client";
 import SearchBar from "./SearchBar";
 import CartaFilters from "./CartaFilters";
+import { CartaCantidad } from "./MazoSection";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface Mazo {
     reino: Carta[];
@@ -16,9 +18,27 @@ export interface Mazo {
 
 export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     const [mazo, setMazo] = useState<Mazo>({ reino: [], boveda: [], sideboard: [] });
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    useEffect(() => {
+        const reinoQueryParamCartas = searchParams.get('reino')?.split(';');
+        const reinoCartas = reinoQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+
+        const sideboardQueryParamCartas = searchParams.get('sideboard')?.split(';');
+        const sideboardCartas = sideboardQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+
+        const bovedaQueryParamCartas = searchParams.get('boveda')?.split(';');
+        const bovedaCartas = bovedaQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+
+        setMazo({
+            reino: reinoCartas || [],
+            sideboard: sideboardCartas || [],
+            boveda: bovedaCartas || []
+        });
+    }, [searchParams, cartas]);
 
     const handleCartaClick = (carta: Carta) => {
-        console.log(carta);
         if (carta.tipo === 'TESORO') {
             setMazo((prevMazo) => ({
                 ...prevMazo,
@@ -29,21 +49,23 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 ...prevMazo,
                 reino: [...prevMazo.reino, carta],
             }));
+
+            addCartaQueryParams(carta, 'reino');
         }
     }
 
     const handleCartaPlusClick = (carta: Carta) => {
-        console.log(carta);
         if (carta.tipo !== 'TESORO') {
             setMazo((prevMazo) => ({
                 ...prevMazo,
                 reino: [...prevMazo.reino, carta],
             }));
         }
+
+        addCartaQueryParams(carta, 'reino');
     }
 
     const handleCartaMinusClick = (carta: Carta) => {
-        console.log(carta);
         if (carta.tipo !== 'TESORO') {
             setMazo((prevMazo) => {
                 const index = prevMazo.reino.findIndex((c) => c.id === carta.id);
@@ -57,6 +79,8 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                     ],
                 };
             });
+
+            removeCartaQueryParams(carta, 'reino');
         } else {
             setMazo((prevMazo) => ({
                 ...prevMazo,
@@ -66,7 +90,6 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     }
 
     const handleCartaSideboardClick = (carta: Carta, fromSection: string) => {
-        console.log(carta);
         if (fromSection === 'reino') {
             setMazo((prevMazo) => {
                 const index = prevMazo.reino.findIndex((c) => c.id === carta.id);
@@ -100,10 +123,152 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
     const handleImportClick = async () => {
         const text = await navigator.clipboard.readText();
-        console.log(text);
         const mazo = procesarListaMazo(text, cartas);
-        console.log(mazo);
+        addBulkCartaQueryParams(mazo);
         setMazo(mazo);
+    }
+
+    const handleExportClick = () => {
+        const mazoString = exportarListaMazo(mazo);
+        navigator.clipboard.writeText(mazoString);
+    }
+
+    const getFormattedDate = () => {
+        const now = new Date();
+      
+        const pad = (num: number) => num.toString().padStart(2, '0');
+
+        const day = pad(now.getDate());
+        const month = pad(now.getMonth() + 1); 
+        const year = now.getFullYear().toString().slice(-2);
+        const hours = pad(now.getHours());
+        const minutes = pad(now.getMinutes());
+        const seconds = pad(now.getSeconds());
+      
+        return `${day}${month}${year}${hours}${minutes}${seconds}`;
+      };
+
+    const handleDownloadClick = () => {
+        const mazoString = exportarListaMazo(mazo);
+        const blob = new Blob([mazoString], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const subtipo1 = searchParams.get('subtipo1')?.toLowerCase() || '';
+        const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
+
+        const link = document.createElement('a');
+        
+        if (subtipo1 && subtipo2) {
+            link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
+        } else if (subtipo1) {
+            link.download = `mazo-${subtipo1}-${getFormattedDate()}.txt`;
+        } else if (subtipo2) {
+            link.download = `mazo-${subtipo2}-${getFormattedDate()}.txt`;
+        } else {
+            link.download = `mazo-${getFormattedDate()}.txt`;
+        }
+
+        link.href = url;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    const addCartaQueryParams = (carta: Carta, section: string) => {
+        const sectionParams = searchParams.get(section);
+        const params = new URLSearchParams(searchParams?.toString() || '');
+
+        if (sectionParams) {
+            const reinoArray = sectionParams.split(';');
+            reinoArray.push(carta.nombre);
+            params.set(section, reinoArray.join(';'));
+            router.push(`?${params.toString()}`, { scroll: false });
+        } else {
+            const params = new URLSearchParams(searchParams?.toString() || '');
+            params.set(section, carta.nombre);
+            router.push(`?${params.toString()}`, { scroll: false });
+        }
+    }
+
+    const addBulkCartaQueryParams = (mazo: Mazo) => {
+        const params = new URLSearchParams(searchParams?.toString() || '');
+        params.delete('reino');
+        params.delete('sideboard');
+        params.delete('boveda');
+
+        if (mazo.reino.length > 0) {
+            const reinoArray = mazo.reino.map((carta) => carta.nombre);
+            params.set('reino', reinoArray.join(';'));
+        }
+
+        if (mazo.sideboard.length > 0) {
+            const sideboardArray = mazo.sideboard.map((carta) => carta.nombre);
+            params.set('sideboard', sideboardArray.join(';'));
+        }
+
+        if (mazo.boveda.length > 0) {
+            const bovedaArray = mazo.boveda.map((carta) => carta.nombre);
+            params.set('boveda', bovedaArray.join(';'));
+        }
+
+        router.push(`?${params.toString()}`, { scroll: false });
+    }
+
+    const removeCartaQueryParams = (carta: Carta, section: string) => {
+        const sectionParams = searchParams.get(section);
+        const params = new URLSearchParams(searchParams?.toString() || '');
+
+        if (sectionParams) {
+            const reinoArray = sectionParams.split(';');
+            const index = reinoArray.findIndex((c) => c === carta.nombre);
+            if (index !== -1) {
+                reinoArray.splice(index, 1);
+                params.set(section, reinoArray.join(';'));
+                if (reinoArray.length === 0) {
+                    params.delete(section);
+                }
+                router.push(`?${params.toString()}`, { scroll: false });
+            }
+        }
+    }
+
+    function exportarListaMazo(mazo: Mazo): string {
+        const reinoReduced = Object.values(
+            mazo.reino.reduce((acc: Record<number, CartaCantidad>, carta) => {
+                if (acc[carta.id]) {
+                    acc[carta.id].cantidad++;
+                } else {
+                    acc[carta.id] = { ...carta, cantidad: 1 };
+                }
+                return acc;
+            }, {})
+        );
+        const sideboardReduced = Object.values(
+            mazo.sideboard.reduce((acc: Record<number, CartaCantidad>, carta) => {
+                if (acc[carta.id]) {
+                    acc[carta.id].cantidad++;
+                } else {
+                    acc[carta.id] = { ...carta, cantidad: 1 };
+                }
+                return acc;
+            }, {})
+        );
+        const bovedaReduced = Object.values(
+            mazo.boveda.reduce((acc: Record<number, CartaCantidad>, carta) => {
+                if (acc[carta.id]) {
+                    acc[carta.id].cantidad++;
+                } else {
+                    acc[carta.id] = { ...carta, cantidad: 1 };
+                }
+                return acc;
+            }, {})
+        );
+
+        const reino = reinoReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+        const boveda = bovedaReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+        const sideboard = sideboardReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+
+        return `Reino: (total: ${mazo.reino.length})\n${reino}\n\nBóveda: (total: ${mazo.boveda.length})\n${boveda}\n\nSide Deck (total: ${mazo.sideboard.length})\n${sideboard}`;
     }
 
     function procesarListaMazo(mazo: string, cartas: Carta[]): Mazo {
@@ -152,7 +317,6 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             const carta = cartas.find((c) => c.nombre === nombre);
 
             if (carta) {
-                // Devuelve un array con `cantidad` copias de la carta
                 return Array(cantidad).fill(carta);
             }
         }
@@ -170,7 +334,9 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                             onPlusClick={handleCartaPlusClick}
                             onMinusClick={handleCartaMinusClick}
                             onSideboardClick={handleCartaSideboardClick}
-                            onImportClick={handleImportClick} />
+                            onImportClick={handleImportClick}
+                            onExportClick={handleExportClick}
+                            onDownloadClick={handleDownloadClick} />
                     </div>
                     <div className="md:col-span-3 lg:col-span-2">
                         <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} />

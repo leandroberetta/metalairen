@@ -1,10 +1,8 @@
 "use client";
 
 import { } from "react";
-import SearchBar from "./SearchBar";
 import { useSearchParams } from "next/navigation";
 import CartaList from "./CartaList";
-import CartaFilters from "./CartaFilters";
 import { Carta } from "@prisma/client";
 
 export default function CartaSearch({ cartas, onCartaClick }: { cartas: Carta[], onCartaClick?: (carta: Carta) => void }) {

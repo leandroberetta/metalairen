@@ -42,7 +42,7 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
             } else if (carta.tipo === 'ARMA') {
                 conteos["Arma"][String(carta.coste)]++;
             } else {
-                conteos["Monumento"][String(carta.coste)]
+                conteos["Monumento"][String(carta.coste)]++;
             }
         });
 
@@ -55,8 +55,7 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
         }));
 
         setSeries(updatedSeries); 
-        console.log(updatedSeries);
-    }, [mazo]);
+    }, [mazo, series]);
 
     const options: ApexOptions = {
         colors: ["#243674", "#961a7f", "#be1523", "#f0941d", "#08683a"],

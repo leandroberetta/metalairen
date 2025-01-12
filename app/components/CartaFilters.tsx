@@ -1,4 +1,4 @@
-import MultiCheckboxSelect from "./MultiSelect";
+import Select from "./Select";
 
 export default function CardFilters() {
     return (
@@ -8,7 +8,7 @@ export default function CardFilters() {
             </h1>
             <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-2">
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "FUNDAMENTOS": "Fundamentos",
                         "PACTO SECRETO": "Pacto secreto",
                         "TRONO COMPARTIDO": "Trono compartido",
@@ -17,23 +17,24 @@ export default function CardFilters() {
                     }} label={"Expansiones"} parameter="expansiones" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "DOMINACION": "Dominación",
                         "ETHERNAL": "Ethernal",
-                    }} label={"Formatos"} parameter="formatos"/>
+                    }} label={"Formatos"} parameter="formatos" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "ACCION": "Acción",
                         "ACCION RAPIDA": "Acción Rápida",
                         "UNIDAD": "Unidad",
+                        "TESORO": "Tesoro",
                         "MONUMENTO": "Monumento",
                         "ARMA": "Arma",
                         "FICHA": "Ficha"
                     }} label={"Tipos"} parameter="tipos" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "ANIMAL": "Animal",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
@@ -53,7 +54,7 @@ export default function CardFilters() {
                     }} label={"Subtipos"} parameter="subtipos" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "ANIMAL": "Animal",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
@@ -73,12 +74,12 @@ export default function CardFilters() {
                     }} label={"Subtipos"} parameter="subtipos2" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "REALEZA": "Realeza"
                     }} label={"Supertipos"} parameter="supertipos" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "0": "0",
                         "1": "1",
                         "2": "2",
@@ -92,7 +93,7 @@ export default function CardFilters() {
                     }} label={"Costes"} parameter="costes" />
                 </div>
                 <div className="">
-                    <MultiCheckboxSelect options={{
+                    <Select options={{
                         "BRONCE": "Bronce",
                         "PLATA": "Plata",
                         "ORO": "Oro",

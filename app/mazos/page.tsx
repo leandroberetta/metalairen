@@ -1,5 +1,7 @@
 import { prisma } from "../db/prisma";
 import MazoBuilder from "../components/MazoBuilder";
+import { Suspense } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default async function Mazos() {
     const cartas = await prisma.carta.findMany({
@@ -12,6 +14,8 @@ export default async function Mazos() {
       });
 
     return (
-        <MazoBuilder cartas={cartas} />
+        <Suspense fallback={<LoadingSpinner />}>
+            <MazoBuilder cartas={cartas} />
+        </Suspense>
     );
 }
