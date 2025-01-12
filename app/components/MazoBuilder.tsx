@@ -36,7 +36,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             sideboard: sideboardCartas || [],
             boveda: bovedaCartas || []
         });
-    }, [cartas]);
+    }, [searchParams, cartas]);
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
@@ -183,7 +183,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         updatedReinoArray.push(carta.nombre);
 
         params.set(section, updatedReinoArray.join(';'));
-        router.replace(`?${params.toString()}`, { scroll: false });
+        window.history.replaceState(null, '', `?${params.toString()}`);
     };
 
     const addBulkCartaQueryParams = (mazo: Mazo) => {
@@ -207,7 +207,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             params.set('boveda', bovedaArray.join(';'));
         }
 
-        router.replace(`?${params.toString()}`, { scroll: false });
+        window.history.replaceState(null, '', `?${params.toString()}`);
     }
 
     const removeCartaQueryParams = (carta: Carta, section: string) => {
@@ -223,7 +223,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 if (reinoArray.length === 0) {
                     params.delete(section);
                 }
-                router.replace(`?${params.toString()}`, { scroll: false });
+                window.history.replaceState(null, '', `?${params.toString()}`);
             }
         }
     }

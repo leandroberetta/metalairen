@@ -38,7 +38,7 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
       } else {
         queryString.delete(parameter);
       }
-      router.replace(`?${queryString.toString()}`)
+      window.history.replaceState(null, '', `?${queryString.toString()}`);
     }
   };
 
