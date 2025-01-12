@@ -34,7 +34,8 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
         if (bovedaCartas) {
             const bovedaPuntos = bovedaCartas.reduce((acc, carta) => acc + carta.coste, 0);
-            setBovedaPuntos(bovedaPuntos);
+            const tesorosGenericos = bovedaCartas.filter((c) => c.nombre === 'TESORO GENERICO').length;
+            setBovedaPuntos(bovedaPuntos - tesorosGenericos);
         }
 
         setMazo({
@@ -42,17 +43,25 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             sideboard: sideboardCartas || [],
             boveda: bovedaCartas || []
         });
-    }, [searchParams, cartas]);
+    }, [searchParams]);
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
-            const cartaFound = mazo.boveda.find((c) => c.id === carta.id);
-            if (!cartaFound) {
-                setMazo((prevMazo) => ({
-                    ...prevMazo,
-                    boveda: [...prevMazo.boveda, carta],
-                }));
-                setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
+            if (mazo.boveda.length < 15) {
+                const cartaFound = mazo.boveda.find((c) => c.id === carta.id);
+                if (!cartaFound || (cartaFound && cartaFound.nombre === 'TESORO GENERICO')) {
+                    setMazo((prevMazo) => ({
+                        ...prevMazo,
+                        boveda: [...prevMazo.boveda, carta],
+                    }));
+                    if (carta.nombre === 'TESORO GENERICO') {
+                        console.log("es un tesoro generico");
+                        setBovedaPuntos((prevPuntos) => prevPuntos - 1);
+                    } else {
+                        setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
+                    }
+                    addCartaQueryParams(carta, 'boveda');
+                }
             }
         } else {
             const cartaAmount = mazo.reino.filter((c) => c.id === carta.id).length;
@@ -73,12 +82,22 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             const cartaSidedeckAmount = mazo.sideboard.filter((c) => c.id === carta.id).length;
             const cartaAmount = cartaReinoAmount + cartaSidedeckAmount;
             if (cartaAmount < 4) {
-                console.log("menor a 4");
                 setMazo((prevMazo) => ({
                     ...prevMazo,
                     reino: [...prevMazo.reino, carta],
                 }));
                 addCartaQueryParams(carta, 'reino');
+            }
+        } else {
+            if (mazo.boveda.length < 15) {
+                if (carta.nombre === 'TESORO GENERICO') {
+                    setMazo((prevMazo) => ({
+                        ...prevMazo,
+                        boveda: [...prevMazo.boveda, carta],
+                    }));
+                    setBovedaPuntos((prevPuntos) => prevPuntos - 1);
+                    addCartaQueryParams(carta, 'boveda');
+                }
             }
         }
 
@@ -101,11 +120,24 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
             removeCartaQueryParams(carta, 'reino');
         } else {
-            setMazo((prevMazo) => ({
-                ...prevMazo,
-                boveda: prevMazo.boveda.filter((c) => c.id !== carta.id),
-            }));
-            setBovedaPuntos((prevPuntos) => prevPuntos - carta.coste);
+            setMazo((prevMazo) => {
+                const index = prevMazo.boveda.findIndex((c) => c.id === carta.id);
+                if (index === -1) return prevMazo;
+
+                return {
+                    ...prevMazo,
+                    boveda: [
+                        ...prevMazo.boveda.slice(0, index),
+                        ...prevMazo.boveda.slice(index + 1),
+                    ],
+                };
+            });
+            if (carta.nombre === 'TESORO GENERICO') {
+                setBovedaPuntos((prevPuntos) => prevPuntos + 1);
+            } else {
+                setBovedaPuntos((prevPuntos) => prevPuntos - carta.coste);
+            }
+            removeCartaQueryParams(carta, 'boveda');
         }
     }
 

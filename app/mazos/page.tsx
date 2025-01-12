@@ -9,7 +9,6 @@ export default async function Mazos() {
           expansion: {
             not: "FUNDAMENTOS"
           },
-          prohibida: false
         }
       });
 
