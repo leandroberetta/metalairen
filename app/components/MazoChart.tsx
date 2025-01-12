@@ -46,16 +46,16 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
             }
         });
 
-        const updatedSeries = series.map((serie) => ({
-            ...serie,
-            data: Object.keys(conteos[serie.name]).map((coste) => ({
-                x: coste,
-                y: conteos[serie.name][coste],
-            })),
-        }));
-
-        setSeries(updatedSeries); 
-    }, [mazo, series]);
+        setSeries((prevSeries) =>
+            prevSeries.map((serie) => ({
+                ...serie,
+                data: Object.keys(conteos[serie.name]).map((coste) => ({
+                    x: coste,
+                    y: conteos[serie.name][coste],
+                })),
+            }))
+        );
+    }, [mazo]);
 
     const options: ApexOptions = {
         colors: ["#243674", "#961a7f", "#be1523", "#f0941d", "#08683a"],
