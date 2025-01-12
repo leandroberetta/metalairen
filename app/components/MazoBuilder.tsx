@@ -382,8 +382,8 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const REINO_MIN = 45;
         const SIDEDECK_MAX = 7;
         const BOVEDA_MAX = 15;
-        const REINO_CARD_LIMIT = 4;
-        const BOVEDA_CARD_LIMIT = 1;
+        //const REINO_CARD_LIMIT = 4;
+        //const BOVEDA_CARD_LIMIT = 1;
         const BOVEDA_PUNTOS_MAX = 30;
 
         const errors: string[] = [];
