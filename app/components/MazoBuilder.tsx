@@ -31,7 +31,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
         const bovedaQueryParamCartas = searchParams.get('boveda')?.split(';');
         const bovedaCartas = bovedaQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
-        
+
         if (bovedaCartas) {
             const bovedaPuntos = bovedaCartas.reduce((acc, carta) => acc + carta.coste, 0);
             setBovedaPuntos(bovedaPuntos);
@@ -156,7 +156,6 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
     const handleExportClick = () => {
         const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-        console.log(errors);
         setErrors(errors);
         if (errors.length === 0) {
             console.log("exporto");
@@ -181,29 +180,33 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     };
 
     const handleDownloadClick = () => {
-        const mazoString = exportarListaMazo(mazo);
-        const blob = new Blob([mazoString], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
+        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+        setErrors(errors);
+        if (errors.length === 0) {
+            const mazoString = exportarListaMazo(mazo);
+            const blob = new Blob([mazoString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
 
-        const subtipo1 = searchParams.get('subtipo1')?.toLowerCase() || '';
-        const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
+            const subtipo1 = searchParams.get('subtipo1')?.toLowerCase() || '';
+            const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
 
-        const link = document.createElement('a');
+            const link = document.createElement('a');
 
-        if (subtipo1 && subtipo2) {
-            link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
-        } else if (subtipo1) {
-            link.download = `mazo-${subtipo1}-${getFormattedDate()}.txt`;
-        } else if (subtipo2) {
-            link.download = `mazo-${subtipo2}-${getFormattedDate()}.txt`;
-        } else {
-            link.download = `mazo-${getFormattedDate()}.txt`;
+            if (subtipo1 && subtipo2) {
+                link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
+            } else if (subtipo1) {
+                link.download = `mazo-${subtipo1}-${getFormattedDate()}.txt`;
+            } else if (subtipo2) {
+                link.download = `mazo-${subtipo2}-${getFormattedDate()}.txt`;
+            } else {
+                link.download = `mazo-${getFormattedDate()}.txt`;
+            }
+
+            link.href = url;
+            link.click();
+
+            URL.revokeObjectURL(url);
         }
-
-        link.href = url;
-        link.click();
-
-        URL.revokeObjectURL(url);
     }
 
     const switchCartaQueryParams = (carta: Carta, fromSection: string, toSection: string) => {

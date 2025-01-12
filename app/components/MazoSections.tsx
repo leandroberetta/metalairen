@@ -8,7 +8,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import Select from "./Select";
 
-export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, onImportClick, onExportClick, onDownloadClick, validationErrors, bovedaPuntos}: {
+export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, onImportClick, onExportClick, onDownloadClick, validationErrors, bovedaPuntos }: {
     mazo: Mazo, onPlusClick: (carta: Carta) => void,
     onMinusClick: (carta: Carta) => void,
     onSideboardClick: (carta: Carta, fromSection: string) => void
@@ -91,7 +91,7 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
             </div>
             <div>
                 {validationErrors && validationErrors.length > 0 &&
-                    <div className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <div className="flex p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400 dark:shadow-xl" role="alert">
                         <div>
                             <span className="font-medium">Errores de validación:</span>
                             <ul className="mt-1.5 list-disc list-inside">
