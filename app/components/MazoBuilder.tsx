@@ -36,7 +36,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             sideboard: sideboardCartas || [],
             boveda: bovedaCartas || []
         });
-    }, [searchParams, cartas]);
+    }, [cartas]);
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
@@ -135,18 +135,18 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
     const getFormattedDate = () => {
         const now = new Date();
-      
+
         const pad = (num: number) => num.toString().padStart(2, '0');
 
         const day = pad(now.getDate());
-        const month = pad(now.getMonth() + 1); 
+        const month = pad(now.getMonth() + 1);
         const year = now.getFullYear().toString().slice(-2);
         const hours = pad(now.getHours());
         const minutes = pad(now.getMinutes());
         const seconds = pad(now.getSeconds());
-      
+
         return `${day}${month}${year}${hours}${minutes}${seconds}`;
-      };
+    };
 
     const handleDownloadClick = () => {
         const mazoString = exportarListaMazo(mazo);
@@ -157,7 +157,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
 
         const link = document.createElement('a');
-        
+
         if (subtipo1 && subtipo2) {
             link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
         } else if (subtipo1) {
@@ -175,20 +175,16 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
     }
 
     const addCartaQueryParams = (carta: Carta, section: string) => {
+        const currentParams = searchParams?.toString() || '';
+        const params = new URLSearchParams(currentParams);
         const sectionParams = searchParams.get(section);
-        const params = new URLSearchParams(searchParams?.toString() || '');
 
-        if (sectionParams) {
-            const reinoArray = sectionParams.split(';');
-            reinoArray.push(carta.nombre);
-            params.set(section, reinoArray.join(';'));
-            router.replace(`?${params.toString()}`, { scroll: false });
-        } else {
-            const params = new URLSearchParams(searchParams?.toString() || '');
-            params.set(section, carta.nombre);
-            router.replace(`?${params.toString()}`, { scroll: false });
-        }
-    }
+        const updatedReinoArray = sectionParams ? sectionParams.split(';') : [];
+        updatedReinoArray.push(carta.nombre);
+
+        params.set(section, updatedReinoArray.join(';'));
+        router.replace(`?${params.toString()}`, { scroll: false });
+    };
 
     const addBulkCartaQueryParams = (mazo: Mazo) => {
         const params = new URLSearchParams(searchParams?.toString() || '');
