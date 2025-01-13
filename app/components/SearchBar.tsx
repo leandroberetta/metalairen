@@ -5,7 +5,7 @@ import { Tooltip } from "flowbite-react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-export default function SearchBar({ filters }: { filters: React.ReactNode }) {
+export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
@@ -54,7 +54,7 @@ export default function SearchBar({ filters }: { filters: React.ReactNode }) {
                         />
                     </div>
                 </div>
-                <Tooltip content="Búsqueda avanzada">
+                {filters && <Tooltip content="Búsqueda avanzada">
                     <button onClick={() => setBusquedaAvanzada(!busquedaAvanzada)}
                         className={clsx("h-full ml-3 rounded bg-yellow-300 px-5 py-3 text-center text-base text-sm font-medium font-medium text-white dark:shadow-xl hover:bg-yellow-400 dark:focus:outline-none dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800", { "bg-yellow-400": busquedaAvanzada })}>
                         <svg
@@ -74,7 +74,7 @@ export default function SearchBar({ filters }: { filters: React.ReactNode }) {
                             />
                         </svg>
                     </button>
-                </Tooltip>
+                </Tooltip>}
             </div>
             {busquedaAvanzada && filters}
         </div>

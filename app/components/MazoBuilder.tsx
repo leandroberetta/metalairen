@@ -458,7 +458,6 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         return errors;
     }
 
-
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4">

@@ -29,11 +29,9 @@ export default function Navbar() {
                             <li>
                                 <Link href="/mazos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/mazos' })}>Mazos</Link>
                             </li>
-                            {/*
                             <li>
                                 <Link href="/torneos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/torneos' })}>Torneos</Link>
                             </li>
-                            */}
                         </ul>
                     </div>
                 </div>

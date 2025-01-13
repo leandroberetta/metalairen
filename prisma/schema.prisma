@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,7 +8,7 @@ datasource db {
 }
 
 model Carta {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   nombre      String
   tipo        String
   subtipo1    String?
@@ -26,31 +20,64 @@ model Carta {
   coste       Int
   expansion   String
   imagen      String
-  text        String    @db.VarChar(1000)
+  text        String      @db.VarChar(1000)
   costeBoveda Int?
-  prohibida   Boolean   @default(false)
-  createdAt   DateTime? @default(now())
-  updated_at  DateTime? @default(now())
-  idLairen    Int       @unique
+  prohibida   Boolean     @default(false)
+  createdAt   DateTime?   @default(now())
+  updatedAt   DateTime?   @default(now())
+  idLairen    Int         @unique
+  mazoCartas  MazoCarta[]
 
   @@map("cartas")
 }
 
 model Mazo {
-  id       Int     @id @default(autoincrement())
-  nombre   String
-  cartas   MazoCarta[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int          @id @default(autoincrement())
+  nombre    String
+  cartas    MazoCarta[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
+  torneos   TorneoMazo[]
+  subtipo1  String?
+  subtipo2  String?
+
+  @@map("mazos")
 }
 
 model MazoCarta {
-  id        Int    @id @default(autoincrement())
-  mazoId    Int
-  cartaId   Int
-  seccion   String
+  id       Int    @id @default(autoincrement())
+  mazoId   Int
+  cartaId  Int
+  seccion  String
+  cantidad Int
 
-  mazo      Mazo   @relation(fields: [mazoId], references: [id])
+  mazo  Mazo  @relation(fields: [mazoId], references: [id])
+  carta Carta @relation(fields: [cartaId], references: [id])
 
-  @@unique([mazoId, cartaId, seccion])
+  @@map("mazos_cartas")
+}
+
+model Torneo {
+  id        Int          @id @default(autoincrement())
+  nombre    String
+  fecha     DateTime
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
+  mazos     TorneoMazo[]
+
+  @@map("torneos")
+}
+
+model TorneoMazo {
+  id           Int      @id @default(autoincrement())
+  torneoId     Int
+  mazoId       Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  participante String
+
+  torneo Torneo @relation(fields: [torneoId], references: [id])
+  mazo   Mazo   @relation(fields: [mazoId], references: [id])
+
+  @@map("torneos_mazos")
 }
