@@ -20,6 +20,25 @@ docker run -d \
    -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
   -p 5432:5432 \
   postgres:latest
+
+docker run -d \
+  --name metalairen-db \
+  -e POSTGRES_USER=metalairen \
+  -e POSTGRES_PASSWORD=metalairen \
+  -e POSTGRES_DB=metalairen \
+  -p 5432:5432 \
+  postgres:latest
+
+
+docker run -d \
+  --name metalairen-db-mysql \
+  -e MYSQL_ROOT_PASSWORD=metalairen \
+  -e MYSQL_DATABASE=metalairen \
+  -e MYSQL_USER=metalairen \
+  -e MYSQL_PASSWORD=metalairen \
+  -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
+  -p 3306:3306 \
+  mysql:latest
 ```
 
 ### Creación de certificados

@@ -63,6 +63,8 @@ model Torneo {
   fecha     DateTime
   createdAt DateTime     @default(now())
   updatedAt DateTime     @default(now())
+  provincia String
+  sede      String
   mazos     TorneoMazo[]
 
   @@map("torneos")
@@ -75,6 +77,7 @@ model TorneoMazo {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
   participante String
+  puesto       String
 
   torneo Torneo @relation(fields: [torneoId], references: [id])
   mazo   Mazo   @relation(fields: [mazoId], references: [id])

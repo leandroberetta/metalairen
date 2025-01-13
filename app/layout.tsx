@@ -17,11 +17,15 @@ export default function RootLayout({
 
   return (
     <html className="dark">
-      <body className="dark:bg-gray-900 dark:text-white">
-        <div className="container mx-auto">
+      <body className="dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">
+        <div className="container mx-auto grow">
           <NavBar />
-          {children}   
-          </div>     
+          {children}
+        </div>
+        <div className="p-5 flex justify-center">
+          <span
+            className="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">v2</span>
+        </div>
       </body>
     </html>
   );
