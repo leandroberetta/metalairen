@@ -13,13 +13,13 @@ interface Serie {
     data: { x: string, y: number }[];
 }
 
-export default function MazoChart({ mazo }: { mazo: Mazo }) {
+export default function MazoChart({ mazo, hideTitle = true }: { mazo: Mazo, hideTitle?: boolean }) {
     const [series, setSeries] = useState<Serie[]>([
         { name: "Unidad", color: "#243674", data: [] },
         { name: "Acción", color: "#961a7f", data: [] },
         { name: "Acción rápida", color: "#be1523", data: [] },
-        { name: "Arma", color: "#f0941d", data: [] },
-        { name: "Monumento", color: "#08683a", data: [] },
+        { name: "Arma", color: "#08683a", data: [] },
+        { name: "Monumento", color: "#f0941d", data: [] },
     ]);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
         tooltip: { enabled: false },
         states: {
             hover: {
-                filter: { type: "darken" },
+                filter: { type: "lighten" },
             },
         },
         stroke: {
@@ -108,9 +108,9 @@ export default function MazoChart({ mazo }: { mazo: Mazo }) {
 
     return (
         <div id="column-chart">
-            <div className="flex py-4">
+            {!hideTitle &&<div className="flex py-4">
                 <h4 className="text-xl font-bold dark:text-white flex-grow">Composición del reino por costes</h4>
-            </div>
+            </div>}
             <ReactApexChart options={options} series={series} type="bar" height={150} />
         </div>
     );

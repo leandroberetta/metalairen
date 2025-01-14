@@ -20,36 +20,6 @@ docker run -d \
    -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
   -p 5432:5432 \
   postgres:latest
-
-docker run -d \
-  --name metalairen-db \
-  -e POSTGRES_USER=metalairen \
-  -e POSTGRES_PASSWORD=metalairen \
-  -e POSTGRES_DB=metalairen \
-  -p 5432:5432 \
-  postgres:latest
-
-
-docker run -d \
-  --name metalairen-db-mysql \
-  -e MYSQL_ROOT_PASSWORD=metalairen \
-  -e MYSQL_DATABASE=metalairen \
-  -e MYSQL_USER=metalairen \
-  -e MYSQL_PASSWORD=metalairen \
-  -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
-  -p 3306:3306 \
-  mysql:latest
-```
-
-### Creación de certificados
-
-```bash
-mkdir -p ./nginx/certs
-
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout ./nginx/certs/selfsigned.key \
-  -out ./nginx/certs/selfsigned.crt \
-  -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=localhost"
 ```
 
 ### Despliegue estático

@@ -1,11 +1,12 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import SearchBar from "@/app/components/SearchBar";
 import { prisma } from "@/app/db/prisma";
+import Link from "next/link";
 import { Suspense } from "react";
 
-export default async function Torneo({ params }: { params: { id: string } }) {
+export default async function Torneo({ params }: { params: Promise<{ id: string }>}) {
     const torneo = await prisma.torneo.findUnique({
-        where: { id: parseInt(params.id) },
+        where: { id: parseInt((await params).id) },
         include: {
             mazos: {
                 include: {
@@ -59,9 +60,9 @@ export default async function Torneo({ params }: { params: { id: string } }) {
                                             <th scope="row"
                                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <h5 className="text-xl font-bold">
-                                                    <a href="" className="font-medium text-yellow-300 hover:text-yellow-400">
+                                                    <Link href={`/torneos/${torneo.id}/participantes/${mazo.id}`} className="font-medium text-yellow-300 hover:text-yellow-400">
                                                         {mazo.participante}
-                                                    </a>
+                                                    </Link>
                                                 </h5>
                                             </th>
                                             <td className="px-6 py-4">

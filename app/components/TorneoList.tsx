@@ -1,4 +1,5 @@
 import { Torneo } from "@prisma/client";
+import Link from "next/link";
 
 export default function TorneoList({ torneos }: { torneos: Torneo[] }) {
     return (
@@ -27,9 +28,9 @@ export default function TorneoList({ torneos }: { torneos: Torneo[] }) {
                                 <th scope="row"
                                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <h5 className="text-xl font-bold">
-                                        <a href="" className="font-medium text-yellow-300 hover:text-yellow-400">
+                                        <Link href={`/torneos/${torneo.id}`} className="font-medium text-yellow-300 hover:text-yellow-400">
                                             {torneo.nombre}
-                                        </a>
+                                        </Link>
                                     </h5>
                                 </th>
                                 <td className="px-6 py-4">
