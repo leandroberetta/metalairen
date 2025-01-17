@@ -24,13 +24,13 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
     useEffect(() => {
         const reinoQueryParamCartas = searchParams.get('reino')?.split(';');
-        const reinoCartas = reinoQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+        const reinoCartas = reinoQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
 
         const sideboardQueryParamCartas = searchParams.get('sideboard')?.split(';');
-        const sideboardCartas = sideboardQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+        const sideboardCartas = sideboardQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
 
         const bovedaQueryParamCartas = searchParams.get('boveda')?.split(';');
-        const bovedaCartas = bovedaQueryParamCartas?.map((nombre) => cartas.find((c) => c.nombre === nombre)) as Carta[];
+        const bovedaCartas = bovedaQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
 
         if (bovedaCartas) {
             const bovedaPuntos = bovedaCartas.reduce((acc, carta) => acc + carta.coste, 0);
@@ -43,7 +43,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
             sideboard: sideboardCartas || [],
             boveda: bovedaCartas || []
         });
-    }, [searchParams]);
+    }, [searchParams, cartas]);
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
@@ -249,12 +249,12 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const toSectionParams = searchParams.get(toSection);
 
         const toSectionArray = toSectionParams ? toSectionParams.split(';') : [];
-        toSectionArray.push(carta.nombre);
+        toSectionArray.push(carta.id.toString());
         params.set(toSection, toSectionArray.join(';'));
 
         if (fromSectionParams) {
             const fromSectionArray = fromSectionParams.split(';');
-            const index = fromSectionArray.findIndex((c) => c === carta.nombre);
+            const index = fromSectionArray.findIndex((c) => c === carta.id.toString());
             if (index !== -1) {
                 fromSectionArray.splice(index, 1);
                 params.set(fromSection, fromSectionArray.join(';'));
@@ -273,7 +273,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const sectionParams = searchParams.get(section);
 
         const updatedReinoArray = sectionParams ? sectionParams.split(';') : [];
-        updatedReinoArray.push(carta.nombre);
+        updatedReinoArray.push(carta.id.toString());
 
         params.set(section, updatedReinoArray.join(';'));
         window.history.replaceState(null, '', `?${params.toString()}`);
@@ -286,17 +286,17 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         params.delete('boveda');
 
         if (mazo.reino.length > 0) {
-            const reinoArray = mazo.reino.map((carta) => carta.nombre);
+            const reinoArray = mazo.reino.map((carta) => carta.id.toString());
             params.set('reino', reinoArray.join(';'));
         }
 
         if (mazo.sideboard.length > 0) {
-            const sideboardArray = mazo.sideboard.map((carta) => carta.nombre);
+            const sideboardArray = mazo.sideboard.map((carta) => carta.id.toString());
             params.set('sideboard', sideboardArray.join(';'));
         }
 
         if (mazo.boveda.length > 0) {
-            const bovedaArray = mazo.boveda.map((carta) => carta.nombre);
+            const bovedaArray = mazo.boveda.map((carta) => carta.id.toString());
             params.set('boveda', bovedaArray.join(';'));
         }
 
@@ -309,7 +309,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
 
         if (sectionParams) {
             const reinoArray = sectionParams.split(';');
-            const index = reinoArray.findIndex((c) => c === carta.nombre);
+            const index = reinoArray.findIndex((c) => c === carta.id.toString());
             if (index !== -1) {
                 reinoArray.splice(index, 1);
                 params.set(section, reinoArray.join(';'));

@@ -13,8 +13,7 @@ export default function RootLayout({
 }>) {
   useEffect(() => {
     initFlowbite();
-  }, []);
-
+  });
   return (
     <html className="dark">
       <body className="dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">

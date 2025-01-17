@@ -1,5 +1,6 @@
-import MazoChart from "@/app/components/MazoChart";
-import MazoSectionGrid from "@/app/components/MazoSectionGrid";
+import { Mazo } from "@/app/components/MazoBuilder";
+import MazoGridView from "@/app/components/MazoGridView";
+import MazoListView from "@/app/components/MazoListView";
 import { prisma } from "@/app/db/prisma";
 import { Carta } from "@prisma/client";
 
@@ -44,36 +45,22 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
         for (let i = 0; i < reinoCarta.cantidad; i++)
             cartas.push(reinoCarta.carta);
     });
+
+    const mazo: Mazo = {
+        reino: reinoCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
+        sideboard: sideboardCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
+        boveda: bovedaCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
+    }
+    const bovedaPuntosNoGenericos = mazo.boveda.reduce((acc, carta) => acc + carta.coste, 0);
+    const tesorosGenericos = mazo.boveda.filter((c) => c.nombre === 'TESORO GENERICO').length;
+    const bovedaPuntos = bovedaPuntosNoGenericos - tesorosGenericos;
     return (
         <div className="p-4">
-            <div className="flex">
-                <div className="grow">
-                    <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">
-                            {torneo.nombre} - {torneoMazo.participante} - {torneoMazo.puesto}
-                        </span>
-                    </h1>
-                    <div className="">
-                        <h2 className="text-xl dark:text-white font-extrabold text-gray-900">
-                            {torneoMazo.mazo.subtipo1 && torneoMazo.mazo.subtipo2 && `${torneoMazo.mazo.subtipo1} / ${torneoMazo.mazo.subtipo2}`}
-                        </h2>
-
-                    </div>
-                </div>
-                <MazoChart mazo={{ reino: cartas, sideboard: [], boveda: [] }} />
+            <div className="hidden lg:block">
+                <MazoGridView mazo={mazo} subtipo1={torneoMazo.mazo.subtipo1} subtipo2={torneoMazo.mazo.subtipo2} nombre={torneoMazo.participante} bovedaPuntos={bovedaPuntos} />
             </div>
-            <div>
-                <div className="grid sm:grid-cols-4 lg:grid-cols-9 gap-4">
-                    <div className="col-span-4">
-                        <MazoSectionGrid cartas={reinoCartas} section="Reino" cols={4} />
-                    </div>
-                    <div className="col-span-4">
-                        <MazoSectionGrid cartas={bovedaCartas} section="Bóveda" cols={4} />
-                    </div>
-                    <div className="">
-                        <MazoSectionGrid cartas={sideboardCartas} section="Sidedeck" cols={1} />
-                    </div>
-                </div>
+            <div className="block lg:hidden">
+                <MazoListView mazo={mazo} subtipo1={torneoMazo.mazo.subtipo1} subtipo2={torneoMazo.mazo.subtipo2} nombre={torneoMazo.participante} bovedaPuntos={bovedaPuntos}/>
             </div>
         </div>
     );

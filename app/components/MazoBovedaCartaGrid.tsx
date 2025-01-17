@@ -1,35 +1,10 @@
 "use client";
 
-import { Carta } from "@prisma/client";
-import MazoCartaRow from "./MazoCartaRow";
 import { useState } from "react";
+import { Carta } from "@prisma/client";
+import MazoCartaItem from "./MazoCartaItem";
 
-export interface CartaCantidad extends Carta {
-    cantidad: number;
-}
-
-export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusClick, onMinusClick, onSideboardClick, viewMode }: {
-    nombre: string,
-    sectionKey: string,
-    section: Carta[],
-    bovedaPuntos?: number
-    onPlusClick?: (carta: CartaCantidad) => void,
-    onMinusClick?: (carta: CartaCantidad) => void
-    onSideboardClick?: (carta: Carta, fromSection: string) => void
-    viewMode?: boolean
-}) {
-
-    const sectionReduced = Object.values(
-        section.reduce((acc: Record<number, CartaCantidad>, carta) => {
-            if (acc[carta.id]) {
-                acc[carta.id].cantidad++;
-            } else {
-                acc[carta.id] = { ...carta, cantidad: 1 };
-            }
-            return acc;
-        }, {})
-    );
-
+export default function MazoBovedaCartaGrid({ cartas, bovedaPuntos }: { cartas: (Carta & { cantidad: number })[], bovedaPuntos?: number }) {
     const [selectedCard, setSelectedCard] = useState<Carta | null>(null);
 
     const closeModal = () => setSelectedCard(null);
@@ -41,31 +16,37 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
     };
 
     return (
-        <>
-            <div className="flex pb-4">
-                <h4 className="text-2xl font-bold dark:text-white flex-grow">{nombre}</h4>
-                {sectionKey === 'boveda' && <span className="me-1 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{bovedaPuntos}P</span>}
-                <span className="content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{section.length}</span>
+        <div>
+            <div className="flex">
+                <div className="grow">
+                    <h5 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Bóveda</h5>
+                </div>
+                <span className="m-2 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{bovedaPuntos}P</span>
             </div>
-            <div className="grid gap-1">
-                {sectionReduced.length > 0 ? (
-                    sectionReduced.map((carta) => (
-                        <div className="" key={carta.id}>
-                            <MazoCartaRow carta={carta} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onSideboardClick={onSideboardClick} section={sectionKey} viewMode={viewMode} onCartaClick={setSelectedCard} />
-                        </div>
-                    ))
-                ) : (
-                    <p>No hay cartas en esta sección.</p>
-                )}
+            <div className="grid grid-cols-3 gap-4">
+                {Array.from({ length: 3 }, (_, colIndex) => (
+                    <div key={colIndex} className="relative h-[400px]">
+                        {cartas
+                            .filter((_, index) => index % 3 === colIndex)
+                            .map((carta, index) => (
+                                <button key={carta.id} type="button" onClick={() => setSelectedCard(carta)}>
+                                    <div style={{ top: `${index * 80}px` }} className="absolute">
+                                        <MazoCartaItem carta={carta} cantidad={carta.cantidad} />
+                                    </div>
+                                </button>
+                            ))}
+                    </div>
+                ))}
+                <div style={{ height: `${cartas.filter((_, index) => index % 3 === 1).length * 30}px` }} />
+
             </div>
             {selectedCard && (
                 <div
-                    id="modal-reino"
+                    id="modal-boveda"
                     tabIndex={-1}
                     className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 backdrop-blur-sm"
                     aria-hidden="true"
-                    onClick={handleBackgroundClick}
-                >
+                    onClick={handleBackgroundClick}>
                     <div className="relative w-full max-w-md max-h-full">
                         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -90,6 +71,6 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

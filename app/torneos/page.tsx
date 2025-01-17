@@ -3,6 +3,7 @@ import { prisma } from "../db/prisma";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SearchBar from "../components/SearchBar";
 import TorneoSearch from "../components/TorneoSearch";
+import TorneoFilters from "../components/TorneoFilters";
 
 export default async function Torneos() {
   const torneos = await prisma.torneo.findMany({
@@ -16,7 +17,7 @@ export default async function Torneos() {
     <Suspense fallback={<LoadingSpinner />}>
       <div className="p-4">
         <div className="pb-4">
-          <SearchBar />
+          <SearchBar filters={TorneoFilters()} />
         </div>
         <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
           <span
