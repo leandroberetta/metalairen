@@ -357,7 +357,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const boveda = bovedaReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
         const sideboard = sideboardReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
 
-        return `Reino: (total: ${mazo.reino.length})\n${reino}\n\nBóveda: (total: ${mazo.boveda.length})\n${boveda}\n\nSide Deck (total: ${mazo.sideboard.length})\n${sideboard}`;
+        return `Reino: (total: ${mazo.reino.length})\n${reino}\n\nBóveda: (total: ${mazo.boveda.length})\n${boveda}\n\nSide Deck: (total: ${mazo.sideboard.length})\n${sideboard}`;
     }
 
     function procesarListaMazo(mazo: string, cartas: Carta[]): Mazo {

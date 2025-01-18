@@ -16,6 +16,9 @@ export default function RootLayout({
   });
   return (
     <html className="dark">
+      <head>
+        <title>MetaLairen</title>
+      </head>
       <body className="dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">
         <div className="container mx-auto grow">
           <NavBar />
