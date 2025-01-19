@@ -51,11 +51,11 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                         <span className="bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>
                     </div>
                 </div>
-                <div className="flex items-stretch gap-4">
-                    <div className="my-4 mt-0 h-full">
+                <div className="flex">
+                    <div className="">
                         <MazoCostesChart mazo={mazo} />
                     </div>
-                    <div className="my-4 mt-0 h-full">
+                    <div className="">
                         <MazoTiposChart mazo={mazo} />
                     </div>
                 </div>

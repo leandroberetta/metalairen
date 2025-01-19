@@ -71,7 +71,12 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
             },
         },
         tooltip: {
+            shared: true,
+            intersect: false,
             enabled: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+            },
             theme: "dark",
         },
         states: {
@@ -93,25 +98,25 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
         legend: { show: false },
         xaxis: {
             labels: {
-                show: true,
+                show: false,
                 style: {
                     fontFamily: "Inter, sans-serif",
                     cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
                 },
             },
             axisBorder: { show: false },
-            axisTicks: { show: false },
+            axisTicks: { show: true },
         },
         yaxis: { show: false },
         fill: { opacity: 1 },
     };
 
     return (
-        <div className="p-2 bg-white border border-gray-200 rounded dark:bg-gray-800 dark:border-gray-700 dark:shadow-xl dark:shadow-gray-800 h-full content-center">
+        <div>
             {!hideTitle && <div className="flex">
                 <h4 className="text-xl font-bold dark:text-white flex-grow">Composición del reino por costes</h4>
             </div>}
-            <ReactApexChart options={options} series={series} type="bar" height={150} />
+            <ReactApexChart options={options} series={series} type="bar" height={100} />
         </div>
     );
 }

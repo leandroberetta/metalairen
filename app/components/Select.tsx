@@ -19,6 +19,7 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
 
   const handleSelectionChange = (option: string) => {
     let updatedSelections: string[];
+
     if (allowMultipleSelections) {
       if (selectedOptions.includes(option)) {
         updatedSelections = selectedOptions.filter((item) => item !== option);
@@ -26,8 +27,9 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
         updatedSelections = [...selectedOptions, option];
       }
     } else {
-      updatedSelections = [option];
+      updatedSelections = selectedOptions.includes(option) ? [] : [option];
     }
+
     setSelectedOptions(updatedSelections);
 
     if (setQueryParameter) {

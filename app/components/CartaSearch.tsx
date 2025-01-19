@@ -21,7 +21,8 @@ export default function CartaSearch({ cartas, onCartaClick }: { cartas: Carta[],
         (!query && expansiones === '' && tipos === '' && subtipos === '' && subtipos2 === '' && supertipos === '' && costes === '' && rarezas === '' && formatos === '')
             ? []
             : cartas
-                .filter((card) => query ? card.nombre.toLowerCase().includes(query.toLowerCase()) : true)
+                .filter((card) => query ? card.nombre.toLowerCase().includes(query.toLowerCase())
+                    || card.text.toLowerCase().includes(query.toLowerCase()) : true)
                 .filter((card) => expansiones === '' || expansiones.split(',').includes(card.expansion.toString()))
                 .filter((card) => {
                     if (tipos !== '') {

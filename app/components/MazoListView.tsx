@@ -1,7 +1,6 @@
 import { MazoSection } from "./MazoSection";
 import { Mazo } from "./MazoBuilder";
 import MazoCostesChart from "./MazoCostesChart";
-import MazoTiposChart from "./MazoTiposChart";
 
 export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos }: {
     mazo: Mazo,
@@ -32,13 +31,11 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                     </div>
                 </div>
             </div>
-            <div className="grid md:grid-cols-2 items-stretch gap-4">
+            <div className="">
                 <div className="my-4 mt-0 h-full">
                     <MazoCostesChart mazo={mazo} />
                 </div>
-                <div className="my-4 mt-0 h-full">
-                    <MazoTiposChart mazo={mazo} />
-                </div>
+               
             </div>
             <div className="grid md:grid-cols-2 gap-4 mt-4">
                 <div className="">

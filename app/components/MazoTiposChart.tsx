@@ -47,7 +47,6 @@ export default function MazoTiposChart({ mazo }: { mazo: Mazo }) {
     const options: ApexOptions = {
         colors: ["#243674", "#961a7f", "#be1523", "#08683a", "#f0941d"],
         chart: {
-            height: 300,
             type: "pie",
         },
         plotOptions: {
@@ -67,7 +66,11 @@ export default function MazoTiposChart({ mazo }: { mazo: Mazo }) {
                 fontFamily: "Inter, sans-serif",
             },
         },
+        tooltip: {
+            fillSeriesColor: false,
+        },
         legend: {
+            show: false,
             horizontalAlign: "center",
             position: "right",
             fontFamily: "Inter, sans-serif",
@@ -82,12 +85,13 @@ export default function MazoTiposChart({ mazo }: { mazo: Mazo }) {
     };
 
     return (
-        <div className="p-2 bg-white border border-gray-200 rounded dark:bg-gray-800 dark:border-gray-700 dark:shadow-xl dark:shadow-gray-800 h-full content-center">
+        <div>
             <ReactApexChart
                 options={options}
                 series={series.map((serie) => serie.cantidad)}
                 type="pie"
-                height={350}
+                width={200}
+                height={120}
             />
         </div>
     );

@@ -34,7 +34,7 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
                     <Tooltip content="Ver mazo">
                         <Link
                             href={{
-                                pathname: '/mazos/view',
+                                pathname: '/mazo/ver',
                                 query: { ...currentQueryParams }
                             }}
                             className="inline-flex items-center justify-center focus:outline-none dark:bg-yellow-300 dark:hover:bg-yellow-400 font-medium rounded text-sm px-2.5 py-2.5 me-2"

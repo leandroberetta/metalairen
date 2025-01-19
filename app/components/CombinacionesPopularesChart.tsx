@@ -10,24 +10,23 @@ interface Serie {
     data: { x: string, y: number }[];
 }
 
-export default function SubtiposPopularesChart({ mazos }: { mazos: Mazo[] }) {
-    const subtiposPopulares = mazos.reduce((acc: Record<string, number>, mazo) => {
-        if (mazo.subtipo1) {
-            if (acc[mazo.subtipo1]) {
-                acc[mazo.subtipo1]++;
-            } else {
-                acc[mazo.subtipo1] = 1;
-            }
-        }
-        if (mazo.subtipo2) {
-            if (acc[mazo.subtipo2]) {
-                acc[mazo.subtipo2]++;
-            } else {
-                acc[mazo.subtipo2] = 1;
-            }
+export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }) {
+    const combinacionesPopulares = mazos.reduce((acc: Record<string, number>, mazo) => {
+        const combinacion = mazo.subtipo1 + ' / ' + mazo.subtipo2;
+        if (acc[combinacion]) {
+            acc[combinacion]++;
+        } else {
+            acc[combinacion] = 1;
         }
         return acc;
     }, {});
+
+    const series: Serie[] = [{
+        data: Object.keys(combinacionesPopulares).map((combinacion) => ({
+            x: combinacion,
+            y: combinacionesPopulares[combinacion],
+        })),
+    }];
 
     const options: ApexOptions = {
         chart: {
@@ -86,12 +85,6 @@ export default function SubtiposPopularesChart({ mazos }: { mazos: Mazo[] }) {
         fill: { opacity: 1 },
         colors: ["#243674", "#be1523", "#961a7f", "#f0941d", "#08683a"],
     };
-
-    const series: Serie[] = [{
-        data: Object.keys(subtiposPopulares).map((subtipo) => ({
-            x: subtipo, y: subtiposPopulares[subtipo]
-        }))
-    }];
 
     return (
         <div>

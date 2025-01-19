@@ -1,10 +1,11 @@
+import CombinacionesPopularesChart from "@/app/components/CombinacionesPopularesChart";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import SearchBar from "@/app/components/SearchBar";
 import { prisma } from "@/app/db/prisma";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default async function Torneo({ params }: { params: Promise<{ id: string }>}) {
+export default async function Torneo({ params }: { params: Promise<{ id: string }> }) {
     const torneo = await prisma.torneo.findUnique({
         where: { id: parseInt((await params).id) },
         include: {
@@ -32,6 +33,16 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                             {torneo.nombre}
                         </span>
                     </h1>
+
+                    <div className="grid grid-cols-1 gap-4">
+                    
+                        <div>
+                            <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
+                                className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
+                            </h1>
+                            <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                        </div>
+                    </div>
                     <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
                         className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Participantes</span>
                     </h1>
