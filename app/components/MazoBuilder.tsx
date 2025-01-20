@@ -8,6 +8,7 @@ import SearchBar from "./SearchBar";
 import CartaFilters from "./CartaFilters";
 import { CartaCantidad } from "./MazoSection";
 import { useSearchParams } from "next/navigation";
+import MazoCostesStack from "./MazoCostesStack";
 
 export interface Mazo {
     reino: Carta[];
@@ -476,6 +477,9 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 </div>
                 <div className="md:col-span-3 lg:col-span-2">
                     <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} />
+                    <div className="hidden lg:block">
+                        <MazoCostesStack cartas={mazo.reino} />
+                    </div>
                 </div>
             </div>
         </div>

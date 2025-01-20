@@ -3,6 +3,7 @@
 import { Carta } from "@prisma/client";
 import MazoCartaRow from "./MazoCartaRow";
 import { useState } from "react";
+import ReactDOM from "react-dom";
 
 export interface CartaCantidad extends Carta {
     cantidad: number;
@@ -58,7 +59,7 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                     <p>No hay cartas en esta sección.</p>
                 )}
             </div>
-            {selectedCard && (
+            {selectedCard && ReactDOM.createPortal(
                 <div
                     id="modal-reino"
                     tabIndex={-1}
@@ -88,7 +89,8 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body // Renderiza el modal directamente en el body
             )}
         </>
     );
