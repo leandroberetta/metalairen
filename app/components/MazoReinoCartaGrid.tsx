@@ -17,7 +17,7 @@ export default function MazoReinoCartaGrid({ cartas }: { cartas: (Carta & { cant
 
     return (
         <div>
-            <h5 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Reino</h5>
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Reino</h5>
             <div className="grid grid-cols-4 gap-4">
                 {Array.from({ length: 4 }, (_, colIndex) => (
                     <div key={colIndex} className="relative h-[400px]">

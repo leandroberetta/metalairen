@@ -17,7 +17,7 @@ export default function MazoSideboardCartaGrid({ cartas }: { cartas: (Carta & { 
 
     return (
         <div>
-            <h5 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Sidedeck</h5>
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Sidedeck</h5>
             <div className="grid grid-cols-1 gap-4">
                 {Array.from({ length: 1 }, (_, colIndex) => (
                     <div key={colIndex} className="relative h-[400px]">
