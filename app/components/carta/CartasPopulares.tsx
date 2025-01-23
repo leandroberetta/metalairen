@@ -1,4 +1,4 @@
-import { prisma } from "../db/prisma";
+import { prisma } from "../../db/prisma";
 
 export default async function CartasPopulares({ section, title }: { section: string, title: string }) {
     const cartasMasUsadas = await prisma.mazoCarta.groupBy({

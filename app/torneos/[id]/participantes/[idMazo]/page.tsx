@@ -1,6 +1,6 @@
-import { Mazo } from "@/app/components/MazoBuilder";
-import MazoGridView from "@/app/components/MazoGridView";
-import MazoListView from "@/app/components/MazoListView";
+import { MazoTemporal } from "@/app/components/mazo/MazoBuilder";
+import MazoGridView from "@/app/components/mazo/MazoGridView";
+import MazoListView from "@/app/components/mazo/MazoListView";
 import { prisma } from "@/app/db/prisma";
 import { Carta } from "@prisma/client";
 
@@ -46,7 +46,7 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
             cartas.push(reinoCarta.carta);
     });
 
-    const mazo: Mazo = {
+    const mazo: MazoTemporal = {
         reino: reinoCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
         sideboard: sideboardCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
         boveda: bovedaCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),

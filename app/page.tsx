@@ -1,10 +1,10 @@
 import { prisma } from "./db/prisma";
 import { Suspense } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
-import CartaSearch from "./components/CartaSearch";
+import CartaSearch from "./components/carta/CartaSearch";
 import SearchBar from "./components/SearchBar";
-import CartaFilters from "./components/CartaFilters";
-import CartasPopulares from "./components/CartasPopulares";
+import CartasPopulares from "./components/carta/CartasPopulares";
+import CartaFilters from "./components/carta/CartaFilters";
 
 export default async function Cartas() {
   const cartas = await prisma.carta.findMany();

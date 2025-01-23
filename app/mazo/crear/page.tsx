@@ -1,5 +1,5 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
-import MazoBuilder from "@/app/components/MazoBuilder";
+import MazoBuilder from "@/app/components/mazo/MazoBuilder";
 import { prisma } from "@/app/db/prisma";
 import { Suspense } from "react";
 

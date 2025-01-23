@@ -1,9 +1,9 @@
 import { MazoSection } from "./MazoSection";
-import { Mazo } from "./MazoBuilder";
+import { MazoTemporal } from "./MazoBuilder";
 import MazoCostesChart from "./MazoCostesChart";
 
 export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos }: {
-    mazo: Mazo,
+    mazo: MazoTemporal,
     subtipo1?: string | null,
     subtipo2?: string | null,
     nombre?: string | null,

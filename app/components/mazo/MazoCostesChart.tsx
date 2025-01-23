@@ -3,7 +3,7 @@
 import { ApexOptions } from 'apexcharts';
 import React, { useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
-import { Mazo } from './MazoBuilder';
+import { Mazo } from './mazo/MazoBuilder';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 

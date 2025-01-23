@@ -18,7 +18,15 @@ export default function CartaSearch({ cartas, onCartaClick }: { cartas: Carta[],
     const formatos = searchParams.get('formatos') ?? '';
 
     const filteredCartas =
-        (!query && expansiones === '' && tipos === '' && subtipos === '' && subtipos2 === '' && supertipos === '' && costes === '' && rarezas === '' && formatos === '')
+        (!query &&
+            expansiones === '' && 
+            tipos === '' && 
+            subtipos === '' && 
+            subtipos2 === '' && 
+            supertipos === '' && 
+            costes === '' && 
+            rarezas === '' && 
+            formatos === '')
             ? []
             : cartas
                 .filter((card) => query ? card.nombre.toLowerCase().includes(query.toLowerCase())

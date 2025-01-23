@@ -1,48 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import CartaSearch from "../components/CartaSearch";
+import CartaSearch from "../carta/CartaSearch";
 import { MazoSections } from "./MazoSections";
 import { Carta } from "@prisma/client";
-import SearchBar from "./SearchBar";
-import CartaFilters from "./CartaFilters";
-import { CartaCantidad } from "./MazoSection";
+import SearchBar from "../SearchBar";
+import { CartaCantidad } from "../mazo/MazoSection";
 import { useSearchParams } from "next/navigation";
-import MazoCostesStack from "./MazoCostesStack";
+import MazoCostesStack from "../mazo/MazoCostesStack";
+import CartaFilters from "../carta/CartaFilters";
+import { calcularPuntosBoveda, crearMazoQueryParams } from "@/app/util/mazoUtil";
 
-export interface Mazo {
+export interface MazoTemporal {
     reino: Carta[];
     boveda: Carta[];
     sideboard: Carta[];
 }
 
 export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
-    const [mazo, setMazo] = useState<Mazo>({ reino: [], boveda: [], sideboard: [] });
+    const [mazo, setMazo] = useState<MazoTemporal>({ reino: [], boveda: [], sideboard: [] });
     const [bovedaPuntos, setBovedaPuntos] = useState(0);
     const [errors, setErrors] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        const reinoQueryParamCartas = searchParams.get('reino')?.split(';');
-        const reinoCartas = reinoQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
+        const mazoQueryParams = crearMazoQueryParams(searchParams, cartas);
 
-        const sideboardQueryParamCartas = searchParams.get('sideboard')?.split(';');
-        const sideboardCartas = sideboardQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
+        setMazo(mazoQueryParams);
 
-        const bovedaQueryParamCartas = searchParams.get('boveda')?.split(';');
-        const bovedaCartas = bovedaQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
-
-        if (bovedaCartas) {
-            const bovedaPuntos = bovedaCartas.reduce((acc, carta) => acc + carta.coste, 0);
-            const tesorosGenericos = bovedaCartas.filter((c) => c.nombre === 'TESORO GENERICO').length;
-            setBovedaPuntos(bovedaPuntos - tesorosGenericos);
+        if (mazoQueryParams.boveda.length > 0) {
+            setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
         }
-
-        setMazo({
-            reino: reinoCartas || [],
-            sideboard: sideboardCartas || [],
-            boveda: bovedaCartas || []
-        });
     }, [searchParams, cartas]);
 
     const handleCartaClick = (carta: Carta) => {
@@ -279,7 +267,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         window.history.replaceState(null, '', `?${params.toString()}`);
     };
 
-    const addBulkCartaQueryParams = (mazo: Mazo) => {
+    const addBulkCartaQueryParams = (mazo: MazoTemporal) => {
         const params = new URLSearchParams(searchParams?.toString() || '');
         params.delete('reino');
         params.delete('sideboard');
@@ -321,7 +309,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         }
     }
 
-    function exportarListaMazo(mazo: Mazo): string {
+    function exportarListaMazo(mazo: MazoTemporal): string {
         const reinoReduced = Object.values(
             mazo.reino.reduce((acc: Record<number, CartaCantidad>, carta) => {
                 if (acc[carta.id]) {
@@ -360,14 +348,14 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         return `Reino: (total: ${mazo.reino.length})\n${reino}\n\nBóveda: (total: ${mazo.boveda.length})\n${boveda}\n\nSide Deck: (total: ${mazo.sideboard.length})\n${sideboard}`;
     }
 
-    function procesarListaMazo(mazo: string, cartas: Carta[]): Mazo {
+    function procesarListaMazo(mazo: string, cartas: Carta[]): MazoTemporal {
         const lines = mazo.trim().split(/\r\n|\n|\r/);
-        const sections: Mazo = {
+        const sections: MazoTemporal = {
             reino: [],
             boveda: [],
             sideboard: []
         };
-        let currentSection: keyof Mazo | '' = '';
+        let currentSection: keyof MazoTemporal | '' = '';
 
         for (const line of lines) {
             const trimmedLine = line.trim();
@@ -412,7 +400,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         return undefined;
     }
 
-    const validateMazo = (mazo: Mazo, subtipo1: string, subtipo2: string): string[] => {
+    const validateMazo = (mazo: MazoTemporal, subtipo1: string, subtipo2: string): string[] => {
         const REINO_MAX = 60;
         const REINO_MIN = 45;
         const SIDEDECK_MAX = 7;

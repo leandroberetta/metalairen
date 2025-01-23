@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { prisma } from "../db/prisma";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SearchBar from "../components/SearchBar";
-import TorneoSearch from "../components/TorneoSearch";
-import TorneoFilters from "../components/TorneoFilters";
+import TorneoSearch from "../components/torneo/TorneoSearch";
+import TorneoFilters from "../components/torneo/TorneoFilters";
 
 export default async function Torneos() {
   const torneos = await prisma.torneo.findMany({

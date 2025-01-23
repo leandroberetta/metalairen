@@ -1,18 +1,18 @@
 "use client";
 
 import { MazoSection } from "./MazoSection";
-import { Mazo } from "./MazoBuilder";
+import { MazoTemporal } from "./MazoBuilder";
 import { Carta } from "@prisma/client";
 import { useState } from "react";
 import clsx from "clsx";
-import Select from "./Select";
+import Select from "../Select";
 import { Tooltip } from "flowbite-react";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import MazoCostesChart from "./MazoCostesChart";
 
 export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, onImportClick, onExportClick, onDownloadClick, validationErrors, bovedaPuntos }: {
-    mazo: Mazo, onPlusClick: (carta: Carta) => void,
+    mazo: MazoTemporal, onPlusClick: (carta: Carta) => void,
     onMinusClick: (carta: Carta) => void,
     onSideboardClick: (carta: Carta, fromSection: string) => void
     onImportClick: () => void,

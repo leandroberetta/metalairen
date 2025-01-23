@@ -2,8 +2,8 @@ import { prisma } from "../db/prisma";
 import { Suspense } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SearchBar from "../components/SearchBar";
-import MazoSearch from "../components/MazoSearch";
-import MazoFilters from "../components/MazoFilters";
+import MazoSearch from "../components/mazo/MazoSearch";
+import MazoFilters from "../components/mazo/MazoFilters";
 import { Tooltip } from "flowbite-react";
 import Link from "next/link";
 

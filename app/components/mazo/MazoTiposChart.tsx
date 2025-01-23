@@ -3,7 +3,7 @@
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { Mazo } from "./MazoBuilder";
+import { MazoTemporal } from "./MazoBuilder";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -12,7 +12,7 @@ interface Serie {
     cantidad: number
 }
 
-export default function MazoTiposChart({ mazo }: { mazo: Mazo }) {
+export default function MazoTiposChart({ mazo }: { mazo: MazoTemporal }) {
     const [series, setSeries] = useState<Serie[]>([]);
 
     useEffect(() => {

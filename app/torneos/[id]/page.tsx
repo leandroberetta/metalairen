@@ -1,6 +1,6 @@
-import CombinacionesPopularesChart from "@/app/components/CombinacionesPopularesChart";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import SearchBar from "@/app/components/SearchBar";
+import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
 import { prisma } from "@/app/db/prisma";
 import Link from "next/link";
 import { Suspense } from "react";
