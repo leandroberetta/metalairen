@@ -9,7 +9,8 @@ import { CartaCantidad } from "../mazo/MazoSection";
 import { useSearchParams } from "next/navigation";
 import MazoCostesStack from "../mazo/MazoCostesStack";
 import CartaFilters from "../carta/CartaFilters";
-import { calcularPuntosBoveda, crearMazoQueryParams } from "@/app/util/mazoUtil";
+import { addBulkCartaQueryParams, addSubtiposQueryParams, agregarMazoQueryParams, calcularPuntosBoveda, crearMazoQueryParams } from "@/app/util/mazoUtil";
+import { useSession } from "next-auth/react";
 
 export interface MazoTemporal {
     reino: Carta[];
@@ -17,21 +18,46 @@ export interface MazoTemporal {
     sideboard: Carta[];
 }
 
-export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
-    const [mazo, setMazo] = useState<MazoTemporal>({ reino: [], boveda: [], sideboard: [] });
-    const [bovedaPuntos, setBovedaPuntos] = useState(0);
+export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, publicoGuardado, onGuardarMazo }: {
+    cartas: Carta[],
+    mazoGuardado?: MazoTemporal,
+    subtipo1Guardado?: string | null,
+    subtipo2Guardado?: string | null,
+    nombreGuardado?: string | null,
+    publicoGuardado?: boolean,
+    publico?: boolean,
+    onGuardarMazo: (mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean) => void 
+}) {
+    const [mazo, setMazo] = useState<MazoTemporal>(mazoGuardado || { reino: [], boveda: [], sideboard: [] });
+    const [bovedaPuntos, setBovedaPuntos] = useState(mazoGuardado ? calcularPuntosBoveda(mazoGuardado.boveda) : 0);
+    const [subtipo1, setSubtipo1] = useState<string | null>(subtipo1Guardado || null);
+    const [subtipo2, setSubtipo2] = useState<string | null>(subtipo2Guardado || null);
+    const [nombre, setNombre] = useState<string | null>(nombreGuardado || "Mazo");
+    const [publico, setPublico] = useState<boolean>(publicoGuardado || false);
     const [errors, setErrors] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
+
     useEffect(() => {
-        const mazoQueryParams = crearMazoQueryParams(searchParams, cartas);
+        if (mazoGuardado) {
+            agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado);
+        } else {
+            const mazoQueryParams = crearMazoQueryParams(searchParams, cartas);
 
-        setMazo(mazoQueryParams);
+            setMazo(mazoQueryParams);
 
-        if (mazoQueryParams.boveda.length > 0) {
-            setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
+            if (mazoQueryParams.boveda.length > 0) {
+                setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
+            }
         }
-    }, [searchParams, cartas]);
+    }, []);
+
+    const handleGuardarMazo = async () => {
+        const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
+        const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
+
+        onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico);
+    }
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
@@ -170,7 +196,7 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         const mazo = procesarListaMazo(text, cartas);
         const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + carta.coste, 0);
         setBovedaPuntos(bovedaPuntos);
-        addBulkCartaQueryParams(mazo);
+        addBulkCartaQueryParams(searchParams, mazo);
         setMazo(mazo);
     }
 
@@ -266,30 +292,6 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
         params.set(section, updatedReinoArray.join(';'));
         window.history.replaceState(null, '', `?${params.toString()}`);
     };
-
-    const addBulkCartaQueryParams = (mazo: MazoTemporal) => {
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.delete('reino');
-        params.delete('sideboard');
-        params.delete('boveda');
-
-        if (mazo.reino.length > 0) {
-            const reinoArray = mazo.reino.map((carta) => carta.id.toString());
-            params.set('reino', reinoArray.join(';'));
-        }
-
-        if (mazo.sideboard.length > 0) {
-            const sideboardArray = mazo.sideboard.map((carta) => carta.id.toString());
-            params.set('sideboard', sideboardArray.join(';'));
-        }
-
-        if (mazo.boveda.length > 0) {
-            const bovedaArray = mazo.boveda.map((carta) => carta.id.toString());
-            params.set('boveda', bovedaArray.join(';'));
-        }
-
-        window.history.replaceState(null, '', `?${params.toString()}`);
-    }
 
     const removeCartaQueryParams = (carta: Carta, section: string) => {
         const sectionParams = searchParams.get(section);
@@ -454,12 +456,17 @@ export default function MazoBuilder({ cartas }: { cartas: Carta[] }) {
                 <div className="md:col-span-2 lg:col-span-1">
                     <MazoSections
                         mazo={mazo}
+                        nombre={nombre || "Mazo"}
+                        publico={publico}
                         onPlusClick={handleCartaPlusClick}
                         onMinusClick={handleCartaMinusClick}
                         onSideboardClick={handleCartaSideboardClick}
                         onImportClick={handleImportClick}
                         onExportClick={handleExportClick}
                         onDownloadClick={handleDownloadClick}
+                        onGuardarMazo={handleGuardarMazo}
+                        onCambiarNombre={(nombre: string) => setNombre(nombre)}
+                        onCambiarPublico={(publico: boolean) => setPublico(publico)}
                         validationErrors={errors}
                         bovedaPuntos={bovedaPuntos} />
                 </div>

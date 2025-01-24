@@ -1,7 +1,7 @@
-import { MazoTemporal } from "@/app/components/mazo/MazoBuilder";
+import MazoError from "@/app/components/mazo/MazoError";
 import MazoViewer from "@/app/components/mazo/MazoViewer";
 import { prisma } from "@/app/db/prisma";
-import { Carta } from "@prisma/client";
+import { buildMazo } from "@/app/util/mazoUtil";
 
 export default async function MazoId({ params }: { params: Promise<{ id: string }> }) {
     const mazo = await prisma.mazo.findUnique({
@@ -13,47 +13,10 @@ export default async function MazoId({ params }: { params: Promise<{ id: string 
     );
 
     if (!mazo) {
-        return <div>No se encontró el mazo.</div>;
+        return <MazoError />;
     }
 
-    const reinoCartas = await prisma.mazoCarta.findMany({
-        where: {
-            mazoId: mazo.id,
-            seccion: 'reino',
-        },
-        include: {
-            carta: true,
-        },
-    });
-    const sideboardCartas = await prisma.mazoCarta.findMany({
-        where: {
-            mazoId: mazo.id,
-            seccion: 'sidedeck',
-        },
-        include: {
-            carta: true,
-        },
-    });
-    const bovedaCartas = await prisma.mazoCarta.findMany({
-        where: {
-            mazoId: mazo.id,
-            seccion: 'boveda',
-        },
-        include: {
-            carta: true,
-        },
-    });
-    const cartas: Carta[] = [];
-    reinoCartas.forEach((reinoCarta) => {
-        for (let i = 0; i < reinoCarta.cantidad; i++)
-            cartas.push(reinoCarta.carta);
-    });
-
-    const mazoTmp: MazoTemporal = {
-        reino: reinoCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
-        sideboard: sideboardCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
-        boveda: bovedaCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
-    }
+    const mazoTmp = await buildMazo(mazo);
 
     return (
         <MazoViewer mazoGuardado={mazoTmp} nombreGuardado={mazo.nombre} subtipo1Guardado={mazo.subtipo1} subtipo2Guardado={mazo.subtipo2}/>

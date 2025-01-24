@@ -3,9 +3,12 @@
 import clsx from 'clsx';
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Navbar() {
     const pathName = usePathname();
+    const { data: session, status } = useSession();
 
     return (
         <div className="mx-auto p-4">
@@ -22,7 +25,7 @@ export default function Navbar() {
                         </svg>
                     </button>
                     <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-                        <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        <ul className="items-center font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
                                 <Link href="/" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/' })}>Cartas</Link>
                             </li>
@@ -32,6 +35,28 @@ export default function Navbar() {
                             <li>
                                 <Link href="/torneos" className={clsx('block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400', { 'md:dark:text-yellow-400': pathName === '/torneos' })}>Torneos</Link>
                             </li>
+                            {status === 'authenticated' ? (
+                                <>
+                                    {session.user?.image && (
+                                        <li>
+                                            <Image
+                                                src={session.user.image}
+                                                alt={`${session.user.name}'s profile`}
+                                                width={40}
+                                                height={40}
+                                                style={{ borderRadius: '50%' }}
+                                            />
+                                        </li>
+                                    )}
+                                    <li>
+                                        <button className="block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400" onClick={() => signOut()}>Cerrar sesión</button>
+                                    </li>
+                                </>
+                            ) : (
+                                <li>
+                                    <button className="block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400" onClick={() => signIn()}>Iniciar sesión</button>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

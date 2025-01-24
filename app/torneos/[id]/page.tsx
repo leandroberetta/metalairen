@@ -1,6 +1,7 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import SearchBar from "@/app/components/SearchBar";
 import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
+import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -18,7 +19,7 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
     });
 
     if (!torneo) {
-        return <div>No se encontró el torneo</div>;
+        return <TorneoError />;
     }
     return (
         <Suspense fallback={<LoadingSpinner />}>
@@ -35,7 +36,7 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                     </h1>
 
                     <div className="grid grid-cols-1 gap-4">
-                    
+
                         <div>
                             <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
                                 className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
@@ -91,8 +92,6 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                             </table>
                         </div>
                     </div>
-
-
                 </div>
             </div >
         </Suspense >

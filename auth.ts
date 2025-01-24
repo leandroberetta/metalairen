@@ -1,5 +1,42 @@
+
 import NextAuth from "next-auth"
- 
+import Google from "next-auth/providers/google"
+import { prisma } from "./app/db/prisma";
+import { Usuario } from "@prisma/client";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [],
+  providers: [Google],
+  callbacks: {
+    async signIn({ user }) {
+      if (user.email && user.name) {
+        await ensureUserExists(user.email, user.name);
+      }
+
+      return true;
+    },
+  },
 })
+
+async function ensureUserExists(email: string, name: string) {
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    await createUser({ email, name });
+  }
+}
+
+async function findUserByEmail(email: string): Promise<Usuario | null> {
+  const usuario = await prisma.usuario.findFirst({
+    where: { email },
+  });
+  return usuario || null;
+}
+
+async function createUser(user: { email: string, name: string }) {
+  await prisma.usuario.create({
+    data: {
+      nombre: user.name,
+      email: user.email,
+    },
+  });
+}

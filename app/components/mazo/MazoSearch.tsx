@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import MazoList from "./MazoList";
 import { Mazo } from "@prisma/client";
 
-export default function MazoSearch({ mazos }: { mazos: Mazo[] }) {
+export default function MazoSearch({ mazos, linkEdit }: { mazos: Mazo[], linkEdit?: boolean }) {
     const searchParams = useSearchParams()
     const query = searchParams.get('query') ?? '';
     const subtipo1 = searchParams.get('subtipo1') ?? '';
@@ -23,6 +23,14 @@ export default function MazoSearch({ mazos }: { mazos: Mazo[] }) {
     });
 
     return (
-        <MazoList mazos={filteredMazos} />
+        <>
+            {filteredMazos.length > 0 ? (
+                <MazoList mazos={filteredMazos} linkEdit={linkEdit} />
+            ) : (
+                <div className="text-gray-200">
+                    No se encontraron mazos.
+                </div>
+            )}
+        </>
     );
 }

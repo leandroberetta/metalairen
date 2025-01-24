@@ -1,17 +1,19 @@
 import { MazoTemporal } from "@/app/components/mazo/MazoBuilder";
+import MazoError from "@/app/components/mazo/MazoError";
 import MazoGridView from "@/app/components/mazo/MazoGridView";
 import MazoListView from "@/app/components/mazo/MazoListView";
+import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
 import { Carta } from "@prisma/client";
 
 export default async function TorneoMazo({ params }: { params: Promise<{ id: string, idMazo: string }> }) {
     const torneoMazo = await prisma.torneoMazo.findUnique({ where: { id: parseInt((await params).idMazo) }, include: { mazo: true } });
     if (!torneoMazo) {
-        return <div>No se encontró el mazo</div>;
+        return <MazoError />;
     }
     const torneo = await prisma.torneo.findUnique({ where: { id: parseInt((await params).id) } });
     if (!torneo) {
-        return <div>No se encontró el torneo</div>;
+        return <TorneoError />;
     }
     const reinoCartas = await prisma.mazoCarta.findMany({
         where: {
