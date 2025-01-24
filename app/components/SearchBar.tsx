@@ -45,7 +45,7 @@ export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
                         </div>
                         <input
                             type="text"
-                            className="block w-full rounded border p-4 ps-10 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow-xl dark:shadow-gray-800 focus:ring-0 focus:outline-none"
+                            className="block w-full rounded border p-4 ps-10 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:shadow dark:shadow-gray-800 focus:ring-0 focus:outline-none"
                             placeholder="Buscar..."
                             onChange={(e) => {
                                 handleSearch(e.target.value);
@@ -56,7 +56,7 @@ export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
                 </div>
                 {filters && <Tooltip content="Búsqueda avanzada">
                     <button onClick={() => setBusquedaAvanzada(!busquedaAvanzada)}
-                        className={clsx("h-full ml-3 rounded bg-yellow-300 px-5 py-3 text-center text-base text-sm font-medium font-medium text-white dark:shadow-xl hover:bg-yellow-400 dark:focus:outline-none dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800", { "bg-yellow-400": busquedaAvanzada })}>
+                        className={clsx("h-full ml-3 rounded bg-yellow-300 px-5 py-3 text-center text-base text-sm font-medium font-medium text-white dark:shadow hover:bg-yellow-400 dark:focus:outline-none dark:text-gray-700 dark:shadow dark:shadow-gray-800", { "bg-yellow-400": busquedaAvanzada })}>
                         <svg
                             className="h-6 w-6 dark:text-gray-700"
 

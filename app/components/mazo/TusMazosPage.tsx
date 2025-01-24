@@ -1,7 +1,4 @@
-import { Tooltip } from "flowbite-react";
-import Link from "next/link";
 import MazoSearch from "./MazoSearch";
-import { Mazo } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/app/db/prisma";
 import CrearMazoButton from "./CrearMazoButton";
@@ -26,7 +23,7 @@ export default async function TusMazosPage() {
     const mazos = await prisma.mazo.findMany({
         where: { usuarioId: usuario.id },
         include: { cartas: true },
-        orderBy: { id: 'asc' },
+        orderBy: { id: 'desc' },
     });
     return (
         <>

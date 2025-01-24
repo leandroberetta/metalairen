@@ -41,8 +41,7 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
         if (mazoQueryParams.boveda.length > 0) {
             setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
         }
-        console.log(mazo);
-    }, [searchParams, cartas, mazoGuardado, subtipo1, subtipo2, nombre]);
+    }, [searchParams, cartas]);
 
     return (
         <div className="p-4">

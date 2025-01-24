@@ -21,7 +21,7 @@ export default function MazoBovedaCartaGrid({ cartas, bovedaPuntos }: { cartas: 
                 <div className="grow">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Bóveda</h5>
                 </div>
-                <span className="m-2 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{bovedaPuntos}P</span>
+                <span className="m-2 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{bovedaPuntos}P</span>
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {Array.from({ length: 3 }, (_, colIndex) => (

@@ -8,7 +8,7 @@ import TorneoFilters from "../components/torneo/TorneoFilters";
 export default async function Torneos() {
   const torneos = await prisma.torneo.findMany({
     orderBy: {
-      fecha: 'desc',
+      id: 'desc',
     },
   });
 

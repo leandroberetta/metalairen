@@ -1,4 +1,4 @@
-import { Carta, Mazo, MazoCarta } from "@prisma/client";
+import { Carta, Mazo } from "@prisma/client";
 import { MazoTemporal } from "../components/mazo/MazoBuilder";
 import { prisma } from "../db/prisma";
 

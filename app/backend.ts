@@ -9,14 +9,69 @@ export async function formAction() {
   await signIn("google")
 }
 
-export async function handleGuardarMazo(mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean) {
-  console.log("guardar mazo2");
+export async function handleEliminarMazo(id: number): Promise<{ error?: string }> {
   const session = await auth();
-  if (session && session.user && session.user.email) {
-    const usuario = await prisma.usuario.findFirst({
-      where: { email: session.user.email },
-    });
-    if (usuario) {
+
+  try {
+    if (session && session.user && session.user.email) {
+      const usuario = await prisma.usuario.findFirst({
+        where: { email: session.user.email },
+      });
+
+      if (!usuario) {
+        return { error: "Usuario no encontrado." };
+      }
+
+      const mazo = await prisma.mazo.findUnique({
+        where: { id },
+      });
+
+      if (!mazo) {
+        return { error: "Mazo no encontrado." };
+      }
+
+      if (mazo.usuarioId !== usuario.id) {
+        return { error: "No tienes permisos para eliminar este mazo." };
+      }
+
+      await prisma.mazoCarta.deleteMany({
+        where: { mazoId: id },
+      });
+
+      await prisma.mazo.delete({
+        where: { id },
+      });
+
+      return {};
+    } else {
+      return { error: "No se pudo autenticar la sesión." };
+    }
+  } catch (err) {
+    console.error("Error al eliminar el mazo:", err);
+    return { error: (err as Error).message || "Error desconocido." };
+  }
+}
+
+export async function handleGuardarMazo(
+  mazo: MazoTemporal,
+  nombre: string,
+  subtipo1: string,
+  subtipo2: string,
+  publico: boolean,
+  id?: number
+): Promise<{ mazoId?: number; error?: string }> {
+  const session = await auth();
+
+  try {
+    if (session && session.user && session.user.email) {
+      const usuario = await prisma.usuario.findFirst({
+        where: { email: session.user.email },
+      });
+
+      if (!usuario) {
+        return { error: "Usuario no encontrado." };
+      }
+
       const reinoReduced = Object.values(
         mazo.reino.reduce((acc: Record<number, CartaCantidad>, carta) => {
           if (acc[carta.id]) {
@@ -27,6 +82,7 @@ export async function handleGuardarMazo(mazo: MazoTemporal, nombre: string, subt
           return acc;
         }, {})
       );
+
       const sideboardReduced = Object.values(
         mazo.sideboard.reduce((acc: Record<number, CartaCantidad>, carta) => {
           if (acc[carta.id]) {
@@ -37,6 +93,7 @@ export async function handleGuardarMazo(mazo: MazoTemporal, nombre: string, subt
           return acc;
         }, {})
       );
+
       const bovedaReduced = Object.values(
         mazo.boveda.reduce((acc: Record<number, CartaCantidad>, carta) => {
           if (acc[carta.id]) {
@@ -47,44 +104,84 @@ export async function handleGuardarMazo(mazo: MazoTemporal, nombre: string, subt
           return acc;
         }, {})
       );
-      // Iniciar la transacción
-      const result = await prisma.$transaction(async (prisma) => {
-        // Crear el mazo
-        const mazo = await prisma.mazo.create({
-          data: {
-            nombre,
-            usuarioId: usuario.id,
-            publico: publico || false,
-            subtipo1,
-            subtipo2,
-          },
-        });
-        // Asociar las cartas al mazo
-        const reinoCartas = reinoReduced.map((carta) => ({
-          mazoId: mazo.id,
-          cartaId: carta.id,
-          seccion: "reino",
-          cantidad: carta.cantidad,
-        }));
 
-        const bovedaCartas = reinoReduced.map((carta) => ({
-          mazoId: mazo.id,
-          cartaId: carta.id,
-          seccion: "boveda",
-          cantidad: carta.cantidad,
-        }));
+      const mazoId = await prisma.$transaction(async (prisma) => {
+        let mazoId: number;
 
-        const sidedeckCartas = reinoReduced.map((carta) => ({
-          mazoId: mazo.id,
-          cartaId: carta.id,
-          seccion: "sidedeck",
-          cantidad: carta.cantidad,
-        }));
+        if (id) {
+          const existingMazo = await prisma.mazo.findUnique({
+            where: { id },
+          });
+
+          if (!existingMazo) {
+            throw new Error("El mazo no existe.");
+          }
+
+          await prisma.mazo.update({
+            where: { id },
+            data: {
+              nombre,
+              usuarioId: usuario.id,
+              publico: publico || false,
+              subtipo1,
+              subtipo2,
+            },
+          });
+
+          await prisma.mazoCarta.deleteMany({
+            where: { mazoId: id },
+          });
+
+          mazoId = id;
+        } else {
+          const newMazo = await prisma.mazo.create({
+            data: {
+              nombre,
+              usuarioId: usuario.id,
+              publico: publico || false,
+              subtipo1,
+              subtipo2,
+            },
+          });
+
+          mazoId = newMazo.id;
+        }
+
+        const cartas = [
+          ...reinoReduced.map((carta) => ({
+            mazoId,
+            cartaId: carta.id,
+            seccion: "reino",
+            cantidad: carta.cantidad,
+          })),
+          ...bovedaReduced.map((carta) => ({
+            mazoId,
+            cartaId: carta.id,
+            seccion: "boveda",
+            cantidad: carta.cantidad,
+          })),
+          ...sideboardReduced.map((carta) => ({
+            mazoId,
+            cartaId: carta.id,
+            seccion: "sidedeck",
+            cantidad: carta.cantidad,
+          })),
+        ];
 
         await prisma.mazoCarta.createMany({
-          data: [...reinoCartas, ...bovedaCartas, ...sidedeckCartas],
+          data: cartas,
         });
+
+        return mazoId;
       });
+
+      return { mazoId };
+    } else {
+      return { error: "No se pudo autenticar la sesión." };
     }
+  } catch (err) {
+    console.error("Error al guardar el mazo:", err);
+    return { error: (err as Error).message || "Error desconocido." };
   }
 }
+

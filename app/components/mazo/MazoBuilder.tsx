@@ -6,11 +6,15 @@ import { MazoSections } from "./MazoSections";
 import { Carta } from "@prisma/client";
 import SearchBar from "../SearchBar";
 import { CartaCantidad } from "../mazo/MazoSection";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import MazoCostesStack from "../mazo/MazoCostesStack";
 import CartaFilters from "../carta/CartaFilters";
-import { addBulkCartaQueryParams, addSubtiposQueryParams, agregarMazoQueryParams, calcularPuntosBoveda, crearMazoQueryParams } from "@/app/util/mazoUtil";
-import { useSession } from "next-auth/react";
+import { addBulkCartaQueryParams, agregarMazoQueryParams, calcularPuntosBoveda, crearMazoQueryParams } from "@/app/util/mazoUtil";
+import MazoMenu from "./MazoMenu";
+import MazoCostesChart from "./MazoCostesChart";
+import Select from "../Select";
+import MazoValidations from "./MazoValidations";
+import MazoParametros from "./MazoParametros";
 
 export interface MazoTemporal {
     reino: Carta[];
@@ -18,25 +22,26 @@ export interface MazoTemporal {
     sideboard: Carta[];
 }
 
-export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, publicoGuardado, onGuardarMazo }: {
+export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, publicoGuardado, id, onGuardarMazo, onEliminarMazo }: {
     cartas: Carta[],
     mazoGuardado?: MazoTemporal,
     subtipo1Guardado?: string | null,
     subtipo2Guardado?: string | null,
     nombreGuardado?: string | null,
     publicoGuardado?: boolean,
-    publico?: boolean,
-    onGuardarMazo: (mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean) => void 
+    id?: number,
+    onGuardarMazo: (mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean, id?: number) => Promise<{ mazoId?: number; error?: string }>,
+    onEliminarMazo: (id: number) => Promise<{ error?: string }>
 }) {
     const [mazo, setMazo] = useState<MazoTemporal>(mazoGuardado || { reino: [], boveda: [], sideboard: [] });
     const [bovedaPuntos, setBovedaPuntos] = useState(mazoGuardado ? calcularPuntosBoveda(mazoGuardado.boveda) : 0);
-    const [subtipo1, setSubtipo1] = useState<string | null>(subtipo1Guardado || null);
-    const [subtipo2, setSubtipo2] = useState<string | null>(subtipo2Guardado || null);
     const [nombre, setNombre] = useState<string | null>(nombreGuardado || "Mazo");
-    const [publico, setPublico] = useState<boolean>(publicoGuardado || false);
+    const [publico, setPublico] = useState<boolean>((publicoGuardado !== undefined) ? publicoGuardado : false);
     const [errors, setErrors] = useState<string[]>([]);
+    const [mostrarChart, setMostrarChart] = useState(false);
+    const [mostrarParametros, setMostrarParametros] = useState(false);
     const searchParams = useSearchParams();
-
+    const router = useRouter();
 
     useEffect(() => {
         if (mazoGuardado) {
@@ -50,13 +55,34 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                 setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
             }
         }
-    }, []);
+    }, [cartas, mazo, mazoGuardado, searchParams, subtipo1Guardado, subtipo2Guardado]);
+
+    const handleEliminarMazo = async () => {
+        if (id) {
+            onEliminarMazo(id);
+            router.push(`/mazos`);
+        }
+    };
+
 
     const handleGuardarMazo = async () => {
+
         const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
         const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
 
-        onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico);
+        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+
+        if (errors.length > 0) {
+            setErrors(errors);
+            return;
+        }
+
+        const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, id);
+        if (mazoId) {
+            router.push(`/mazo/editar/${mazoId}`);
+        } else {
+            console.log(error);
+        }
     }
 
     const handleCartaClick = (carta: Carta) => {
@@ -69,7 +95,6 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                         boveda: [...prevMazo.boveda, carta],
                     }));
                     if (carta.nombre === 'TESORO GENERICO') {
-                        console.log("es un tesoro generico");
                         setBovedaPuntos((prevPuntos) => prevPuntos - 1);
                     } else {
                         setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
@@ -204,7 +229,6 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
         setErrors(errors);
         if (errors.length === 0) {
-            console.log("exporto");
             const mazoString = exportarListaMazo(mazo);
             navigator.clipboard.writeText(mazoString);
         }
@@ -452,23 +476,93 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
         <div className="p-4">
             <SearchBar filters={CartaFilters()} />
+            <div className="flex flex-col md:flex-row mt-4">
+                <div className="grow">
+                    <h1 className="text-3xl font-extrabold dark:text-white flex-grow">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r dark:from-white dark:to-yellow-300">{nombre}</span>
+                    </h1>
+                </div>
+                <div className="flex mt-4 md:mt-0">
+                    <MazoMenu
+                        onEliminarMazo={handleEliminarMazo}
+                        onGuardarMazo={handleGuardarMazo}
+                        onDownloadClick={handleDownloadClick}
+                        onExportClick={handleExportClick}
+                        onImportClick={handleImportClick}
+                        mostrarChart={mostrarChart}
+                        mostrarParametros={mostrarParametros}
+                        setMostrarChart={setMostrarChart}
+                        setMostrarParametros={setMostrarParametros}
+                    />
+                </div>
+            </div>
             <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-8">
                 <div className="md:col-span-2 lg:col-span-1">
-                    <MazoSections
-                        mazo={mazo}
-                        nombre={nombre || "Mazo"}
-                        publico={publico}
-                        onPlusClick={handleCartaPlusClick}
-                        onMinusClick={handleCartaMinusClick}
-                        onSideboardClick={handleCartaSideboardClick}
-                        onImportClick={handleImportClick}
-                        onExportClick={handleExportClick}
-                        onDownloadClick={handleDownloadClick}
-                        onGuardarMazo={handleGuardarMazo}
-                        onCambiarNombre={(nombre: string) => setNombre(nombre)}
-                        onCambiarPublico={(publico: boolean) => setPublico(publico)}
-                        validationErrors={errors}
-                        bovedaPuntos={bovedaPuntos} />
+                    <div className="grid grid-cols-2 gap-2">
+                        <div className="cols-span-1">
+                            <Select options={{
+                                "ANIMAL": "Animal",
+                                "BRUJA": "Bruja",
+                                "DEMONIO": "Demonio",
+                                "DESERTOR": "Desertor",
+                                "DJINN": "Djinn",
+                                "DRAGON": "Dragón",
+                                "ELEMENTAL": "Elemental",
+                                "ENANO": "Enano",
+                                "ETERNO": "Eterno",
+                                "GIGANTE": "Gigante",
+                                "INSECTO": "Insecto",
+                                "MAGO": "Mago",
+                                "MIMETICO": "Mimético",
+                                "MONJE": "Monje",
+                                "PIRATA": "Pirata",
+                                "SOLDADO": "Soldado",
+                            }} label={"Subtipo"} parameter={"subtipo1"} allowMultipleSelections={false} />
+                        </div>
+                        <div className="cols-span-1">
+                            <Select options={{
+                                "ANIMAL": "Animal",
+                                "BRUJA": "Bruja",
+                                "DEMONIO": "Demonio",
+                                "DESERTOR": "Desertor",
+                                "DJINN": "Djinn",
+                                "DRAGON": "Dragón",
+                                "ELEMENTAL": "Elemental",
+                                "ENANO": "Enano",
+                                "ETERNO": "Eterno",
+                                "GIGANTE": "Gigante",
+                                "INSECTO": "Insecto",
+                                "MAGO": "Mago",
+                                "MIMETICO": "Mimético",
+                                "MONJE": "Monje",
+                                "PIRATA": "Pirata",
+                                "SOLDADO": "Soldado",
+                            }} label={"Subtipo"} parameter={"subtipo2"} allowMultipleSelections={false} />
+                        </div>
+                    </div>
+                    {mostrarParametros && (
+                        <div className="mt-4">
+                            <MazoParametros nombre={nombre || "Mazo"} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} />
+                        </div>
+                    )}
+                    {mostrarChart && (
+                        <div className="mt-4">
+                            <MazoCostesChart mazo={mazo} />
+                        </div>
+                    )}
+                    {errors.length > 0 && (
+                        <div className="mt-4">
+                            <MazoValidations validationErrors={errors} />
+                        </div>
+                    )}
+                    <div className="mt-4 sticky top-4 max-h-screen overflow-auto scrollbar-hide pb-10">
+                        <MazoSections
+                            mazo={mazo}
+                            onPlusClick={handleCartaPlusClick}
+                            onMinusClick={handleCartaMinusClick}
+                            onSideboardClick={handleCartaSideboardClick}
+                            bovedaPuntos={bovedaPuntos} />
+                    </div>
                 </div>
                 <div className="md:col-span-3 lg:col-span-2">
                     <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} />

@@ -68,6 +68,7 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
     );
 }
 
+/*
 export async function generateStaticParams() {
     const torneos = await prisma.torneo.findMany({
         include: {
@@ -88,3 +89,4 @@ export async function generateStaticParams() {
 
     return paths;
 }
+*/

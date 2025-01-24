@@ -17,7 +17,7 @@ export default function CardsList({ cartas, onCartaClick }: { cartas: Carta[], o
                         <img
                             src={carta.imagen}
                             alt={`Card ${carta.id}`}
-                            className="rounded-xl shadow-xl dark:shadow-xl dark:shadow-gray-800"
+                            className="rounded-xl shadow dark:shadow dark:shadow-gray-800"
                         />
                     </div>
                 ))}

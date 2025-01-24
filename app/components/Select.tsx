@@ -56,7 +56,7 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
   }, []);
 
   return (
-    <div className="relative inline-block text-left dark:shadow-xl dark:shadow-gray-800 w-full" ref={dropdownRef}>
+    <div className="relative inline-block text-left dark:shadow dark:shadow-gray-800 w-full" ref={dropdownRef}>
       <button
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-gray-400 dark:bg-gray-700 rounded border dark:border-gray-600"
@@ -82,7 +82,7 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
       </button>
 
       <div
-        className={`${isDropdownOpen ? 'block' : 'hidden'} absolute z-50 mt-2 dark:bg-gray-700 dark:text-white rounded shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none w-full`}
+        className={`${isDropdownOpen ? 'block' : 'hidden'} absolute z-50 mt-2 dark:bg-gray-700 dark:text-white rounded shadow ring-1 ring-black ring-opacity-5 focus:outline-none w-full`}
       >
         <ul className="py-1 overflow-y-auto text-sm text-white">
           {Object.entries(options).map(([id, value]) => (

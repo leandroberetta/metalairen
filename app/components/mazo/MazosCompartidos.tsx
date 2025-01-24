@@ -1,7 +1,5 @@
-import { Tooltip } from "flowbite-react";
-import Link from "next/link";
 import MazoSearch from "./MazoSearch";
-import { Mazo, Prisma } from "@prisma/client";
+import { Mazo } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/app/db/prisma";
 import CrearMazoButton from "./CrearMazoButton";

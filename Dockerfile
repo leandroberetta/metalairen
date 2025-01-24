@@ -1,8 +1,19 @@
-FROM nginx:latest
+FROM node:18-alpine
 
-COPY out /usr/share/nginx/html
+WORKDIR /app
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY .next ./.next
+COPY public ./public
+COPY package.json ./package.json
+COPY package-lock.json ./package-lock.json
+COPY prisma ./prisma
+COPY .env ./.env
+COPY next.config.ts ./next.config.ts
 
-COPY certs/server.crt /etc/ssl/certs/server.crt
-COPY certs/server.key /etc/ssl/private/server.key
+RUN npm ci --only=production
+
+RUN npx prisma generate
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

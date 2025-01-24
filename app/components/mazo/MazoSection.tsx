@@ -45,8 +45,8 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
         <>
             <div className="flex pb-4">
                 <h4 className="text-2xl font-bold dark:text-white flex-grow">{nombre}</h4>
-                {sectionKey === 'boveda' && <span className="me-1 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{bovedaPuntos}P</span>}
-                <span className="content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow-xl dark:text-gray-700 dark:shadow-xl dark:shadow-gray-800">{section.length}</span>
+                {sectionKey === 'boveda' && <span className="me-1 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{bovedaPuntos}P</span>}
+                <span className="content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{section.length}</span>
             </div>
             <div className="grid gap-1">
                 {sectionReduced.length > 0 ? (

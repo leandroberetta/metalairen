@@ -7,7 +7,7 @@ import React from "react";
 export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], linkEdit?: boolean }) {
     return (
         <div>
-            <div className="relative overflow-x-auto shadow-xl dark:shadow-xl dark:shadow-gray-800 rounded" >
+            <div className="relative overflow-x-auto shadow dark:shadow dark:shadow-gray-800 rounded" >
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -20,6 +20,11 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                             <th scope="col" className="px-6 py-3">
                                 Subtipo
                             </th>
+                            {linkEdit &&
+                                <th scope="col" className="px-6 py-3">
+                                    Público
+                                </th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +33,7 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                                 <th scope="row"
                                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <h5 className="text-xl font-bold">
-                                        <Link href={linkEdit ? `/mazo/editar/${mazo.id}`:`/mazo/ver/${mazo.id}`} className="font-medium text-yellow-300 hover:text-yellow-400">
+                                        <Link href={linkEdit ? `/mazo/editar/${mazo.id}` : `/mazo/ver/${mazo.id}`} className="font-medium text-yellow-300 hover:text-yellow-400">
                                             {mazo.nombre}
                                         </Link>
                                     </h5>
@@ -39,6 +44,11 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                                 <td className="px-6 py-4">
                                     {mazo.subtipo2}
                                 </td>
+                                {linkEdit &&
+                                    <td className="px-6 py-4">
+                                        <input readOnly={true} checked={mazo.publico ? true : false} id="default-checkbox" type="checkbox" value="" className="appearance-none w-4 h-4 border border-gray-300 rounded dark:focus:ring-0 dark:focus:outline-none checked:dark:bg-yellow-300 dark:checked:text-gray-900" />
+                                    </td>
+                                }
                             </tr>
                         ))}
                     </tbody>

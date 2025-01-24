@@ -3,7 +3,7 @@
 import { ApexOptions } from 'apexcharts';
 import React, { useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
-import { Mazo } from './mazo/MazoBuilder';
+import { MazoTemporal } from './MazoBuilder';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -13,7 +13,7 @@ interface Serie {
     data: { x: string, y: number }[];
 }
 
-export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo, hideTitle?: boolean }) {
+export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: MazoTemporal, hideTitle?: boolean }) {
     const [series, setSeries] = useState<Serie[]>([
         { name: "Unidades", color: "#243674", data: [] },
         { name: "Acciones", color: "#961a7f", data: [] },
@@ -44,7 +44,7 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
                 conteos["Monumentos"][String(carta.coste)]++;
             }
         });
-
+        console.log(mazo);
         setSeries((prevSeries) =>
             prevSeries.map((serie) => ({
                 ...serie,

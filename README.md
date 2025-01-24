@@ -9,6 +9,12 @@ npm install
 npx prisma generate
 ```
 
+### Generación de backup de base de datos
+
+```bash
+docker exec -t metalairen-db pg_dump -U metalairen metalairen > dump.sql
+```
+
 ### Creación de base de datos
 
 ```bash
@@ -22,19 +28,12 @@ docker run -d \
   postgres:latest
 ```
 
-### Despliegue estático
-
-Ejecutar los siguientes pasos (es necesario tener la base de datos levantada):
+### Certificados
 
 ```bash
-npm run build
-
-docker build -t metalairen .
-docker run -p 8080:80 8443:443 --name metalairen metalairen
-```
-
-### Generación de backup de base de datos
-
-```bash
-docker exec -t metalairen-db pg_dump -U metalairen metalairen > dump.sql
+mkdir certs
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout certs/key.pem \
+    -out certs/cert.pem \
+    -subj "/C=US/ST=State/L=City/O=Organization/OU=Unit/CN=localhost"
 ```

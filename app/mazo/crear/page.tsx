@@ -10,7 +10,7 @@ export default async function CrearMazo() {
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
-        <MazoBuilder cartas={cartas} onGuardarMazo={handleGuardarMazo} />
+        <MazoBuilder cartas={cartas} onGuardarMazo={handleGuardarMazo} publicoGuardado={false} />
       </Suspense>
     </>
   );
