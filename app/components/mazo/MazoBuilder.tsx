@@ -55,7 +55,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                 setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
             }
         }
-    }, [cartas, mazo, mazoGuardado, searchParams, subtipo1Guardado, subtipo2Guardado]);
+    }, [cartas, mazoGuardado, searchParams, subtipo1Guardado, subtipo2Guardado]);
 
     const handleEliminarMazo = async () => {
         if (id) {
