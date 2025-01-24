@@ -16,14 +16,14 @@ export default async function MazosPublicos() {
             mazos = await prisma.mazo.findMany({
                 where: { publico: true, usuarioId: { not: usuario.id }},
                 include: { cartas: true },
-                orderBy: { id: 'asc' },
+                orderBy: { id: 'desc' },
             });
         }
     } else {
         mazos = await prisma.mazo.findMany({
             where: { publico: true },
             include: { cartas: true },
-            orderBy: { id: 'asc' },
+            orderBy: { id: 'desc' },
         });
     }
     
