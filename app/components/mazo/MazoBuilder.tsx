@@ -66,17 +66,8 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
 
     const handleGuardarMazo = async () => {
-
         const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
         const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
-
-        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-
-        if (errors.length > 0) {
-            setErrors(errors);
-            return;
-        }
-
         const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, id);
         if (mazoId) {
             router.push(`/mazo/editar/${mazoId}`);
@@ -542,11 +533,12 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     </div>
                     {mostrarParametros && (
                         <div className="mt-4">
-                            <MazoParametros nombre={nombre || "Mazo"} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} />
+                            <MazoParametros nombre={nombre || ""} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} />
                         </div>
                     )}
                     {mostrarChart && (
                         <div className="mt-4">
+                            <h4 className="text-xl font-bold dark:text-white flex-grow mb-4">Costes del reino</h4>
                             <MazoCostesChart mazo={mazo} />
                         </div>
                     )}

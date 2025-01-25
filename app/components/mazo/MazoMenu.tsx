@@ -32,7 +32,7 @@ export default function MazoMenu({
     const currentQueryParams = Object.fromEntries(searchParams.entries());
 
     return (
-        <>
+        <div className="flex flex-row overflow-x-scroll scrollbar-hide">
             {session.data?.user && (
                 <Tooltip content="Editar información del mazo">
                     <button onClick={() => setMostrarParametros(!mostrarParametros)} type="button" className={clsx("focus:outline-none dark:bg-yellow-300 dark:hover:bg-yellow-400 font-medium rounded text-sm px-2.5 py-2.5 me-2", { "dark:bg-yellow-400": mostrarParametros })}>
@@ -105,6 +105,6 @@ export default function MazoMenu({
                     </Tooltip>
                 </>
             )}
-        </>
+        </div>
     );
 }

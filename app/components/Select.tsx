@@ -59,7 +59,7 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
     <div className="relative inline-block text-left dark:shadow dark:shadow-gray-800 w-full" ref={dropdownRef}>
       <button
         onClick={() => setIsDropdownOpen((prev) => !prev)}
-        className="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-gray-400 dark:bg-gray-700 rounded border dark:border-gray-600"
+        className="inline-flex justify-between w-full px-4 py-2 text-sm  text-gray-400 dark:bg-gray-700 rounded border dark:border-gray-600"
       >
         {selectedOptions.length > 0 && allowMultipleSelections
           ? `${label} (${selectedOptions.length})`
