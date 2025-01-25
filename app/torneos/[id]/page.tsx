@@ -28,7 +28,7 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                     <SearchBar />
                 </div>
                 <div className="">
-                    <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
+                    <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
                         <span
                             className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">
                             {torneo.nombre}
@@ -38,13 +38,13 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                     <div className="grid grid-cols-1 gap-4">
 
                         <div>
-                            <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
+                            <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
                                 className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
                             </h1>
                             <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
                         </div>
                     </div>
-                    <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
+                    <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
                         className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Participantes</span>
                     </h1>
                     <div>

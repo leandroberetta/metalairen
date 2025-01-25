@@ -18,7 +18,7 @@ export default async function Torneos() {
         <div className="pb-4">
           <SearchBar filters={TorneoFilters()} />
         </div>
-        <h1 className="mb-8 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
+        <h1 className="mb-8 text-xl md.text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
           <span
             className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">
             Torneos

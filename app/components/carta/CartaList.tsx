@@ -7,7 +7,7 @@ export default function CardsList({ cartas, onCartaClick }: { cartas: Carta[], o
     return (
         <div className="mx-auto">
             {cartas.length > 0 &&
-                <h1 className="text-3xl font-extrabold dark:text-white flex-grow mb-4">
+                <h1 className="text-xl md:text-3xl font-extrabold dark:text-white flex-grow py-4">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r dark:from-white dark:to-yellow-300">Resultados de la búsqueda ({cartas.length})</span>
                 </h1>
             }
