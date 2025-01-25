@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/app/db/prisma";
 import CrearMazoButton from "./CrearMazoButton";
 import MazoError from "./MazoError";
+import { MazoConUsuario } from "./MazosCompartidos";
 
 export default async function TusMazosPage() {
     const session = await auth();
@@ -20,9 +21,9 @@ export default async function TusMazosPage() {
         return <div>No se encontró el usuario en la base de datos</div>;
     }
 
-    const mazos = await prisma.mazo.findMany({
+    const mazos: MazoConUsuario[] = await prisma.mazo.findMany({
         where: { usuarioId: usuario.id },
-        include: { cartas: true },
+        include: { cartas: true, usuario: true },
         orderBy: { id: 'desc' },
     });
     return (

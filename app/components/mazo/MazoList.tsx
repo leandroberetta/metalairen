@@ -1,14 +1,8 @@
 "use client";
 
-import { Mazo } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
-
-type MazoConUsuario = Mazo & {
-    usuario: {
-      nombre: string;
-    };
-  };
+import { MazoConUsuario } from "./MazosCompartidos";
 
 export default function MazoList({ mazos, linkEdit = false }: { mazos: MazoConUsuario[], linkEdit?: boolean }) {
     return (

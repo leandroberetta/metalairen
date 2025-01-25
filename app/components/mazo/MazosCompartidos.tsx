@@ -4,10 +4,16 @@ import { auth } from "@/auth";
 import { prisma } from "@/app/db/prisma";
 import CrearMazoButton from "./CrearMazoButton";
 
+export type MazoConUsuario = Mazo & {
+    usuario: {
+        nombre: string;
+    };
+};
+
 export default async function MazosPublicos() {
     const session = await auth();
     const email = session?.user?.email;
-    let mazos: Mazo[] = [];
+    let mazos: MazoConUsuario[] = [];
     if (email) {
         const usuario = await prisma.usuario.findFirst({
             where: { email },
@@ -22,9 +28,10 @@ export default async function MazosPublicos() {
     } else {
         mazos = await prisma.mazo.findMany({
             where: { publico: true },
-            include: { usuario: true },
+            include: { cartas: true, usuario: true },
             orderBy: { id: 'desc' },
         });
+        console.log(mazos);
     }
 
     return (

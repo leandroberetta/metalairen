@@ -3,9 +3,9 @@
 import { } from "react";
 import { useSearchParams } from "next/navigation";
 import MazoList from "./MazoList";
-import { Mazo } from "@prisma/client";
+import { MazoConUsuario } from "./MazosCompartidos";
 
-export default function MazoSearch({ mazos, linkEdit }: { mazos: Mazo[], linkEdit?: boolean }) {
+export default function MazoSearch({ mazos, linkEdit }: { mazos: MazoConUsuario[], linkEdit?: boolean }) {
     const searchParams = useSearchParams()
     const query = searchParams.get('query') ?? '';
     const subtipo1 = searchParams.get('subtipo1') ?? '';
