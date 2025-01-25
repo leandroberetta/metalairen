@@ -58,7 +58,7 @@ export default function Navbar() {
                             </>
                         )}
                         {status === 'unauthenticated' && (
-                            <ul className="items-center font-bold flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                            <ul className="items-center font-bold flex p-0  border border-gray-100 rounded-lg bg-gray-50 flex-row space-x-8 rtl:space-x-reverse mt-0 border-0 bg-white dark:bg-gray-900 dark:border-gray-700">
                                 <li>
                                     <button className="block py-2 px-3 rounded md:bg-transparent md:p-0 dark:text-white hover:dark:text-yellow-400" onClick={() => signIn()}>Iniciar sesión</button>
                                 </li>
