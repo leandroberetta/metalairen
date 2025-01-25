@@ -15,7 +15,7 @@ export default async function MazosPublicos() {
         if (usuario) {
             mazos = await prisma.mazo.findMany({
                 where: { publico: true, usuarioId: { not: usuario.id }},
-                include: { cartas: true },
+                include: { cartas: true, usuario: true },
                 orderBy: { id: 'desc' },
             });
         }

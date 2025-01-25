@@ -25,6 +25,11 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                                     Público
                                 </th>
                             }
+                            {!linkEdit &&
+                                <th scope="col" className="px-6 py-3">
+                                    Usuario
+                                </th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +52,11 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                                 {linkEdit &&
                                     <td className="px-6 py-4">
                                         <input readOnly={true} checked={mazo.publico ? true : false} id="default-checkbox" type="checkbox" value="" className="appearance-none w-4 h-4 border border-gray-300 rounded dark:focus:ring-0 dark:focus:outline-none checked:dark:bg-yellow-300 dark:checked:text-gray-900" />
+                                    </td>
+                                }
+                                {!linkEdit &&
+                                    <td className="px-6 py-4">
+                                        {mazo.usuarioId}
                                     </td>
                                 }
                             </tr>
