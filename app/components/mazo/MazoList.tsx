@@ -4,7 +4,13 @@ import { Mazo } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
-export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], linkEdit?: boolean }) {
+type MazoConUsuario = Mazo & {
+    usuario: {
+      nombre: string;
+    };
+  };
+
+export default function MazoList({ mazos, linkEdit = false }: { mazos: MazoConUsuario[], linkEdit?: boolean }) {
     return (
         <div>
             <div className="relative overflow-x-auto shadow dark:shadow dark:shadow-gray-800 rounded" >
@@ -56,7 +62,7 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: Mazo[], l
                                 }
                                 {!linkEdit &&
                                     <td className="px-6 py-4">
-                                        {mazo.usuarioId}
+                                        {mazo.usuario.nombre}
                                     </td>
                                 }
                             </tr>

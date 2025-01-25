@@ -14,7 +14,7 @@ export default async function MazosPublicos() {
         });
         if (usuario) {
             mazos = await prisma.mazo.findMany({
-                where: { publico: true, usuarioId: { not: usuario.id }},
+                where: { publico: true, usuarioId: { not: usuario.id } },
                 include: { cartas: true, usuario: true },
                 orderBy: { id: 'desc' },
             });
@@ -22,11 +22,11 @@ export default async function MazosPublicos() {
     } else {
         mazos = await prisma.mazo.findMany({
             where: { publico: true },
-            include: { cartas: true },
+            include: { usuario: true },
             orderBy: { id: 'desc' },
         });
     }
-    
+
     return (
         <>
             <div className="flex flex-row">
