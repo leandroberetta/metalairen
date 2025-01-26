@@ -15,6 +15,8 @@ import MazoCostesChart from "./MazoCostesChart";
 import Select from "../Select";
 import MazoValidations from "./MazoValidations";
 import MazoParametros from "./MazoParametros";
+import { useToast } from "@/app/hooks/useToast";
+import { Toast } from "../Toast";
 
 export interface MazoTemporal {
     reino: Carta[];
@@ -42,6 +44,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const [mostrarParametros, setMostrarParametros] = useState(false);
     const searchParams = useSearchParams();
     const router = useRouter();
+    const { toast, showToast, hideToast } = useToast();
 
     useEffect(() => {
         if (mazoGuardado) {
@@ -55,7 +58,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                 setBovedaPuntos(calcularPuntosBoveda(mazoQueryParams.boveda));
             }
         }
-    }, [cartas, mazoGuardado, searchParams, subtipo1Guardado, subtipo2Guardado]);
+    }, []);
 
     const handleEliminarMazo = async () => {
         if (id) {
@@ -64,13 +67,15 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         }
     };
 
-
     const handleGuardarMazo = async () => {
         const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
         const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
         const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, id);
         if (mazoId) {
-            router.push(`/mazo/editar/${mazoId}`);
+            const newPath = `/mazo/editar/${mazoId}?${searchParams.toString()}`;
+
+            window.history.replaceState(null, "", newPath);
+            showToast("Mazo guardado correctamente.", "success");
         } else {
             console.log(error);
         }
@@ -466,6 +471,13 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     return (
 
         <div className="p-4">
+            {toast.visible && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={hideToast}
+                />
+            )}
             <SearchBar filters={CartaFilters()} />
             <div className="flex flex-col md:flex-row mt-4">
                 <div className="grow">
