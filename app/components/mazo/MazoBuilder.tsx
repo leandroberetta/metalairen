@@ -452,7 +452,6 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         const SIDEDECK_MAX = 7;
         const BOVEDA_MAX = 15;
         const REINO_SIDEDECK_CARD_LIMIT = 4;
-        const BOVEDA_CARD_LIMIT = 1;
         const BOVEDA_PUNTOS_MAX = 30;
 
         const errors: string[] = [];
