@@ -1,4 +1,3 @@
-// components/Toast.tsx
 import React, { useEffect } from "react";
 
 type ToastProps = {
@@ -18,8 +17,8 @@ export function Toast({ message, type = "success", onClose }: ToastProps) {
     useEffect(() => {
         const timer = setTimeout(() => {
             onClose();
-        }, 3000); // Auto-hide after 3 seconds
-        return () => clearTimeout(timer); // Cleanup the timer
+        }, 3000); 
+        return () => clearTimeout(timer);
     }, [onClose]);
 
     return (

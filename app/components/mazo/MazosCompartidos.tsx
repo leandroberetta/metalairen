@@ -31,7 +31,6 @@ export default async function MazosPublicos() {
             include: { cartas: true, usuario: true },
             orderBy: { id: 'desc' },
         });
-        console.log(mazos);
     }
 
     return (

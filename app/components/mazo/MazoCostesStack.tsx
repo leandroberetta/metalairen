@@ -33,13 +33,15 @@ export default function MazoCostesStack({ cartas }: { cartas: Carta[] }) {
 
     return (
         <div>
-            <h4 className="text-2xl font-bold dark:text-white flex-grow mb-4">Reino</h4>
             <div className="grid grid-cols-7 gap-4 relative"> {/* Asegura z-10 en las cartas */}
                 {Array.from({ length: 7 }, (_, colIndex) => (
                     <div key={colIndex} className="relative rounded">
+                        <div className="flex justify-center">
+                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-300 dark:text-gray-900 content-center">{colIndex + 1}</span>
+                        </div>
                         {cartasPorCostes[colIndex + 1]?.map((carta, i) => (
                             <button key={carta.id} type="button" className=""> {/* Reducir z-index */}
-                                <div style={{ top: `${i * 80}px` }} className="absolute">
+                                <div style={{ top: `${i * 80 + 35}px` }} className="absolute">
                                     <MazoCartaItem key={carta.id} carta={carta} cantidad={carta.cantidad} />
                                 </div>
                             </button>

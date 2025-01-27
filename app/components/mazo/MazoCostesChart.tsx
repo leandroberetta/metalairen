@@ -44,7 +44,6 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
                 conteos["Monumentos"][String(carta.coste)]++;
             }
         });
-        console.log(mazo);
         setSeries((prevSeries) =>
             prevSeries.map((serie) => ({
                 ...serie,

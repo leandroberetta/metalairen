@@ -14,8 +14,8 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
     sectionKey: string,
     section: Carta[],
     bovedaPuntos?: number
-    onPlusClick?: (carta: CartaCantidad) => void,
-    onMinusClick?: (carta: CartaCantidad) => void
+    onPlusClick?: (carta: CartaCantidad, section: string) => void,
+    onMinusClick?: (carta: CartaCantidad, section: string) => void
     onSideboardClick?: (carta: Carta, fromSection: string) => void
     viewMode?: boolean
 }) {

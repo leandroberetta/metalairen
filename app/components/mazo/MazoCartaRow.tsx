@@ -5,8 +5,8 @@ import { CartaCantidad } from "./MazoSection";
 export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick, onSideboardClick, viewMode = false, onCartaClick }: {
     carta: CartaCantidad,
     section: string,
-    onPlusClick?: (carta: CartaCantidad) => void,
-    onMinusClick?: (carta: CartaCantidad) => void
+    onPlusClick?: (carta: CartaCantidad, section: string) => void,
+    onMinusClick?: (carta: CartaCantidad, section: string) => void
     onSideboardClick?: (carta: CartaCantidad, fromSection: string) => void,
     onCartaClick?: (carta: CartaCantidad) => void,
     viewMode?: boolean
@@ -22,23 +22,21 @@ export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick
                 <p className="">{carta.nombre}</p>
             </button>
             {!viewMode && (
-                (section === "reino" || section === "boveda") && (
-                    <div className="inline-flex rounded-md shadow-sm" role="group">
-                        {section === "boveda" && <span className="me-1 content-center text-md rounded bg-gray-200 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{carta.costeBoveda}P</span>}
-                        <button onClick={() => onMinusClick && onMinusClick(carta)} type="button" className={clsx("px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded-s dark:hover:bg-yellow-400 border-0", { "rounded": (section === "boveda" && carta.nombre !== "TESORO GENERICO") })}>
+                <div className="inline-flex rounded-md shadow-sm" role="group">
+                    {section === "boveda" && <span className="me-1 content-center text-md rounded bg-gray-200 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{carta.costeBoveda}P</span>}
+                    <button onClick={() => onMinusClick && onMinusClick(carta, section)} type="button" className={clsx("px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded-s dark:hover:bg-yellow-400 border-0", { "rounded": (section === "boveda" && carta.nombre !== "TESORO GENERICO") })}>
+                        <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14" />
+                        </svg>
+                    </button>
+                    {(section === "reino" || section === "sidedeck" || carta.nombre === "TESORO GENERICO") && (
+                        <button onClick={() => onPlusClick && onPlusClick(carta, section)} type="button" className="px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded-e dark:hover:bg-yellow-400 border-0">
                             <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14" />
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
                             </svg>
                         </button>
-                        {(section === "reino" || carta.nombre === "TESORO GENERICO") && (
-                            <button onClick={() => onPlusClick && onPlusClick(carta)} type="button" className="px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded-e dark:hover:bg-yellow-400 border-0">
-                                <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
-                                </svg>
-                            </button>
-                        )}
-                    </div>
-                )
+                    )}
+                </div>
             )}
             {!viewMode && (
                 section !== "boveda" && (

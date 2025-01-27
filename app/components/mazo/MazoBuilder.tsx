@@ -111,18 +111,27 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         }
     }
 
-    const handleCartaPlusClick = (carta: Carta) => {
+    const handleCartaPlusClick = (carta: Carta, section: string) => {
         if (carta.tipo !== 'TESORO') {
             const cartaReinoAmount = mazo.reino.filter((c) => c.id === carta.id).length;
             const cartaSidedeckAmount = mazo.sideboard.filter((c) => c.id === carta.id).length;
             const cartaAmount = cartaReinoAmount + cartaSidedeckAmount;
             if (cartaAmount < 4) {
-                setMazo((prevMazo) => ({
-                    ...prevMazo,
-                    reino: [...prevMazo.reino, carta],
-                }));
-                addCartaQueryParams(carta, 'reino');
+                if (section === 'reino') {
+                    setMazo((prevMazo) => ({
+                        ...prevMazo,
+                        reino: [...prevMazo.reino, carta],
+                    }));
+                    addCartaQueryParams(carta, 'reino');
+                } else {
+                    setMazo((prevMazo) => ({
+                        ...prevMazo,
+                        sideboard: [...prevMazo.sideboard, carta],
+                    }));
+                    addCartaQueryParams(carta, 'sideboard');
+                }
             }
+
         } else {
             if (mazo.boveda.length < 15) {
                 if (carta.nombre === 'TESORO GENERICO') {
@@ -138,22 +147,37 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
     }
 
-    const handleCartaMinusClick = (carta: Carta) => {
+    const handleCartaMinusClick = (carta: Carta, section: string) => {
         if (carta.tipo !== 'TESORO') {
-            setMazo((prevMazo) => {
-                const index = prevMazo.reino.findIndex((c) => c.id === carta.id);
-                if (index === -1) return prevMazo;
+            if (section === 'reino') {
+                setMazo((prevMazo) => {
+                    const index = prevMazo.reino.findIndex((c) => c.id === carta.id);
+                    if (index === -1) return prevMazo;
 
-                return {
-                    ...prevMazo,
-                    reino: [
-                        ...prevMazo.reino.slice(0, index),
-                        ...prevMazo.reino.slice(index + 1),
-                    ],
-                };
-            });
+                    return {
+                        ...prevMazo,
+                        reino: [
+                            ...prevMazo.reino.slice(0, index),
+                            ...prevMazo.reino.slice(index + 1),
+                        ],
+                    };
+                });
+                removeCartaQueryParams(carta, 'reino');
+            } else {
+                setMazo((prevMazo) => {
+                    const index = prevMazo.sideboard.findIndex((c) => c.id === carta.id);
+                    if (index === -1) return prevMazo;
 
-            removeCartaQueryParams(carta, 'reino');
+                    return {
+                        ...prevMazo,
+                        sideboard: [
+                            ...prevMazo.sideboard.slice(0, index),
+                            ...prevMazo.sideboard.slice(index + 1),
+                        ],
+                    };
+                });
+                removeCartaQueryParams(carta, 'sideboard');
+            }
         } else {
             setMazo((prevMazo) => {
                 const index = prevMazo.boveda.findIndex((c) => c.id === carta.id);
@@ -427,8 +451,8 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         const REINO_MIN = 45;
         const SIDEDECK_MAX = 7;
         const BOVEDA_MAX = 15;
-        //const REINO_CARD_LIMIT = 4;
-        //const BOVEDA_CARD_LIMIT = 1;
+        const REINO_SIDEDECK_CARD_LIMIT = 4;
+        const BOVEDA_CARD_LIMIT = 1;
         const BOVEDA_PUNTOS_MAX = 30;
 
         const errors: string[] = [];
@@ -460,6 +484,43 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         if (!subtipo1 || !subtipo2) {
             errors.push('Los subtipos son requeridos.');
         }
+
+        const reinoSidedeck = mazo.reino.concat(mazo.sideboard);
+        const reinoSidedeckMap = reinoSidedeck.reduce((acc, carta) => {
+            if (acc[carta.id]) {
+                acc[carta.id]++;
+            } else {
+                acc[carta.id] = 1;
+            }
+            return acc;
+        }, {} as Record<number, number>);
+
+        const reinoSidedeckInvalid = Object.values(reinoSidedeckMap).filter((cantidad) => cantidad > REINO_SIDEDECK_CARD_LIMIT);
+
+        if (reinoSidedeckInvalid.length > 0) {
+            errors.push(`El mazo no puede tener más de ${REINO_SIDEDECK_CARD_LIMIT} copias de una misma carta entre el reino y sidedeck.`);
+        }
+
+        reinoSidedeck.forEach((carta) => {
+            const cartaSubtipos = [carta.subtipo1, carta.subtipo2, carta.subtipo3, carta.subtipo4];
+            const subtiposMatch = cartaSubtipos.filter((subtipo) => subtipo === subtipo1 || subtipo === subtipo2 || subtipo === 'MIMETICO');
+            if (subtiposMatch.length === 0) {
+                if (carta.tipo === 'UNIDAD') {
+                    errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+                } else {
+                    const cartaSubtiposConcat = cartaSubtipos.filter((subtipo) => subtipo !== null).join("");
+                    if (carta.tipo === 'ACCION') {
+                        if (cartaSubtiposConcat !== 'COMUN' && cartaSubtiposConcat !== 'RAPIDA') {
+                            errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+                        }
+                    } else {
+                        if (cartaSubtiposConcat !== '') {
+                            errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+                        }
+                    }
+                }
+            }
+        });
 
         if (bovedaPuntos > BOVEDA_PUNTOS_MAX) {
             errors.push(`La bóveda no puede tener más de ${BOVEDA_PUNTOS_MAX} puntos.`);
