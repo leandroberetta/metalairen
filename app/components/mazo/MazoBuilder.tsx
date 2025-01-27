@@ -239,7 +239,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const handleImportClick = async () => {
         const text = await navigator.clipboard.readText();
         const mazo = procesarListaMazo(text, cartas);
-        const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + carta.coste, 0);
+        const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + (carta.costeBoveda ?? 0), 0);
         setBovedaPuntos(bovedaPuntos);
         addBulkCartaQueryParams(searchParams, mazo);
         setMazo(mazo);
