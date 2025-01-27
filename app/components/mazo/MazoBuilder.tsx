@@ -521,6 +521,12 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
             }
         });
 
+        mazo.reino.concat(mazo.sideboard).concat(mazo.boveda).forEach((carta) => {
+            if (carta.prohibida) {
+                errors.push(`La carta ${carta.nombre} está prohibida.`);
+            }
+        });
+
         if (bovedaPuntos > BOVEDA_PUNTOS_MAX) {
             errors.push(`La bóveda no puede tener más de ${BOVEDA_PUNTOS_MAX} puntos.`);
         }
