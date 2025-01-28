@@ -16,7 +16,7 @@ export default async function Cartas() {
           <SearchBar filters={CartaFilters()} />
           <CartaSearch cartas={cartas} />
         </div>
-      </Suspense>
+      </Suspense >
       <CartasPopulares section="reino" title="Cartas populares del reino" />
       <CartasPopulares section="boveda" title="Cartas populares de la bóveda" />
     </>

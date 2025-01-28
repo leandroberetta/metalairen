@@ -90,7 +90,7 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                         </div>
                     </div>
                 </div>,
-                document.body // Renderiza el modal directamente en el body
+                document.body
             )}
         </>
     );

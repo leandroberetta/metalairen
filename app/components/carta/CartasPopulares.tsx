@@ -14,7 +14,7 @@ export default async function CartasPopulares({ section, title }: { section: str
                 cantidad: 'desc',
             },
         },
-        take: 5,
+        take: 6,
     });
 
     const cartasDetalles = await prisma.carta.findMany({
@@ -34,7 +34,7 @@ export default async function CartasPopulares({ section, title }: { section: str
                             {title}
                         </span>
                     </h1>
-                    <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-4">
+                    <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 py-4">
                         {cartasDetalles.map((carta) => (
                             <div key={carta.id} className="relative inline-block transition ease-in-out hover:scale-110 cursor-pointer">
                                 <img

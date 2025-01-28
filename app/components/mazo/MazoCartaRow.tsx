@@ -13,7 +13,7 @@ export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick
 }) {
     return (
         <div className="flex gap-1">
-            <span className="bg-yellow-100 text-yellow-800 text-md font-medium px-2.5 py-0.5 rounded dark:bg-yellow-300 dark:shadow-gray-800 flex items-center justify-center">
+            <span className="w-8 dark:text-gray-800 text-md font-medium px-2.5 py-0.5 rounded dark:bg-yellow-300 dark:shadow-gray-800 dark:shadow content-center">
                 {carta.cantidad}
             </span>
 
