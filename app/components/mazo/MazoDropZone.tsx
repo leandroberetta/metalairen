@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function MazoDropZone({ onUpload }: { onUpload: (files: File[]) => void }) {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
