@@ -23,7 +23,7 @@ docker run -d \
   -e POSTGRES_USER=metalairen \
   -e POSTGRES_PASSWORD=metalairen \
   -e POSTGRES_DB=metalairen \
-   -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
+  -v ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:z \
   -p 5432:5432 \
   postgres:latest
 ```
@@ -36,4 +36,12 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout certs/key.pem \
     -out certs/cert.pem \
     -subj "/C=US/ST=State/L=City/O=Organization/OU=Unit/CN=localhost"
+```
+
+### Generación de imagen y despliegue
+
+```bash
+docker compose up -d db
+DOCKER_BUILDKIT=0 docker build --network metalairen_app-network -t metalairen .
+docker compose up -d
 ```
