@@ -17,6 +17,7 @@ import MazoValidations from "./MazoValidations";
 import MazoParametros from "./MazoParametros";
 import { useToast } from "@/app/hooks/useToast";
 import { Toast } from "../Toast";
+import MazoDropZone from "./MazoDropZone";
 
 export interface MazoTemporal {
     reino: Carta[];
@@ -244,6 +245,19 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         addBulkCartaQueryParams(searchParams, mazo);
         setMazo(mazo);
     }
+
+    const handleUpload = (files: File[]) => {
+        const file = files[0];
+        console.log(file);
+        file.text().then((text: string) => {
+            const mazo = procesarListaMazo(text, cartas);
+            const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + (carta.costeBoveda ?? 0), 0);
+            setBovedaPuntos(bovedaPuntos);
+            addBulkCartaQueryParams(searchParams, mazo);
+            setMazo(mazo);
+            console.log(mazo);
+        });
+      };
 
     const handleExportClick = () => {
         const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
@@ -641,6 +655,9 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                             <MazoCostesStack cartas={mazo.reino} />
                         </div>
                     }
+                    {mazo.reino.length === 0 && mazo.sideboard.length === 0 && mazo.boveda.length === 0 && (
+                        <MazoDropZone onUpload={handleUpload}/>
+                    )}
                 </div>
             </div>
         </div>
