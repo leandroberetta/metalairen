@@ -1,13 +1,11 @@
 import { useState } from "react";
 
 export default function MazoDropZone({ onUpload }: { onUpload: (files: File[]) => void }) {
-    const [files, setFiles] = useState<File[]>([]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) return;
     
         const newFiles = Array.from(event.target.files);
-        setFiles(newFiles);
     
         if (onUpload) {
           onUpload(newFiles);
