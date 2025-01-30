@@ -1,6 +1,5 @@
 "use client";
 
-import { handleEliminarMazo } from "@/app/backend";
 import clsx from "clsx";
 import { Tooltip } from "flowbite-react";
 import { useSession } from "next-auth/react";
