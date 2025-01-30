@@ -63,7 +63,7 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                 <div
                     id="modal-reino"
                     tabIndex={-1}
-                    className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 backdrop-blur-sm"
+                    className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full bg-gray-900 bg-opacity-50 backdrop-blur-sm"
                     aria-hidden="true"
                     onClick={handleBackgroundClick}
                 >
