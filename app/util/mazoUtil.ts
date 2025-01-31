@@ -2,7 +2,6 @@ import { Carta, Mazo } from "@prisma/client";
 import { MazoTemporal } from "../components/mazo/MazoBuilder";
 import { prisma } from "../db/prisma";
 import { CartaCantidad } from "../components/mazo/MazoSection";
-import { ReadonlyURLSearchParams } from "next/navigation";
 
 export function crearMazoQueryParams(searchParams: URLSearchParams, cartas: Carta[]): MazoTemporal {
     const reinoQueryParamCartas = searchParams.get('reino')?.split(';');
@@ -279,39 +278,3 @@ export const getFormattedDate = () => {
 
     return `${day}${month}${year}${hours}${minutes}${seconds}`;
 };
-
-const handleExportClick = (mazo: MazoTemporal, searchParams: ReadonlyURLSearchParams) => {
-    const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-    if (errors.length === 0) {
-        const mazoString = exportarListaMazo(mazo);
-        navigator.clipboard.writeText(mazoString);
-    }
-}
-const handleDownloadClick = (mazo: MazoTemporal, searchParams: ReadonlyURLSearchParams) => {
-    const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-    if (errors.length === 0) {
-        const mazoString = exportarListaMazo(mazo);
-        const blob = new Blob([mazoString], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-
-        const subtipo1 = searchParams.get('subtipo1')?.toLowerCase() || '';
-        const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
-
-        const link = document.createElement('a');
-
-        if (subtipo1 && subtipo2) {
-            link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
-        } else if (subtipo1) {
-            link.download = `mazo-${subtipo1}-${getFormattedDate()}.txt`;
-        } else if (subtipo2) {
-            link.download = `mazo-${subtipo2}-${getFormattedDate()}.txt`;
-        } else {
-            link.download = `mazo-${getFormattedDate()}.txt`;
-        }
-
-        link.href = url;
-        link.click();
-
-        URL.revokeObjectURL(url);
-    }
-}

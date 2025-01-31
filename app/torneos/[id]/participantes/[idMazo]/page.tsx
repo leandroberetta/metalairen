@@ -1,7 +1,5 @@
 import { MazoTemporal } from "@/app/components/mazo/MazoBuilder";
 import MazoError from "@/app/components/mazo/MazoError";
-import MazoGridView from "@/app/components/mazo/MazoGridView";
-import MazoListView from "@/app/components/mazo/MazoListView";
 import MazoViewer from "@/app/components/mazo/MazoViewer";
 import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
@@ -54,9 +52,6 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
         sideboard: sideboardCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
         boveda: bovedaCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
     }
-    const bovedaPuntosNoGenericos = mazo.boveda.reduce((acc, carta) => acc + carta.coste, 0);
-    const tesorosGenericos = mazo.boveda.filter((c) => c.nombre === 'TESORO GENERICO').length;
-    const bovedaPuntos = bovedaPuntosNoGenericos - tesorosGenericos;
     return (
         <div className="">
             <MazoViewer mazoGuardado={mazo} subtipo1Guardado={torneoMazo.mazo.subtipo1} subtipo2Guardado={torneoMazo.mazo.subtipo2} nombreGuardado={torneoMazo.participante} />
