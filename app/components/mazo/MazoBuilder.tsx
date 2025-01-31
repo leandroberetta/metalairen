@@ -18,6 +18,9 @@ import MazoParametros from "./MazoParametros";
 import { useToast } from "@/app/hooks/useToast";
 import { Toast } from "../Toast";
 import MazoDropZone from "./MazoDropZone";
+import { Tooltip } from "flowbite-react";
+import clsx from "clsx";
+import { useSession } from "next-auth/react";
 
 export interface MazoTemporal {
     reino: Carta[];
@@ -46,6 +49,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const searchParams = useSearchParams();
     const router = useRouter();
     const { toast, showToast, hideToast } = useToast();
+    const session = useSession();
 
     useEffect(() => {
         if (mazoGuardado) {
@@ -257,7 +261,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
             setMazo(mazo);
             console.log(mazo);
         });
-      };
+    };
 
     const handleExportClick = () => {
         const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
@@ -560,10 +564,20 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
             )}
             <SearchBar filters={CartaFilters()} />
             <div className="flex flex-col md:flex-row mt-4">
-                <div className="grow">
-                    <h1 className="text-3xl font-extrabold dark:text-white flex-grow">
+                <div className="flex flex-row grow">
+                    <h1 className="text-3xl font-extrabold dark:text-white">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r dark:from-white dark:to-yellow-300">{nombre}</span>
                     </h1>
+                    {session.data?.user && (
+                        <Tooltip content="Editar información del mazo">
+                            <button onClick={() => setMostrarParametros(!mostrarParametros)} type="button" className={clsx("focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-2.5 py-2.5 me-2", { "dark:text-yellow-400": mostrarParametros })}>
+                                <svg className={clsx("w-6 h-6 dark:text-yellow-300 dark:hover:text-yellow-400", { "dark:text-yellow-400": mostrarParametros })} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                </svg>
+
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
                 <div className="flex mt-4 md:mt-0">
                     <MazoMenu
@@ -573,13 +587,11 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                         onExportClick={handleExportClick}
                         onImportClick={handleImportClick}
                         mostrarChart={mostrarChart}
-                        mostrarParametros={mostrarParametros}
                         setMostrarChart={setMostrarChart}
-                        setMostrarParametros={setMostrarParametros}
                     />
                 </div>
             </div>
-            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-8">
+            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-4">
                 <div className="md:col-span-2 lg:col-span-1">
                     <div className="grid grid-cols-2 gap-2">
                         <div className="cols-span-1">
@@ -656,7 +668,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                         </div>
                     }
                     {mazo.reino.length === 0 && mazo.sideboard.length === 0 && mazo.boveda.length === 0 && (
-                        <MazoDropZone onUpload={handleUpload}/>
+                        <MazoDropZone onUpload={handleUpload} />
                     )}
                 </div>
             </div>

@@ -1,6 +1,18 @@
 import { prisma } from "../../db/prisma";
 
 export default async function CartasPopulares({ section, title }: { section: string, title: string }) {
+    const ultimos5Torneos = await prisma.torneo.findMany({
+        orderBy: {
+            fecha: 'desc',
+        },
+        take: 4,
+        select: {
+            id: true,
+        },
+    });
+    
+    const torneosIds = ultimos5Torneos.map(torneo => torneo.id);
+    
     const cartasMasUsadas = await prisma.mazoCarta.groupBy({
         by: ['cartaId'],
         _sum: {
@@ -8,6 +20,13 @@ export default async function CartasPopulares({ section, title }: { section: str
         },
         where: {
             seccion: section,
+            mazo: {
+                torneos: {
+                    some: {
+                        torneoId: { in: torneosIds },
+                    },
+                },
+            },
         },
         orderBy: {
             _sum: {

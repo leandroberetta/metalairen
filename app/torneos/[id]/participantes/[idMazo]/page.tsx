@@ -2,6 +2,7 @@ import { MazoTemporal } from "@/app/components/mazo/MazoBuilder";
 import MazoError from "@/app/components/mazo/MazoError";
 import MazoGridView from "@/app/components/mazo/MazoGridView";
 import MazoListView from "@/app/components/mazo/MazoListView";
+import MazoViewer from "@/app/components/mazo/MazoViewer";
 import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
 import { Carta } from "@prisma/client";
@@ -57,13 +58,8 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
     const tesorosGenericos = mazo.boveda.filter((c) => c.nombre === 'TESORO GENERICO').length;
     const bovedaPuntos = bovedaPuntosNoGenericos - tesorosGenericos;
     return (
-        <div className="p-4">
-            <div className="hidden lg:block">
-                <MazoGridView mazo={mazo} subtipo1={torneoMazo.mazo.subtipo1} subtipo2={torneoMazo.mazo.subtipo2} nombre={torneoMazo.participante} bovedaPuntos={bovedaPuntos} />
-            </div>
-            <div className="block lg:hidden">
-                <MazoListView mazo={mazo} subtipo1={torneoMazo.mazo.subtipo1} subtipo2={torneoMazo.mazo.subtipo2} nombre={torneoMazo.participante} bovedaPuntos={bovedaPuntos}/>
-            </div>
+        <div className="">
+            <MazoViewer mazoGuardado={mazo} subtipo1Guardado={torneoMazo.mazo.subtipo1} subtipo2Guardado={torneoMazo.mazo.subtipo2} nombreGuardado={torneoMazo.participante} />
         </div>
     );
 }

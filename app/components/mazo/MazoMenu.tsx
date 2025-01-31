@@ -15,8 +15,6 @@ export default function MazoMenu({
     onGuardarMazo,
     mostrarChart,
     setMostrarChart,
-    mostrarParametros,
-    setMostrarParametros,
     onEliminarMazo
 }: {
     onDownloadClick?: () => void,
@@ -25,8 +23,6 @@ export default function MazoMenu({
     onGuardarMazo: () => void,
     mostrarChart: boolean,
     setMostrarChart: (value: boolean) => void,
-    mostrarParametros: boolean,
-    setMostrarParametros: (value: boolean) => void,
     onEliminarMazo: () => void
 }) {
     const session = useSession();
@@ -42,16 +38,6 @@ export default function MazoMenu({
     };
     return (
         <div className="flex flex-row overflow-x-scroll scrollbar-hide">
-            {session.data?.user && (
-                <Tooltip content="Editar información del mazo">
-                    <button onClick={() => setMostrarParametros(!mostrarParametros)} type="button" className={clsx("focus:outline-none dark:bg-yellow-300 dark:hover:bg-yellow-400 font-medium rounded text-sm px-2.5 py-2.5 me-2", { "dark:bg-yellow-400": mostrarParametros })}>
-                        <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                        </svg>
-
-                    </button>
-                </Tooltip>
-            )}
             <Tooltip content="Ver mazo">
                 <Link
                     href={{

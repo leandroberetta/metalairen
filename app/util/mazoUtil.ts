@@ -1,6 +1,8 @@
 import { Carta, Mazo } from "@prisma/client";
 import { MazoTemporal } from "../components/mazo/MazoBuilder";
 import { prisma } from "../db/prisma";
+import { CartaCantidad } from "../components/mazo/MazoSection";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
 export function crearMazoQueryParams(searchParams: URLSearchParams, cartas: Carta[]): MazoTemporal {
     const reinoQueryParamCartas = searchParams.get('reino')?.split(';');
@@ -133,4 +135,183 @@ export async function buildMazo(mazo: Mazo): Promise<MazoTemporal> {
     }
 
     return mazoTmp;
+}
+
+export const validateMazo = (mazo: MazoTemporal, subtipo1: string, subtipo2: string): string[] => {
+    const REINO_MAX = 60;
+    const REINO_MIN = 45;
+    const SIDEDECK_MAX = 7;
+    const BOVEDA_MAX = 15;
+    const REINO_SIDEDECK_CARD_LIMIT = 4;
+    const BOVEDA_PUNTOS_MAX = 30;
+
+    const errors: string[] = [];
+
+    if (mazo.reino.length < REINO_MIN) {
+        errors.push(`El mazo debe tener al menos ${REINO_MIN} cartas en el reino.`);
+    }
+
+    if (mazo.reino.length > REINO_MAX) {
+        errors.push(`El mazo no puede tener más de ${REINO_MAX} cartas en el reino.`);
+    }
+
+    if (mazo.sideboard.length < SIDEDECK_MAX) {
+        errors.push(`El mazo debe tener al menos ${SIDEDECK_MAX} cartas en el sidedeck.`);
+    }
+
+    if (mazo.sideboard.length > SIDEDECK_MAX) {
+        errors.push(`El mazo no puede tener más de ${SIDEDECK_MAX} cartas en el sidedeck.`);
+    }
+
+    if (mazo.boveda.length < BOVEDA_MAX) {
+        errors.push(`El mazo debe tener al menos ${BOVEDA_MAX} cartas en la bóveda.`);
+    }
+
+    if (mazo.boveda.length > BOVEDA_MAX) {
+        errors.push(`El mazo no puede tener más de ${BOVEDA_MAX} cartas en la bóveda.`);
+    }
+
+    if (!subtipo1 || !subtipo2) {
+        errors.push('Los subtipos son requeridos.');
+    }
+
+    const reinoSidedeck = mazo.reino.concat(mazo.sideboard);
+    const reinoSidedeckMap = reinoSidedeck.reduce((acc, carta) => {
+        if (acc[carta.id]) {
+            acc[carta.id]++;
+        } else {
+            acc[carta.id] = 1;
+        }
+        return acc;
+    }, {} as Record<number, number>);
+
+    const reinoSidedeckInvalid = Object.values(reinoSidedeckMap).filter((cantidad) => cantidad > REINO_SIDEDECK_CARD_LIMIT);
+
+    if (reinoSidedeckInvalid.length > 0) {
+        errors.push(`El mazo no puede tener más de ${REINO_SIDEDECK_CARD_LIMIT} copias de una misma carta entre el reino y sidedeck.`);
+    }
+
+    reinoSidedeck.forEach((carta) => {
+        const cartaSubtipos = [carta.subtipo1, carta.subtipo2, carta.subtipo3, carta.subtipo4];
+        const subtiposMatch = cartaSubtipos.filter((subtipo) => subtipo === subtipo1 || subtipo === subtipo2 || subtipo === 'MIMETICO');
+        if (subtiposMatch.length === 0) {
+            if (carta.tipo === 'UNIDAD') {
+                errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+            } else {
+                const cartaSubtiposConcat = cartaSubtipos.filter((subtipo) => subtipo !== null).join("");
+                if (carta.tipo === 'ACCION') {
+                    if (cartaSubtiposConcat !== 'COMUN' && cartaSubtiposConcat !== 'RAPIDA') {
+                        errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+                    }
+                } else {
+                    if (cartaSubtiposConcat !== '') {
+                        errors.push(`La carta ${carta.nombre} no tiene los subtipos requeridos.`);
+                    }
+                }
+            }
+        }
+    });
+
+    mazo.reino.concat(mazo.sideboard).concat(mazo.boveda).forEach((carta) => {
+        if (carta.prohibida) {
+            errors.push(`La carta ${carta.nombre} está prohibida.`);
+        }
+    });
+
+    const bovedaPuntos = calcularPuntosBoveda(mazo.boveda);
+    if (bovedaPuntos > BOVEDA_PUNTOS_MAX) {
+        errors.push(`La bóveda no puede tener más de ${BOVEDA_PUNTOS_MAX} puntos.`);
+    }
+
+    return errors;
+}
+
+export function exportarListaMazo(mazo: MazoTemporal): string {
+    const reinoReduced = Object.values(
+        mazo.reino.reduce((acc: Record<number, CartaCantidad>, carta) => {
+            if (acc[carta.id]) {
+                acc[carta.id].cantidad++;
+            } else {
+                acc[carta.id] = { ...carta, cantidad: 1 };
+            }
+            return acc;
+        }, {})
+    );
+    const sideboardReduced = Object.values(
+        mazo.sideboard.reduce((acc: Record<number, CartaCantidad>, carta) => {
+            if (acc[carta.id]) {
+                acc[carta.id].cantidad++;
+            } else {
+                acc[carta.id] = { ...carta, cantidad: 1 };
+            }
+            return acc;
+        }, {})
+    );
+    const bovedaReduced = Object.values(
+        mazo.boveda.reduce((acc: Record<number, CartaCantidad>, carta) => {
+            if (acc[carta.id]) {
+                acc[carta.id].cantidad++;
+            } else {
+                acc[carta.id] = { ...carta, cantidad: 1 };
+            }
+            return acc;
+        }, {})
+    );
+
+    const reino = reinoReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+    const boveda = bovedaReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+    const sideboard = sideboardReduced.map((carta) => `${carta.nombre} x${carta.cantidad}`).join('\n');
+
+    return `Reino: (total: ${mazo.reino.length})\n${reino}\n\nBóveda: (total: ${mazo.boveda.length})\n${boveda}\n\nSide Deck: (total: ${mazo.sideboard.length})\n${sideboard}`;
+}
+
+export const getFormattedDate = () => {
+    const now = new Date();
+
+    const pad = (num: number) => num.toString().padStart(2, '0');
+
+    const day = pad(now.getDate());
+    const month = pad(now.getMonth() + 1);
+    const year = now.getFullYear().toString().slice(-2);
+    const hours = pad(now.getHours());
+    const minutes = pad(now.getMinutes());
+    const seconds = pad(now.getSeconds());
+
+    return `${day}${month}${year}${hours}${minutes}${seconds}`;
+};
+
+const handleExportClick = (mazo: MazoTemporal, searchParams: ReadonlyURLSearchParams) => {
+    const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+    if (errors.length === 0) {
+        const mazoString = exportarListaMazo(mazo);
+        navigator.clipboard.writeText(mazoString);
+    }
+}
+const handleDownloadClick = (mazo: MazoTemporal, searchParams: ReadonlyURLSearchParams) => {
+    const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+    if (errors.length === 0) {
+        const mazoString = exportarListaMazo(mazo);
+        const blob = new Blob([mazoString], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const subtipo1 = searchParams.get('subtipo1')?.toLowerCase() || '';
+        const subtipo2 = searchParams.get('subtipo2')?.toLowerCase() || '';
+
+        const link = document.createElement('a');
+
+        if (subtipo1 && subtipo2) {
+            link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.txt`;
+        } else if (subtipo1) {
+            link.download = `mazo-${subtipo1}-${getFormattedDate()}.txt`;
+        } else if (subtipo2) {
+            link.download = `mazo-${subtipo2}-${getFormattedDate()}.txt`;
+        } else {
+            link.download = `mazo-${getFormattedDate()}.txt`;
+        }
+
+        link.href = url;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
 }

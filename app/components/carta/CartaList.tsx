@@ -13,7 +13,7 @@ export default function CardsList({ cartas, onCartaClick }: { cartas: Carta[], o
             }
             {cartas.length > 0 && <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-4">
                 {cartas.map((carta) => (
-                    <div key={carta.id} onClick={() => onCartaClick && onCartaClick(carta)} className="inline-block transition ease-in-out hover:scale-110 cursor-pointer">
+                    <div key={carta.id} onClick={() => onCartaClick && onCartaClick(carta)} className="inline-block transition ease-in-out hover:scale-110 cursor-pointer mb-4">
                         <img
                             src={carta.imagen}
                             alt={`Card ${carta.id}`}

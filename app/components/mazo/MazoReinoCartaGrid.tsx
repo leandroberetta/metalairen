@@ -23,7 +23,7 @@ export default function MazoReinoCartaGrid({ cartas }: { cartas: (Carta & { cant
                 <div className="grow">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Reino</h5>
                 </div>
-                <span className="m-2 content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{reinoCantidad}</span>
+                <span className="m-2 me-0 content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{reinoCantidad}</span>
             </div>
             <div className="grid grid-cols-4 gap-4">
                 {Array.from({ length: 4 }, (_, colIndex) => (
