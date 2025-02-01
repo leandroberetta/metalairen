@@ -16,7 +16,7 @@ export default async function Mazos() {
           <SearchBar filters={<MazoFilters />} />
         </div>
         {session &&
-          <div className="pb-8">
+          <div className="pb-4">
             <TusMazosPage />
           </div>
         }

@@ -22,14 +22,12 @@ export default function RootLayout({
       </head>
       <body className="dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">
         <SessionProvider>
-
           <div className="container mx-auto grow">
             <NavBar />
             {children}
           </div>
-          <div className="p-5 flex justify-center">
-            <span
-              className="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">v2</span>
+          <div className="p-4 pt-0 flex justify-center">
+            <span className="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">v2</span>
           </div>
         </SessionProvider>
       </body>
