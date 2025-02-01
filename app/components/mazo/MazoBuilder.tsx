@@ -554,7 +554,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
     return (
 
-        <div className="p-4">
+        <div className="p-4 pt-0">
             {toast.visible && (
                 <Toast
                     message={toast.message}
@@ -591,9 +591,9 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     />
                 </div>
             </div>
-            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-4">
+            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-3">
                 <div className="md:col-span-2 lg:col-span-1">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-3">
                         <div className="cols-span-1">
                             <Select options={{
                                 "ANIMAL": "Animal",
@@ -651,7 +651,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                             <MazoValidations validationErrors={errors} />
                         </div>
                     )}
-                    <div className="mt-4 sticky top-4 max-h-screen overflow-auto scrollbar-hide pb-10">
+                    <div className="mt-4 sticky top-4 max-h-screen overflow-auto scrollbar-hide pb-4">
                         <MazoSections
                             mazo={mazo}
                             onPlusClick={handleCartaPlusClick}

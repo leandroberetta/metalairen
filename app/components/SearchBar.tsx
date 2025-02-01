@@ -23,7 +23,7 @@ export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
 
     return (
         <div className="mx-auto">
-            <div className=" mx-auto flex pb-4">
+            <div className=" mx-auto flex">
                 <div className="grow">
                     <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
@@ -76,7 +76,11 @@ export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
                     </button>
                 </Tooltip>}
             </div>
-            {busquedaAvanzada && filters}
+            {busquedaAvanzada && (
+                <div className="mt-4">
+                    {filters}
+                </div>
+            )}
         </div>
     );
 }

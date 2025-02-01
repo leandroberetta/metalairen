@@ -11,7 +11,7 @@ export default async function Mazos() {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <div className="p-4">
+      <div className="p-4 pt-0">
         <div className="pb-4">
           <SearchBar filters={<MazoFilters />} />
         </div>

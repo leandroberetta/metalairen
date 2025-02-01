@@ -80,7 +80,7 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
     }
 
     return (
-        <div className="p-4">
+        <div className="p-4 pt-0">
             <div className="hidden lg:block">
                 <MazoGridView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} />
             </div>

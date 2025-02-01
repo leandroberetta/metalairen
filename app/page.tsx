@@ -12,7 +12,7 @@ export default async function Cartas() {
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
-        <div className="p-4">
+        <div className="p-4 pt-0">
           <SearchBar filters={CartaFilters()} />
           <CartaSearch cartas={cartas} />
         </div>
