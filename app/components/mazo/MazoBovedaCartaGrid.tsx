@@ -38,7 +38,6 @@ export default function MazoBovedaCartaGrid({ cartas, bovedaPuntos }: { cartas: 
                     </div>
                 ))}
                 <div style={{ height: `${cartas.filter((_, index) => index % 3 === 1).length * 30}px` }} />
-
             </div>
             {selectedCard && (
                 <div

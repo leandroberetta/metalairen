@@ -25,15 +25,23 @@ export default function MazoReinoCartaGrid({ cartas }: { cartas: (Carta & { cant
                 </div>
                 <span className="m-2 me-0 content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{reinoCantidad}</span>
             </div>
-            <div className="grid grid-cols-4 gap-2">
-                {cartas.map((carta) => (
-                    <button key={carta.id} type="button" onClick={() => setSelectedCard(carta)}>
-                        <MazoCartaItem carta={carta} cantidad={carta.cantidad} />
-                    </button>
+            <div className="grid grid-cols-4 gap-4">
+                {Array.from({ length: 4 }, (_, colIndex) => (
+                    <div key={colIndex} className="relative h-[400px]">
+                        {cartas
+                            .filter((_, index) => index % 4 === colIndex)
+                            .map((carta, index) => (
+                                <button key={carta.id} type="button" onClick={() => setSelectedCard(carta)}>
+                                    <div style={{ top: `${index * 80}px` }} className="absolute">
+                                        <MazoCartaItem carta={carta} cantidad={carta.cantidad} />
+                                    </div>
+                                </button>
+                            ))}
+                    </div>
                 ))}
+                <div style={{ height: `${cartas.filter((_, index) => index % 4 === 1).length * 80}px` }} />
+
             </div>
-
-
             {selectedCard && (
                 <div
                     id="modal-reino"
