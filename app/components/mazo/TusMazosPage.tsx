@@ -28,9 +28,9 @@ export default async function TusMazosPage() {
     });
     return (
         <>
-            <div className="flex flex-row">
-                <div className="grow">
-                    <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
+            <div className="flex flex-row mb-4 items-end">
+                <div className="grow ">
+                    <h1 className=" text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
                         <span
                             className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">
                             Tus mazos

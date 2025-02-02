@@ -56,7 +56,7 @@ export default function SearchBar({ filters }: { filters?: React.ReactNode }) {
                 </div>
                 {filters && <Tooltip content="Búsqueda avanzada">
                     <button onClick={() => setBusquedaAvanzada(!busquedaAvanzada)}
-                        className={clsx("h-full ml-3 rounded bg-yellow-300 px-5 py-3 text-center text-base text-sm font-medium font-medium text-white dark:shadow hover:bg-yellow-400 dark:focus:outline-none dark:text-gray-700 dark:shadow dark:shadow-gray-800", { "bg-yellow-400": busquedaAvanzada })}>
+                        className={clsx("h-full ml-2 rounded bg-yellow-300 px-5 py-3 text-center text-base text-sm font-medium font-medium text-white dark:shadow hover:bg-yellow-400 dark:focus:outline-none dark:text-gray-700 dark:shadow dark:shadow-gray-800", { "bg-yellow-400": busquedaAvanzada })}>
                         <svg
                             className="h-6 w-6 dark:text-gray-700"
 
