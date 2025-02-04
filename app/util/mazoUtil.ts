@@ -14,10 +14,14 @@ export function crearMazoQueryParams(searchParams: URLSearchParams, cartas: Cart
     const bovedaCartas = bovedaQueryParamCartas?.map((id) => cartas.find((c) => c.id === parseInt(id))) as Carta[];
 
     return {
-        reino: reinoCartas || [],
-        sideboard: sideboardCartas || [],
-        boveda: bovedaCartas || []
+        reino: reinoCartas ? ordenarCartasPorCoste(reinoCartas) : [],
+        sideboard: sideboardCartas ? ordenarCartasPorCoste(sideboardCartas) : [],
+        boveda: bovedaCartas ? ordenarCartasPorCoste(bovedaCartas) : []
     };
+}
+
+export function ordenarCartasPorCoste(cartas: Carta[]): Carta[] {
+    return cartas.sort((a, b) => a.coste - b.coste);
 }
 
 export function calcularPuntosBoveda(boveda: Carta[]) {
@@ -107,6 +111,11 @@ export async function buildMazo(mazo: Mazo): Promise<MazoTemporal> {
         include: {
             carta: true,
         },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
+        },
     });
     const sideboardCartas = await prisma.mazoCarta.findMany({
         where: {
@@ -116,6 +125,11 @@ export async function buildMazo(mazo: Mazo): Promise<MazoTemporal> {
         include: {
             carta: true,
         },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
+        },
     });
     const bovedaCartas = await prisma.mazoCarta.findMany({
         where: {
@@ -124,6 +138,11 @@ export async function buildMazo(mazo: Mazo): Promise<MazoTemporal> {
         },
         include: {
             carta: true,
+        },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
         },
     });
 

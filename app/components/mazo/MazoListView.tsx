@@ -5,7 +5,7 @@ import { MazoTemporal } from "./MazoBuilder";
 import MazoCostesChart from "./MazoCostesChart";
 import { Tooltip } from "flowbite-react";
 
-export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos, onDownloadClick, onExportClick }: {
+export default function MazoListView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos, onDownloadClick, onExportClick }: {
     mazo: MazoTemporal,
     subtipo1?: string | null,
     subtipo2?: string | null,
@@ -55,7 +55,6 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                 <div className="my-4 mt-0 h-full grow">
                     <MazoCostesChart mazo={mazo} />
                 </div>
-
             </div>
             <div className="grid md:grid-cols-2 gap-4 mt-4">
                 <div className="">
@@ -68,7 +67,6 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                     <MazoSection nombre="Sidedeck" sectionKey="sidedeck" section={mazo.sideboard} viewMode={true} />
                 </div>
             </div>
-
         </div >
     );
 

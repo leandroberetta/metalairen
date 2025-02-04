@@ -19,7 +19,7 @@ const reduceSection = (cartas: Carta[]): (Carta & { cantidad: number })[] => {
             }
             return acc;
         }, {})
-    );
+    ).sort((a, b) => a.coste - b.coste);
 };
 
 export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos, onDownloadClick, onExportClick }: {
@@ -31,11 +31,9 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
     onDownloadClick?: () => void,
     onExportClick?: () => void
 }) {
-
     const reinoReduced = reduceSection(mazo.reino);
     const sideboardReduced = reduceSection(mazo.sideboard);
     const bovedaReduced = reduceSection(mazo.boveda);
-
     return (
         <div className="">
             <div className="flex flex-col sm:flex-row">

@@ -22,6 +22,11 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
         include: {
             carta: true,
         },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
+        },
     });
     const sideboardCartas = await prisma.mazoCarta.findMany({
         where: {
@@ -30,6 +35,11 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
         },
         include: {
             carta: true,
+        },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
         },
     });
     const bovedaCartas = await prisma.mazoCarta.findMany({
@@ -40,13 +50,17 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
         include: {
             carta: true,
         },
+        orderBy: {
+            carta: {
+                coste: 'asc',
+            },
+        },
     });
     const cartas: Carta[] = [];
     reinoCartas.forEach((reinoCarta) => {
         for (let i = 0; i < reinoCarta.cantidad; i++)
             cartas.push(reinoCarta.carta);
     });
-
     const mazo: MazoTemporal = {
         reino: reinoCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),
         sideboard: sideboardCartas.flatMap(({ carta, cantidad }) => Array(cantidad).fill(carta)),

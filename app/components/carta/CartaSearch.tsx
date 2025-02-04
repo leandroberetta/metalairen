@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import CartaList from "./CartaList";
 import { Carta } from "@prisma/client";
 
-export default function CartaSearch({ cartas, onCartaClick }: { cartas: Carta[], onCartaClick?: (carta: Carta) => void }) {
+export default function CartaSearch({ cartas, onCartaClick, setCantidad }: { cartas: Carta[], onCartaClick?: (carta: Carta) => void, setCantidad?: (cantidad: number) => void }) {
     const searchParams = useSearchParams()
     const query = searchParams.get('query') ?? '';
     const expansiones = searchParams.get('expansiones') ?? '';
@@ -50,7 +50,9 @@ export default function CartaSearch({ cartas, onCartaClick }: { cartas: Carta[],
                     return formatos === '' || formatos.split(',').includes('ETHERNAL') || (formatos.split(',').includes('DOMINACION') && (card.prohibida == false && card.expansion !== 'FUNDAMENTOS'));
                 })
                 .sort((a, b) => a.nombre.localeCompare(b.nombre));
-
+    if (setCantidad) {
+        setCantidad(filteredCartas.length);
+    }
     return (
         <CartaList cartas={filteredCartas} onCartaClick={onCartaClick} />
     );

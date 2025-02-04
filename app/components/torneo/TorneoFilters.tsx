@@ -6,7 +6,7 @@ export default function TorneoFilters() {
             <h1 className="text-xl font-extrabold text-gray-900 dark:text-white md:text-xl lg:text-xl">
                 <span className="bg-gradient-to-r from-black to-yellow-300 bg-clip-text text-transparent dark:from-white dark:to-yellow-300">Búsqueda avanzada</span>
             </h1>
-            <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-2">
+            <div className="pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-2">
                 <div className="">
                     <Select options={{
                         "Buenos Aires": "Buenos Aires",

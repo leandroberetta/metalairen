@@ -2,38 +2,48 @@
 
 import { Carta } from "@prisma/client";
 import MazoCartaRow from "./MazoCartaRow";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { Tooltip } from "flowbite-react";
+import clsx from "clsx";
+import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 
 export interface CartaCantidad extends Carta {
     cantidad: number;
 }
 
-export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusClick, onMinusClick, onSideboardClick, viewMode }: {
+export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusClick, onMinusClick, onSideboardClick, viewMode, onOrdenarClick }: {
     nombre: string,
     sectionKey: string,
     section: Carta[],
     bovedaPuntos?: number
     onPlusClick?: (carta: CartaCantidad, section: string) => void,
     onMinusClick?: (carta: CartaCantidad, section: string) => void
-    onSideboardClick?: (carta: Carta, fromSection: string) => void
+    onSideboardClick?: (carta: CartaCantidad, fromSection: string) => void
+    onOrdenarClick?: (direction: string) => void
     viewMode?: boolean
 }) {
-
-    const sectionReduced = Object.values(
-        section.reduce((acc: Record<number, CartaCantidad>, carta) => {
-            if (acc[carta.id]) {
-                acc[carta.id].cantidad++;
-            } else {
-                acc[carta.id] = { ...carta, cantidad: 1 };
-            }
-            return acc;
-        }, {})
-    );
-
     const [selectedCard, setSelectedCard] = useState<Carta | null>(null);
-
+    const [ordenarDesc, setOrdernarDesc] = useState<boolean>(true);
     const closeModal = () => setSelectedCard(null);
+    const searchParams = useSearchParams();
+    const [sect, setSection] = useState<CartaCantidad[]>([]);
+
+    useEffect(() => {
+        const sectionReduced = Object.values(
+            section.reduce((acc: Record<number, CartaCantidad>, carta) => {
+                if (acc[carta.id]) {
+                    acc[carta.id].cantidad++;
+                } else {
+                    acc[carta.id] = { ...carta, cantidad: 1 };
+                }
+                return acc;
+            }, {})
+        );
+
+        const order = searchParams.get('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1));
+        setSection([...sectionReduced].sort((a, b) => (order === 'desc' ? b.coste - a.coste : a.coste - b.coste)));
+    }, [section, searchParams]);
 
     const handleBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
@@ -41,16 +51,47 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
         }
     };
 
+    useEffect(() => {
+        const order = searchParams.get('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1));
+        const queryString = new URLSearchParams(searchParams as ReadonlyURLSearchParams);
+        if (order === 'asc') {
+            queryString.delete('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1));
+            queryString.set('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1), 'desc');
+            window.history.replaceState(null, '', `?${queryString.toString()}`);
+        } else if (order === 'desc') {
+            queryString.delete('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1));
+            queryString.set('ordenar' + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1), 'asc');
+            window.history.replaceState(null, '', `?${queryString.toString()}`);
+        } 
+    }, [ordenarDesc]);
+
     return (
         <>
             <div className="flex pb-4">
-                <h4 className="text-2xl font-bold dark:text-white flex-grow">{nombre}</h4>
+                <div className="grow flex flex-row items-center">
+                    <h4 className="text-2xl font-bold dark:text-white">{nombre}</h4>
+                    <Tooltip content={sectionKey === 'boveda' ? "Ordenar por puntos" : "Ordenar por coste"}>
+                        {ordenarDesc ? (
+                            <button onClick={() => setOrdernarDesc(false)} type="button" className="focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-2.5 py-2.5 me-2">
+                                <svg className="w-6 h-6 dark:text-yellow-300 dark:hover:text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v13m0-13 4 4m-4-4-4 4" />
+                                </svg>
+                            </button>
+                        ) : (
+                            <button onClick={() => setOrdernarDesc(true)} type="button" className="focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-2.5 py-2.5 me-2">
+                                <svg className="w-6 h-6 dark:text-yellow-300 dark:hover:text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19V5m0 14-4-4m4 4 4-4" />
+                                </svg>
+                            </button>
+                        )}
+                    </Tooltip>
+                </div>
                 {sectionKey === 'boveda' && <span className="me-1 content-center text-md rounded bg-gray-200 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{bovedaPuntos}P</span>}
                 <span className="content-center text-md rounded bg-yellow-300 mt-1.5 px-2.5 py-0.5 font-medium text-white shadow dark:text-gray-700 dark:shadow dark:shadow-gray-800">{section.length}</span>
             </div>
             <div className="grid gap-1">
-                {sectionReduced.length > 0 ? (
-                    sectionReduced.map((carta) => (
+                {sect.length > 0 ? (
+                    sect.map((carta) => (
                         <div className="" key={carta.id}>
                             <MazoCartaRow carta={carta} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onSideboardClick={onSideboardClick} section={sectionKey} viewMode={viewMode} onCartaClick={setSelectedCard} />
                         </div>

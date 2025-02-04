@@ -5,6 +5,7 @@ import CartaSearch from "./components/carta/CartaSearch";
 import SearchBar from "./components/SearchBar";
 import CartasPopulares from "./components/carta/CartasPopulares";
 import CartaFilters from "./components/carta/CartaFilters";
+import CartaHeader from "./components/carta/CartaHeader";
 
 export default async function Cartas() {
   const cartas = await prisma.carta.findMany();
@@ -12,10 +13,7 @@ export default async function Cartas() {
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
-        <div className="p-4 pt-0">
-          <SearchBar filters={CartaFilters()} />
-          <CartaSearch cartas={cartas} />
-        </div>
+        <CartaHeader cartas={cartas} />
       </Suspense >
       <CartasPopulares section="reino" title="Cartas populares del reino" />
       <CartasPopulares section="boveda" title="Cartas populares de la bóveda" />

@@ -50,7 +50,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const router = useRouter();
     const { toast, showToast, hideToast } = useToast();
     const session = useSession();
-
+    const [cantidad, setCantidad] = useState(0);
     useEffect(() => {
         if (mazoGuardado) {
             agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado);
@@ -252,14 +252,12 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
     const handleUpload = (files: File[]) => {
         const file = files[0];
-        console.log(file);
         file.text().then((text: string) => {
             const mazo = procesarListaMazo(text, cartas);
             const bovedaPuntos = mazo.boveda.reduce((acc, carta) => acc + (carta.costeBoveda ?? 0), 0);
             setBovedaPuntos(bovedaPuntos);
             addBulkCartaQueryParams(searchParams, mazo);
             setMazo(mazo);
-            console.log(mazo);
         });
     };
 
@@ -661,13 +659,13 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     </div>
                 </div>
                 <div className="md:col-span-3 lg:col-span-2">
-                    <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} />
+                    <CartaSearch cartas={cartas} onCartaClick={handleCartaClick} setCantidad={setCantidad} />
                     {mazo.reino.length > 0 &&
-                        <div className="hidden lg:block">
+                        <div className="hidden lg:block mt-4">
                             <MazoCostesStack cartas={mazo.reino} />
                         </div>
                     }
-                    {mazo.reino.length === 0 && mazo.sideboard.length === 0 && mazo.boveda.length === 0 && (
+                    {cantidad === 0 && mazo.reino.length === 0 && mazo.sideboard.length === 0 && mazo.boveda.length === 0 && (
                         <MazoDropZone onUpload={handleUpload} />
                     )}
                 </div>
