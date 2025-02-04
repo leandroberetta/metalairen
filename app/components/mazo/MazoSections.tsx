@@ -6,7 +6,7 @@ import { Carta } from "@prisma/client";
 import React, { useEffect } from "react";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 
-export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, bovedaPuntos, onOrdenarBovedaClick, onOrdenarReinoClick, onOrdenarSideboardClick }: {
+export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick, bovedaPuntos }: {
     mazo: MazoTemporal,
     onPlusClick: (carta: Carta, section: string) => void,
     onMinusClick: (carta: Carta, section: string) => void,
@@ -37,13 +37,13 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
     return (
         <div className="grid gap-4">
             <div>
-                <MazoSection nombre="Reino" sectionKey="reino" section={mazo.reino} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onSideboardClick={onSideboardClick} onOrdenarClick={onOrdenarReinoClick} />
+                <MazoSection nombre="Reino" sectionKey="reino" section={mazo.reino} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onSideboardClick={onSideboardClick} />
             </div>
             <div>
-                <MazoSection nombre="Sidedeck" sectionKey="sidedeck" section={mazo.sideboard} onSideboardClick={onSideboardClick} onPlusClick={onPlusClick} onMinusClick={onMinusClick} onOrdenarClick={onOrdenarSideboardClick} />
+                <MazoSection nombre="Sidedeck" sectionKey="sidedeck" section={mazo.sideboard} onSideboardClick={onSideboardClick} onPlusClick={onPlusClick} onMinusClick={onMinusClick} />
             </div>
             <div>
-                <MazoSection nombre="Bóveda" sectionKey="boveda" section={mazo.boveda} onPlusClick={onPlusClick} onMinusClick={onMinusClick} bovedaPuntos={bovedaPuntos} onOrdenarClick={onOrdenarBovedaClick} />
+                <MazoSection nombre="Bóveda" sectionKey="boveda" section={mazo.boveda} onPlusClick={onPlusClick} onMinusClick={onMinusClick} bovedaPuntos={bovedaPuntos} />
             </div>
         </div>
     );

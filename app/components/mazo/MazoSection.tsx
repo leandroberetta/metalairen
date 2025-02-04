@@ -2,17 +2,16 @@
 
 import { Carta } from "@prisma/client";
 import MazoCartaRow from "./MazoCartaRow";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Tooltip } from "flowbite-react";
-import clsx from "clsx";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 
 export interface CartaCantidad extends Carta {
     cantidad: number;
 }
 
-export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusClick, onMinusClick, onSideboardClick, viewMode, onOrdenarClick }: {
+export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusClick, onMinusClick, onSideboardClick, viewMode }: {
     nombre: string,
     sectionKey: string,
     section: Carta[],
@@ -20,7 +19,6 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
     onPlusClick?: (carta: CartaCantidad, section: string) => void,
     onMinusClick?: (carta: CartaCantidad, section: string) => void
     onSideboardClick?: (carta: CartaCantidad, fromSection: string) => void
-    onOrdenarClick?: (direction: string) => void
     viewMode?: boolean
 }) {
     const [selectedCard, setSelectedCard] = useState<Carta | null>(null);

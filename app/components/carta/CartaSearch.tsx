@@ -1,6 +1,6 @@
 "use client";
 
-import { } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import CartaList from "./CartaList";
 import { Carta } from "@prisma/client";
@@ -19,13 +19,13 @@ export default function CartaSearch({ cartas, onCartaClick, setCantidad }: { car
 
     const filteredCartas =
         (!query &&
-            expansiones === '' && 
-            tipos === '' && 
-            subtipos === '' && 
-            subtipos2 === '' && 
-            supertipos === '' && 
-            costes === '' && 
-            rarezas === '' && 
+            expansiones === '' &&
+            tipos === '' &&
+            subtipos === '' &&
+            subtipos2 === '' &&
+            supertipos === '' &&
+            costes === '' &&
+            rarezas === '' &&
             formatos === '')
             ? []
             : cartas
@@ -50,9 +50,12 @@ export default function CartaSearch({ cartas, onCartaClick, setCantidad }: { car
                     return formatos === '' || formatos.split(',').includes('ETHERNAL') || (formatos.split(',').includes('DOMINACION') && (card.prohibida == false && card.expansion !== 'FUNDAMENTOS'));
                 })
                 .sort((a, b) => a.nombre.localeCompare(b.nombre));
-    if (setCantidad) {
-        setCantidad(filteredCartas.length);
-    }
+                
+    useEffect(() => {
+        if (setCantidad) {
+            setCantidad(filteredCartas.length);
+        }
+    }, [filteredCartas, setCantidad]);
     return (
         <CartaList cartas={filteredCartas} onCartaClick={onCartaClick} />
     );

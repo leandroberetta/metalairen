@@ -1,10 +1,7 @@
 import { prisma } from "./db/prisma";
 import { Suspense } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
-import CartaSearch from "./components/carta/CartaSearch";
-import SearchBar from "./components/SearchBar";
 import CartasPopulares from "./components/carta/CartasPopulares";
-import CartaFilters from "./components/carta/CartaFilters";
 import CartaHeader from "./components/carta/CartaHeader";
 
 export default async function Cartas() {
