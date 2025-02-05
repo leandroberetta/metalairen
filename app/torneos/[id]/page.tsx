@@ -11,6 +11,9 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
         where: { id: parseInt((await params).id) },
         include: {
             mazos: {
+                orderBy: {
+                    id: 'asc',
+                },
                 include: {
                     mazo: true,
                 },
