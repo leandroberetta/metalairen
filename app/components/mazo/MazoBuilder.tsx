@@ -589,7 +589,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     />
                 </div>
             </div>
-            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-2">
+            <div className="pt-4 grid md:grid-cols-5 lg:grid-cols-3 gap-4">
                 <div className="md:col-span-2 lg:col-span-1">
                     <div className="grid grid-cols-2 gap-2">
                         <div className="cols-span-1">

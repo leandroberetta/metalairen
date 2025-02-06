@@ -115,7 +115,7 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
             {!hideTitle && <div className="flex">
                 <h4 className="text-xl font-bold dark:text-white flex-grow">Composición del reino por costes</h4>
             </div>}
-            <ReactApexChart options={options} series={series} type="bar" height={100} />
+            <ReactApexChart options={options} series={series} type="bar" height="auto"/>
         </div>
     );
 }

@@ -59,7 +59,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                     <div className="">
                         <MazoCostesChart mazo={mazo} />
                     </div>
-                    <div className="">
+                    <div className="flex items-center">
                         <MazoTiposChart mazo={mazo} />
                     </div>
                     <div className="content-center">

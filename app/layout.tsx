@@ -19,6 +19,7 @@ export default function RootLayout({
     <html className="dark">
       <head>
         <title>MetaLairen</title>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1707306639075867" crossOrigin="anonymous"></script>
       </head>
       <body className="dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">
         <SessionProvider>
