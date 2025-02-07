@@ -32,7 +32,7 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
             queryString.set('ordenarBoveda', 'asc');
         }
         window.history.replaceState(null, '', `?${queryString.toString()}`);
-    });
+    }, []);
     
     return (
         <div className="grid gap-4">
