@@ -99,6 +99,25 @@ export const agregarMazoQueryParams = (searchParams: URLSearchParams, mazo: Mazo
         params.set("subtipo2", subtipo2);
     }
 
+    const ordenarReino = searchParams.get('ordenarReino');
+    if (ordenarReino) {
+        params.set('ordenarReino', ordenarReino);
+    } else {
+        params.set('ordenarReino', 'asc');
+    }
+    const ordenarSidedeck = searchParams.get('ordenarSidedeck');
+    if (ordenarSidedeck) {
+        params.set('ordenarSidedeck', ordenarSidedeck);
+    } else {
+        params.set('ordenarSidedeck', 'asc');
+    }
+    const ordenarBoveda = searchParams.get('ordenarBoveda');
+    if (ordenarBoveda) {
+        params.set('ordenarBoveda', ordenarBoveda);
+    } else {
+        params.set('ordenarBoveda', 'asc');
+    }
+
     window.history.replaceState(null, '', `?${params.toString()}`);
 }
 

@@ -18,6 +18,7 @@ export function MazoSections({ mazo, onPlusClick, onMinusClick, onSideboardClick
 }) {
     const searchParams = useSearchParams();
     useEffect(() => {
+        console.log("agrego los orders");
         const orderReino = searchParams.get('ordenarReino');
         const queryString = new URLSearchParams(searchParams as ReadonlyURLSearchParams);
         if (orderReino == null) {

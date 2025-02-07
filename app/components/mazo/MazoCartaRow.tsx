@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { Tooltip } from "flowbite-react";
 import { CartaCantidad } from "./MazoSection";
 
 export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick, onSideboardClick, viewMode = false, onCartaClick }: {
