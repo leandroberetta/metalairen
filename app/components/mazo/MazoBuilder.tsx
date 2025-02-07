@@ -567,7 +567,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                         <span className="text-transparent bg-clip-text bg-gradient-to-r dark:from-white dark:to-yellow-300">{nombre}</span>
                     </h1>
                     {session.data?.user && (
-                        <Tooltip content="Editar información del mazo">
+                        <Tooltip content="Editar información del mazo" placement="right" arrow={false}>
                             <button onClick={() => setMostrarParametros(!mostrarParametros)} type="button" className={clsx("focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-2.5 py-2.5 me-2", { "dark:text-yellow-400": mostrarParametros })}>
                                 <svg className={clsx("w-6 h-6 dark:text-yellow-300 dark:hover:text-yellow-400", { "dark:text-yellow-400": mostrarParametros })} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />

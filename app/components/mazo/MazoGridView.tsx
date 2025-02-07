@@ -36,7 +36,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
     const bovedaReduced = reduceSection(mazo.boveda);
     return (
         <div className="">
-            <div className="flex flex-col sm:flex-row">
+            <div className="flex flex-col sm:flex-row items-center">
                 <div className="grow">
                     <div className="flex">
                         <h1 className="grow mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -63,14 +63,14 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                         <MazoTiposChart mazo={mazo} />
                     </div>
                     <div className="content-center">
-                        <Tooltip content="Descargar lista">
+                        <Tooltip content="Descargar lista" placement="left" arrow={false}>
                             <button onClick={() => onDownloadClick && onDownloadClick()} type="button" className="mb-2 focus:outline-none dark:bg-yellow-300 dark:hover:bg-yellow-400 font-medium rounded text-sm px-2.5 py-2.5">
                                 <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
                                 </svg>
                             </button>
                         </Tooltip>
-                        <Tooltip content="Copiar lista al porta papeles">
+                        <Tooltip content="Copiar lista al porta papeles" placement="left" arrow={false}>
                             <button onClick={() => onExportClick && onExportClick()} type="button" className="focus:outline-none dark:bg-yellow-300 dark:hover:bg-yellow-400 font-medium rounded text-sm px-2.5 py-2.5">
                                 <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z" />

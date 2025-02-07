@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CrearMazoButton() {
     return (
-        <Tooltip content="Construir mazo">
+        <Tooltip content="Construir mazo" placement="top" arrow={false}>
             <Link
                 href={{
                     pathname: '/mazo/crear',

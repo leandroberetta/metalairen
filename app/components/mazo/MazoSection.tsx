@@ -69,7 +69,7 @@ export function MazoSection({ nombre, sectionKey, section, bovedaPuntos, onPlusC
                 <div className="grow flex flex-row items-center">
                     <h4 className="text-2xl font-bold dark:text-white">{nombre}</h4>
                     {!viewMode &&
-                        <Tooltip content={sectionKey === 'boveda' ? "Ordenar por puntos" : "Ordenar por coste"}>
+                        <Tooltip content={sectionKey === 'boveda' ? "Ordenar por puntos" : "Ordenar por coste"} placement="top" arrow={false}>
                             {ordenarDesc ? (
                                 <button onClick={() => setOrdernarDesc(false)} type="button" className="focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-1 py-1 me-2">
                                     <svg className="w-6 h-6 dark:text-yellow-300 dark:hover:text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

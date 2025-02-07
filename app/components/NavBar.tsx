@@ -26,7 +26,7 @@ export default function Navbar() {
                     <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         {status === 'authenticated' && (
                             <>
-                                <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-400" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                                <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-yellow-300 dark:focus:ring-yellow-400" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                                     <span className="sr-only">Open user menu</span>
                                     {session.user?.image && (
                                         <Image

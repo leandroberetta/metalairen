@@ -40,9 +40,8 @@ export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick
             )}
             {!viewMode && (
                 section !== "boveda" && (
-                    <Tooltip content={section === 'reino' ? 'Mover al sidedeck' : 'Mover al reino'}>
 
-                        <button onClick={() => onSideboardClick && onSideboardClick(carta, section)} type="button" className="h-full px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded dark:hover:bg-yellow-400 border-0">
+                        <button onClick={() => onSideboardClick && onSideboardClick(carta, section)} type="button" className="px-1 text-sm font-medium dark:text-gray-800 dark:bg-yellow-300 rounded dark:hover:bg-yellow-400 border-0">
                             {section === "reino"
                                 ?
                                 <svg className="w-6 h-6 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -54,7 +53,6 @@ export default function MazoCartaRow({ carta, section, onPlusClick, onMinusClick
                                 </svg>
                             }
                         </button>
-                    </Tooltip>
                 )
             )}
         </div>
