@@ -9,9 +9,6 @@ export default async function Cartas() {
 
   return (
     <>
-      <div className="p-4 m-4  text-sm text-blue-800 rounded bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-        <span className="font-medium">Atención!</span> Estas en la nueva versión de MetaLairen. Si necesitas acceder a la versión anterior, podés encontrarla en https://old.metalairen.com.ar, estará disponible hasta el 07/02/25.
-      </div>
       <Suspense fallback={<LoadingSpinner />}>
         <CartaHeader cartas={cartas} />
       </Suspense >
