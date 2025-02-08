@@ -10,6 +10,7 @@ export default function MazoSearch({ mazos, linkEdit }: { mazos: MazoConUsuario[
     const query = searchParams.get('query') ?? '';
     const subtipo1 = searchParams.get('subtipo1') ?? '';
     const subtipo2 = searchParams.get('subtipo2') ?? '';
+    const visibilidad = searchParams.get('visibilidad')?.split(',') ?? [];
 
     const filteredMazos = mazos.filter((mazo) => {
         const matchesNombre = mazo.nombre.toLowerCase().includes(query.toLowerCase());
@@ -19,7 +20,20 @@ export default function MazoSearch({ mazos, linkEdit }: { mazos: MazoConUsuario[
         const matchesSubtipo2 = subtipo2
             ? mazo.subtipo1?.includes(subtipo2) || mazo.subtipo2?.includes(subtipo2)
             : true;
-        return matchesNombre && matchesSubtipo1 && matchesSubtipo2;
+
+        if (linkEdit) {
+            if (visibilidad.length === 0 || visibilidad.length === 2) {
+                return matchesNombre && matchesSubtipo1 && matchesSubtipo2;
+            } else {
+                if (visibilidad[0] === 'PUBLICO') {
+                    return matchesNombre && matchesSubtipo1 && matchesSubtipo2 && mazo.publico;
+                } else {
+                    return matchesNombre && matchesSubtipo1 && matchesSubtipo2 && !mazo.publico;
+                }
+            }
+        } else {
+            return matchesNombre && matchesSubtipo1 && matchesSubtipo2;
+        }
     });
 
     return (

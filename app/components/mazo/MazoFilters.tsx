@@ -47,6 +47,12 @@ export default function MazoFilters() {
                         "SOLDADO": "Soldado",
                     }} label={"Subtipo"} parameter="subtipo2" allowMultipleSelections={false} />
                 </div>
+                <div className="">
+                    <Select options={{
+                        "PUBLICO": "Público",
+                        "PRIVADO": "Privado",
+                    }} label={"Visibilidad"} parameter="visibilidad" allowMultipleSelections={false} />
+                </div>
             </div>
         </>
     );
