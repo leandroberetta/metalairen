@@ -51,6 +51,7 @@ export default function CardFilters() {
                         "MONJE": "Monje",
                         "PIRATA": "Pirata",
                         "SOLDADO": "Soldado",
+                        "SIN_SUBTIPOS": "Sin subtipos"
                     }} label={"Subtipos"} parameter="subtipos" />
                 </div>
                 <div className="">

@@ -34,14 +34,21 @@ export default function CartaSearch({ cartas, onCartaClick, setCantidad }: { car
                 .filter((card) => expansiones === '' || expansiones.split(',').includes(card.expansion.toString()))
                 .filter((card) => {
                     if (tipos !== '') {
-                        const esAccionRapida = tipos === 'ACCION RAPIDA' && (card.subtipo3 === 'RAPIDA');
-                        const esOtraOrden = !tipos.split(',').includes('ACCION RAPIDA') && tipos.split(',').includes(card.tipo.toString());
+                        const esAccionRapida = tipos.split(',').includes('ACCION RAPIDA') && (card.subtipo3 === 'RAPIDA');
+                        const esOtraOrden = tipos.split(',').includes(card.tipo.toString());
                         return (esOtraOrden && card.subtipo3 != 'RAPIDA') || esAccionRapida;
                     } else {
                         return true;
                     }
                 })
-                .filter((card) => subtipos === '' || ((card.subtipo1 && subtipos.split(',').includes(card.subtipo1.toString())) || (card.subtipo2 && subtipos.split(',').includes(card.subtipo2.toString()))))
+                .filter((card) => {
+                    if (subtipos.split(',').includes('SIN_SUBTIPOS')) {
+                        return (!card.subtipo1 && !card.subtipo2) || ((card.subtipo1 === 'COMUN' && !card.subtipo2) || (!card.subtipo1 && card.subtipo2 === 'COMUN'));
+                    } else {
+                        return subtipos === '' || ((card.subtipo1 && subtipos.split(',').includes(card.subtipo1.toString())) || (card.subtipo2 && subtipos.split(',').includes(card.subtipo2.toString())));
+                    }
+                })
+                //.filter((card) => subtipos === '' || ((card.subtipo1 && subtipos.split(',').includes(card.subtipo1.toString())) || (card.subtipo2 && subtipos.split(',').includes(card.subtipo2.toString()))))
                 .filter((card) => subtipos2 === '' || ((card.subtipo1 && subtipos2.split(',').includes(card.subtipo1.toString())) || (card.subtipo2 && subtipos2.split(',').includes(card.subtipo2.toString()))))
                 .filter((card) => supertipos === '' || (card.supertipo && supertipos.split(',').includes(card.supertipo.toString())))
                 .filter((card) => costes === '' || costes.split(',').includes(card.coste.toString()))
