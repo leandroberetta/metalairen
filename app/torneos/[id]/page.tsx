@@ -1,6 +1,7 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import SearchBar from "@/app/components/SearchBar";
 import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
+import CombinacionesPopularesPieChart from "@/app/components/torneo/CombinacionesPopularesPieChart";
 import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
 import Link from "next/link";
@@ -44,7 +45,10 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                             <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
                                 className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
                             </h1>
-                            <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                                <CombinacionesPopularesPieChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                            </div>
                         </div>
                     </div>
                     <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
