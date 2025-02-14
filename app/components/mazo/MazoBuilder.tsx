@@ -88,20 +88,18 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
 
     const handleCartaClick = (carta: Carta) => {
         if (carta.tipo === 'TESORO') {
-            if (mazo.boveda.length < 15) {
-                const cartaFound = mazo.boveda.find((c) => c.id === carta.id);
-                if (!cartaFound || (cartaFound && cartaFound.nombre === 'TESORO GENERICO')) {
-                    setMazo((prevMazo) => ({
-                        ...prevMazo,
-                        boveda: [...prevMazo.boveda, carta],
-                    }));
-                    if (carta.nombre === 'TESORO GENERICO') {
-                        setBovedaPuntos((prevPuntos) => prevPuntos - 1);
-                    } else {
-                        setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
-                    }
-                    addCartaQueryParams(carta, 'boveda');
+            const cartaFound = mazo.boveda.find((c) => c.id === carta.id);
+            if (!cartaFound || (cartaFound && cartaFound.nombre === 'TESORO GENERICO')) {
+                setMazo((prevMazo) => ({
+                    ...prevMazo,
+                    boveda: [...prevMazo.boveda, carta],
+                }));
+                if (carta.nombre === 'TESORO GENERICO') {
+                    setBovedaPuntos((prevPuntos) => prevPuntos - 1);
+                } else {
+                    setBovedaPuntos((prevPuntos) => prevPuntos + carta.coste);
                 }
+                addCartaQueryParams(carta, 'boveda');
             }
         } else {
             const cartaAmount = mazo.reino.filter((c) => c.id === carta.id).length;

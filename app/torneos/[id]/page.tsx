@@ -25,6 +25,70 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
     if (!torneo) {
         return <TorneoError />;
     }
+
+    const cartasMasUsadasReino = await prisma.mazoCarta.groupBy({
+        by: ['cartaId'],
+        _sum: {
+            cantidad: true,
+        },
+        where: {
+            seccion: "reino",
+            mazo: {
+                torneos: {
+                    some: {
+                        torneoId: { in: [torneo.id] },
+                    },
+                },
+            },
+        },
+        orderBy: {
+            _sum: {
+                cantidad: 'desc',
+            },
+        },
+        take: 6,
+    });
+
+    const cartasDetallesReino = await prisma.carta.findMany({
+        where: {
+            id: {
+                in: cartasMasUsadasReino.map((item) => item.cartaId),
+            },
+        },
+    });
+
+    const cartasMasUsadasBoveda = await prisma.mazoCarta.groupBy({
+        by: ['cartaId'],
+        _sum: {
+            cantidad: true,
+        },
+        where: {
+            seccion: "boveda",
+            mazo: {
+                torneos: {
+                    some: {
+                        torneoId: { in: [torneo.id] },
+                    },
+                },
+            },
+        },
+        orderBy: {
+            _sum: {
+                cantidad: 'desc',
+            },
+        },
+        take: 6,
+    });
+
+    const cartasDetallesBoveda = await prisma.carta.findMany({
+        where: {
+            id: {
+                in: cartasMasUsadasBoveda.map((item) => item.cartaId),
+            },
+        },
+    });
+
+
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4 pt-0">
@@ -40,9 +104,42 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                     </h1>
 
                     <div className="grid grid-cols-1 gap-4">
-
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <h1 className="mb-4 text-xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Cartas populares del reino</span>
+                                </h1>
+                                <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 ">
+                                    {cartasDetallesReino.map((carta) => (
+                                        <div key={carta.id} className="relative inline-block transition ease-in-out hover:scale-110 cursor-pointer">
+                                            <img
+                                                src={carta.imagen}
+                                                alt={`Card ${carta.id}`}
+                                                className="rounded-xl shadow dark:shadow dark:shadow-gray-800"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="mb-4 text-xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Cartas populares de la bóveda</span>
+                                </h1>
+                                <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 ">
+                                    {cartasDetallesBoveda.map((carta) => (
+                                        <div key={carta.id} className="relative inline-block transition ease-in-out hover:scale-110 cursor-pointer">
+                                            <img
+                                                src={carta.imagen}
+                                                alt={`Card ${carta.id}`}
+                                                className="rounded-xl shadow dark:shadow dark:shadow-gray-800"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                         <div>
-                            <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl"><span
+                            <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
                                 className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
                             </h1>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
