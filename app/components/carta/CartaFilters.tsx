@@ -1,6 +1,5 @@
 import { Tooltip } from "flowbite-react";
 import Select from "../Select";
-import { use } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function CardFilters() {
