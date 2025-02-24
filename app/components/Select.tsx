@@ -14,6 +14,8 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
     const queryOptions = searchParams.get(parameter);
     if (queryOptions) {
       setSelectedOptions(queryOptions.split(','));
+    } else {
+      setSelectedOptions([]);
     }
   }, [searchParams, parameter]);
 
