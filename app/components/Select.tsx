@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, ReadonlyURLSearchParams } from 'next/navigation';
 
-const Select = ({ options, label, parameter, allowMultipleSelections = true, setQueryParameter = true }: { options: { [id: string]: string }, label: string, parameter: string, allowMultipleSelections?: boolean, setQueryParameter?: boolean }) => {
+const Select = ({ options, label, parameter, allowMultipleSelections = true, setQueryParameter = true, onChangeHandler }: { options: { [id: string]: string }, label: string, parameter: string, allowMultipleSelections?: boolean, setQueryParameter?: boolean, onChangeHandler?: (option: string | null) => void }) => {
   const searchParams = useSearchParams();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,6 +43,8 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
       }
       window.history.replaceState(null, '', `?${queryString.toString()}`);
     }
+
+    onChangeHandler && onChangeHandler(updatedSelections.length > 0 ? updatedSelections[0] : null);
   };
 
   useEffect(() => {

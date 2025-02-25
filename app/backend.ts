@@ -58,6 +58,7 @@ export async function handleGuardarMazo(
   subtipo1: string,
   subtipo2: string,
   publico: boolean,
+  formato: string,
   id?: number
 ): Promise<{ mazoId?: number; error?: string }> {
   const session = await auth();
@@ -125,6 +126,7 @@ export async function handleGuardarMazo(
               publico: publico || false,
               subtipo1,
               subtipo2,
+              formato
             },
           });
 
@@ -141,6 +143,7 @@ export async function handleGuardarMazo(
               publico: publico || false,
               subtipo1,
               subtipo2,
+              formato
             },
           });
 

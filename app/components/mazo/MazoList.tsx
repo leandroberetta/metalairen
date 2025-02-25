@@ -30,6 +30,9 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: MazoConUs
                                     Usuario
                                 </th>
                             }
+                            <th scope="col" className="px-6 py-3">
+                                Formato
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,6 +65,10 @@ export default function MazoList({ mazos, linkEdit = false }: { mazos: MazoConUs
                                         {mazo.usuario.nombre}
                                     </td>
                                 }
+                                <td>
+                                    {(mazo.formato === null || mazo.formato === 'DOMINACION') && <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>}
+                                    {(mazo.formato === 'TRUE_ETHERNAL') && <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">True Ethernal</span>}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
