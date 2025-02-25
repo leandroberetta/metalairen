@@ -68,7 +68,7 @@ export default async function TorneoMazo({ params }: { params: Promise<{ id: str
     }
     return (
         <div className="">
-            <MazoViewer mazoGuardado={mazo} subtipo1Guardado={torneoMazo.mazo.subtipo1} subtipo2Guardado={torneoMazo.mazo.subtipo2} nombreGuardado={torneoMazo.participante} />
+            <MazoViewer mazoGuardado={mazo} subtipo1Guardado={torneoMazo.mazo.subtipo1} subtipo2Guardado={torneoMazo.mazo.subtipo2} nombreGuardado={torneoMazo.participante} videosGuardado={torneoMazo.videos} />
         </div>
     );
 }

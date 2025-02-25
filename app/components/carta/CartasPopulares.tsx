@@ -33,7 +33,7 @@ export default async function CartasPopulares({ section, title }: { section: str
                 cantidad: 'desc',
             },
         },
-        take: 6,
+        take: 12,
     });
 
     const cartasDetalles = await prisma.carta.findMany({

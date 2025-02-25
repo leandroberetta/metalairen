@@ -8,12 +8,13 @@ import { useSearchParams } from "next/navigation";
 import MazoListView from "./MazoListView";
 import { calcularPuntosBoveda, crearMazoQueryParams, exportarListaMazo, getFormattedDate, validateMazo } from "@/app/util/mazoUtil";
 
-export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado }: {
+export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, videosGuardado }: {
     cartas?: Carta[],
     mazoGuardado?: MazoTemporal,
     subtipo1Guardado?: string | null,
     subtipo2Guardado?: string | null,
-    nombreGuardado?: string | null
+    nombreGuardado?: string | null,
+    videosGuardado?: string | null,
 }) {
     const [mazo, setMazo] = useState<MazoTemporal>(mazoGuardado || { reino: [], boveda: [], sideboard: [] });
     const [bovedaPuntos, setBovedaPuntos] = useState(mazoGuardado ? calcularPuntosBoveda(mazoGuardado.boveda) : 0);
@@ -87,6 +88,16 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
             <div className="block lg:hidden">
                 <MazoListView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} />
             </div>
+            {videosGuardado && (
+                <>
+                    <h2 className="text-xl dark:text-white font-extrabold text-gray-900 mb-5">Videos relacionados</h2>
+                    <div className="flex gap-4">
+                        {videosGuardado.split(',').map((video) => (
+                            <iframe key={video} width="560" height="315" src={`https://www.youtube.com/embed/${video}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin"></iframe>
+                        ))}
+                    </div>
+                </>
+            )}
         </div>
     );
-}
+}   
