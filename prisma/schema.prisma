@@ -83,6 +83,7 @@ model TorneoMazo {
   updatedAt    DateTime @default(now())
   participante String
   puesto       String
+  orden        Int?
   videos       String   @default("")
 
   torneo Torneo @relation(fields: [torneoId], references: [id])
