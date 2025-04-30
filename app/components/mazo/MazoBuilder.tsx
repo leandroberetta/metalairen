@@ -51,6 +51,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const { toast, showToast, hideToast } = useToast();
     const session = useSession();
     const [cantidad, setCantidad] = useState(0);
+    
     useEffect(() => {
         if (mazoGuardado) {
             agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado);
@@ -593,6 +594,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                         <div className="cols-span-1">
                             <Select options={{
                                 "ANIMAL": "Animal",
+                                "ARTIFICE": "Artífice",
                                 "BRUJA": "Bruja",
                                 "DEMONIO": "Demonio",
                                 "DESERTOR": "Desertor",
@@ -606,13 +608,16 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                                 "MAGO": "Mago",
                                 "MIMETICO": "Mimético",
                                 "MONJE": "Monje",
+                                "MONSTRUO": "Monstruo",
                                 "PIRATA": "Pirata",
                                 "SOLDADO": "Soldado",
+                                "TRITON": "Tritón",
                             }} label={"Subtipo"} parameter={"subtipo1"} allowMultipleSelections={false} />
                         </div>
                         <div className="cols-span-1">
                             <Select options={{
                                 "ANIMAL": "Animal",
+                                "ARTIFICE": "Artífice",
                                 "BRUJA": "Bruja",
                                 "DEMONIO": "Demonio",
                                 "DESERTOR": "Desertor",
@@ -626,8 +631,10 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                                 "MAGO": "Mago",
                                 "MIMETICO": "Mimético",
                                 "MONJE": "Monje",
+                                "MONSTRUO": "Monstruo",
                                 "PIRATA": "Pirata",
                                 "SOLDADO": "Soldado",
+                                "TRITON": "Tritón",
                             }} label={"Subtipo"} parameter={"subtipo2"} allowMultipleSelections={false} />
                         </div>
                     </div>

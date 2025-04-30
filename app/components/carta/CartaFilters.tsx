@@ -41,7 +41,8 @@ export default function CardFilters() {
                         "PACTO SECRETO": "Pacto secreto",
                         "TRONO COMPARTIDO": "Trono compartido",
                         "IMPERIO": "Imperio",
-                        "ANCESTROS": "Ancestros"
+                        "ANCESTROS": "Ancestros",
+                        "PROFUNDIDADES": "Profundidades",
                     }} label={"Expansiones"} parameter={filtros[0]} />
                 </div>
                 <div className="">
@@ -64,6 +65,7 @@ export default function CardFilters() {
                 <div className="">
                     <Select options={{
                         "ANIMAL": "Animal",
+                        "ARTIFICE": "Artífice",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
                         "DESERTOR": "Desertor",
@@ -77,14 +79,17 @@ export default function CardFilters() {
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",
                         "MONJE": "Monje",
+                        "MONSTRUO": "Monstruo",
                         "PIRATA": "Pirata",
                         "SOLDADO": "Soldado",
+                        "TRITON": "Tritón",
                         "SIN_SUBTIPOS": "Sin subtipos"
                     }} label={"Subtipos"} parameter={filtros[3]} />
                 </div>
                 <div className="">
                     <Select options={{
                         "ANIMAL": "Animal",
+                        "ARTIFICE": "Artífice",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
                         "DESERTOR": "Desertor",
@@ -98,8 +103,10 @@ export default function CardFilters() {
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",
                         "MONJE": "Monje",
+                        "MONSTRUO": "Monstruo",
                         "PIRATA": "Pirata",
                         "SOLDADO": "Soldado",
+                        "TRITON": "Tritón",
                     }} label={"Subtipos"} parameter={filtros[4]} />
                 </div>
                 <div className="">
@@ -118,7 +125,10 @@ export default function CardFilters() {
                         "6": "6",
                         "7": "7",
                         "8": "8",
-                        "9": "9"
+                        "9": "9",
+                        "10": "10",
+                        "11": "11",
+                        "12": "12",
                     }} label={"Costes"} parameter={filtros[6]} />
                 </div>
                 <div className="">
