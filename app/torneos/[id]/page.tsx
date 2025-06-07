@@ -1,5 +1,4 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
-import SearchBar from "@/app/components/SearchBar";
 import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
 import CombinacionesPopularesPieChart from "@/app/components/torneo/CombinacionesPopularesPieChart";
 import TorneoError from "@/app/components/torneo/TorneoError";
