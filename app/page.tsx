@@ -35,7 +35,7 @@ export default async function Cartas() {
         <CartaHeader cartas={cartas} />
       </Suspense >
       <div className="p-4 pt-0">
-        <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
+        <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><span
           className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares de subtipos</span>
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -48,7 +48,7 @@ export default async function CartasPopulares({ section, title }: { section: str
         <>
             {cartasDetalles.length > 0 && (
                 <div className="p-4 pt-0">
-                    <h1 className=" text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
+                    <h1 className="text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">
                             {title}
                         </span>

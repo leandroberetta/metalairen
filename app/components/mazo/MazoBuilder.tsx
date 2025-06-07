@@ -646,8 +646,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     )}
                     {mostrarChart && (
                         <div className="mt-4">
-                            <h4 className="text-xl font-bold dark:text-white flex-grow mb-4">Costes del reino</h4>
-                            <MazoCostesChart mazo={mazo} />
+                            <MazoCostesChart mazo={mazo} hideTitle={false} />
                         </div>
                     )}
                     {errors.length > 0 && (
