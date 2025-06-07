@@ -13,8 +13,8 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
         include: {
             mazos: {
                 orderBy: [
-                    { orden: 'asc' },  
-                    { id: 'asc' } 
+                    { orden: 'asc' },
+                    { id: 'asc' }
                 ],
                 include: {
                     mazo: true,
@@ -93,9 +93,6 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4 pt-0">
-                <div className="pb-4">
-                    <SearchBar />
-                </div>
                 <div className="">
                     <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
                         <span
