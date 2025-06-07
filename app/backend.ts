@@ -175,6 +175,7 @@ export async function handleGuardarMazo(
         return mazoId;
       });
 
+      console.log("Mazo guardado con ID:", mazoId);
       return { mazoId };
     } else {
       return { error: "No se pudo autenticar la sesión." };

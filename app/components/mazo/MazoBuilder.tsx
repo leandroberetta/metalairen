@@ -74,13 +74,14 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     };
 
     const handleGuardarMazo = async () => {
+        console.log("Guardando mazo...");
         const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
         const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
+        console.log(id);
         const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, id);
+        console.log(`Mazo guardado con ID: ${mazoId}`);
         if (mazoId) {
-            const newPath = `/mazo/editar/${mazoId}?${searchParams.toString()}`;
-
-            window.history.replaceState(null, "", newPath);
+            router.replace(`/mazo/editar/${mazoId}?${searchParams.toString()}`);
             showToast("Mazo guardado correctamente.", "success");
         } else {
             console.log(error);

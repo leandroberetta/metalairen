@@ -55,13 +55,14 @@ export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }
         grid: {
             show: false,
             strokeDashArray: 4,
-            padding: { left: 2, right: 2, top: -14 },
+            padding: { left: 2, right: 2, top: -14, bottom: 30 },
         },
         dataLabels: { enabled: true },
         legend: { show: false },
         xaxis: {
             labels: {
                 show: true,
+                rotate: -90,
                 style: {
                     fontFamily: "Inter, sans-serif",
                     cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
@@ -88,7 +89,7 @@ export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="bar" height={350} />
+            <ReactApexChart options={options} series={series} type="bar" height={450} />
         </div>
     );
 }
