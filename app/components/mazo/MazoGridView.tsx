@@ -9,6 +9,7 @@ import MazoTiposChart from "./MazoTiposChart";
 import MazoCostesChart from "./MazoCostesChart";
 import { Tooltip } from "flowbite-react";
 import domtoimage from "dom-to-image";
+import { getFormattedDate } from "@/app/util/mazoUtil";
 
 const reduceSection = (cartas: Carta[]): (Carta & { cantidad: number })[] => {
     return Object.values(
@@ -59,7 +60,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                 // Restaurar los botones
                 if (toolbar) toolbar.classList.remove('w-0', 'overflow-hidden', 'opacity-0', 'pointer-events-none')
                 const link = document.createElement('a')
-                link.download = 'captura.png'
+                link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.png`
                 link.href = dataUrl
                 link.click()
             })
