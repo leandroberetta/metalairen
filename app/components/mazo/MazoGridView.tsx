@@ -36,18 +36,20 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
     const reinoReduced = reduceSection(mazo.reino);
     const sideboardReduced = reduceSection(mazo.sideboard);
     const bovedaReduced = reduceSection(mazo.boveda);
+    
     const handleScreenshot = () => {
         const node = document.getElementById('capture')
         if (!node) return
 
-        const toolbar = document.getElementById('mazo-toolbar')
+        const originalPadding = node.style.padding;
+        node.style.padding = '20px';
 
-        // Ocultar los botones
+        const toolbar = document.getElementById('mazo-toolbar')
         if (toolbar) toolbar.classList.add('w-0', 'overflow-hidden', 'opacity-0', 'pointer-events-none')
 
         domtoimage.toPng(node, {
-            quality: 1,               // mejora el antialias
-            height: node.offsetHeight * 2,  // doble de resolución
+            quality: 1,              
+            height: node.offsetHeight * 2,
             width: node.offsetWidth * 2,
             style: {
                 transform: 'scale(2)',
@@ -57,7 +59,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
             }
         })
             .then((dataUrl) => {
-                // Restaurar los botones
+                node.style.padding = originalPadding;
                 if (toolbar) toolbar.classList.remove('w-0', 'overflow-hidden', 'opacity-0', 'pointer-events-none')
                 const link = document.createElement('a')
                 link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.png`
@@ -68,8 +70,9 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                 console.error('Error al capturar imagen', error)
             })
     }
+    
     return (
-        <div className="" id="capture">
+        <div className="bg-gray-900" id="capture">
             <div className="flex flex-col sm:flex-row items-center">
                 <div className="grow">
                     <div className="flex">
