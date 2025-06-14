@@ -20,7 +20,8 @@ export default async function Cartas() {
   });
 
   const torneosIds = ultimos5Torneos.map(torneo => torneo.id);
-  const mazos  = await prisma.mazo.findMany({
+ 
+  const mazos = await prisma.mazo.findMany({
     where: {
       torneos: {
         some: {
@@ -29,19 +30,24 @@ export default async function Cartas() {
       },
     },
   });
+  
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
         <CartaHeader cartas={cartas} />
       </Suspense >
       <div className="p-4 pt-0">
-        <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><span
-          className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares de subtipos</span>
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CombinacionesPopularesChart mazos={mazos.map((mazo) => mazo)} />
-          <CombinacionesPopularesPieChart mazos={mazos.map((mazo) => mazo)} />
-        </div>
+        {mazos.length > 0 &&
+          <>
+            <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><span
+              className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares de subtipos</span>
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <CombinacionesPopularesChart mazos={mazos.map((mazo) => mazo)} />
+              <CombinacionesPopularesPieChart mazos={mazos.map((mazo) => mazo)} />
+            </div>
+          </>
+        }
       </div>
       <div className="grid grid-cols-2 p-4 pt-0 gap-4">
         <div className="">

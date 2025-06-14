@@ -1,7 +1,8 @@
 import { Torneo } from "@prisma/client";
 import Link from "next/link";
+import EditarTorneoButton from "./EditarTorneoButton";
 
-export default function TorneoList({ torneos }: { torneos: Torneo[] }) {
+export default function TorneoList({ torneos, rol }: { torneos: Torneo[], rol: string }) {
     return (
         <div>
             <div className="relative overflow-x-auto shadow dark:shadow dark:shadow-gray-800 rounded" >
@@ -20,6 +21,9 @@ export default function TorneoList({ torneos }: { torneos: Torneo[] }) {
                             <th scope="col" className="px-6 py-3">
                                 Fecha
                             </th>
+                            {rol && (rol == 'admin' || rol == 'juez') &&
+                                <th></th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -34,14 +38,19 @@ export default function TorneoList({ torneos }: { torneos: Torneo[] }) {
                                     </h5>
                                 </th>
                                 <td className="px-6 py-4">
-                                    { torneo.sede }
+                                    {torneo.sede}
                                 </td>
                                 <td className="px-6 py-4">
-                                    { torneo.provincia}
+                                    {torneo.provincia}
                                 </td>
                                 <td className="px-6 py-4">
-                                    { torneo.fecha.toLocaleDateString('es-ES', {day: '2-digit', month: '2-digit', year: '2-digit',}) } 
+                                    {torneo.fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', })}
                                 </td>
+                                {rol && (rol === 'admin' || rol === 'juez') &&
+                                    <td className="px-6 py-4 justify-items-end">
+                                        <EditarTorneoButton id={torneo.id} />
+                                    </td>
+                                }
                             </tr>
                         ))}
                     </tbody>

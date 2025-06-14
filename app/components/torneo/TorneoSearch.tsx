@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Torneo } from "@prisma/client";
 import TorneoList from "./TorneoList";
 
-export default function TorneoSearch({ torneos }: { torneos: Torneo[] }) {
+export default function TorneoSearch({ torneos, rol }: { torneos: Torneo[], rol: string }) {
     const searchParams = useSearchParams()
     const query = searchParams.get('query') ?? '';
     const provincias = searchParams.get('provincias') ?? '';
@@ -18,7 +18,7 @@ export default function TorneoSearch({ torneos }: { torneos: Torneo[] }) {
         <>
             {
                 filteredTorneos.length > 0 ? (
-                    < TorneoList torneos={filteredTorneos} />
+                    < TorneoList torneos={filteredTorneos} rol={rol}/>
                 ) : (
                     <div className="text-gray-200">
                         No se encontraron torneos.

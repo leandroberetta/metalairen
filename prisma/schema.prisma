@@ -70,6 +70,7 @@ model Torneo {
   updatedAt DateTime     @default(now())
   provincia String
   sede      String
+  oficial   Boolean      @default(false)
   mazos     TorneoMazo[]
 
   @@map("torneos")
@@ -92,12 +93,19 @@ model TorneoMazo {
   @@map("torneos_mazos")
 }
 
+enum Rol {
+  jugador
+  juez
+  admin
+}
+
 model Usuario {
   id        Int      @id @default(autoincrement())
   nombre    String
   email     String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  rol       Rol      @default(jugador)
   mazos     Mazo[]
 
   @@map("usuarios")

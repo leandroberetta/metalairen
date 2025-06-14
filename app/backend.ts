@@ -186,3 +186,102 @@ export async function handleGuardarMazo(
   }
 }
 
+function parseFechaDDMMYYYY(fecha: string): Date | null {
+  const [day, month, year] = fecha.split("/").map(Number);
+  if (!day || !month || !year) return null;
+  return new Date(year, month - 1, day); // mes: 0-indexed
+}
+
+export async function handleCrearTorneo(
+  nombre: string,
+  sede: string,
+  provincia: string,
+  fecha: string,
+  oficial: boolean
+): Promise<{ torneoId?: number; error?: string }> {
+  const session = await auth();
+
+  try {
+    console.log("onCrearTorneo");
+    if (!session || !session.user || !session.user.email) {
+      return { error: "No se pudo autenticar la sesión." };
+    }
+
+    const fechaDate = parseFechaDDMMYYYY(fecha);
+    if (!fechaDate || isNaN(fechaDate.getTime())) {
+      return { error: "Formato de fecha inválido (debe ser dd/mm/yyyy)." };
+    }
+
+    const torneo = await prisma.torneo.create({
+      data: {
+        nombre,
+        sede,
+        provincia,
+        fecha: fechaDate,
+      },
+    });
+
+    return { torneoId: torneo.id };
+  } catch (err) {
+    console.error("Error al crear torneo:", err);
+    return { error: (err as Error).message || "Error desconocido." };
+  }
+}
+
+export async function handleEditarTorneo(
+  id: number,
+  nombre: string,
+  sede: string,
+  provincia: string,
+  fecha: string,
+  oficial: boolean
+): Promise<{ torneoId?: number; error?: string }> {
+  const session = await auth();
+
+  try {
+    if (!session?.user?.email) {
+      return { error: "No se pudo autenticar la sesión." };
+    }
+
+    const fechaDate = parseFechaDDMMYYYY(fecha);
+    if (!fechaDate || isNaN(fechaDate.getTime())) {
+      return { error: "Formato de fecha inválido (debe ser dd/mm/yyyy)." };
+    }
+
+    const torneo = await prisma.torneo.findUnique({
+      where: { id },
+    });
+
+    if (!torneo) {
+      return { error: "Torneo no encontrado." };
+    }
+
+    const updated = await prisma.torneo.update({
+      where: { id },
+      data: {
+        nombre,
+        sede,
+        provincia,
+        fecha: fechaDate,
+        oficial,
+        updatedAt: new Date(), // opcional, por claridad
+      },
+    });
+
+    return { torneoId: updated.id };
+  } catch (err) {
+    console.error("Error al editar torneo:", err);
+    return { error: (err as Error).message || "Error desconocido." };
+  }
+}
+
+export async function getUserRol(): Promise<"jugador" | "juez" | "admin" | null> {
+  const session = await auth();
+  if (!session?.user?.email) return null;
+
+  const usuario = await prisma.usuario.findFirst({
+    where: { email: session.user.email },
+  });
+
+  return usuario?.rol ?? null;
+}
