@@ -62,7 +62,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                 node.style.padding = originalPadding;
                 if (toolbar) toolbar.classList.remove('w-0', 'overflow-hidden', 'opacity-0', 'pointer-events-none')
                 const link = document.createElement('a')
-                link.download = `mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.png`
+                link.download = String(`mazo-${subtipo1}-${subtipo2}-${getFormattedDate()}.png`).toLowerCase()
                 link.href = dataUrl
                 link.click()
             })
