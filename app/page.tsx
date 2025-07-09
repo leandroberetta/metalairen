@@ -13,7 +13,7 @@ export default async function Cartas() {
     orderBy: {
       fecha: 'desc',
     },
-    take: 9,
+    take: 10,
     select: {
       id: true,
     },
