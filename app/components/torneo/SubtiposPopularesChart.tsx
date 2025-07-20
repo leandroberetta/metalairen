@@ -56,13 +56,14 @@ export default function SubtiposPopularesChart({ mazos }: { mazos: Mazo[] }) {
         grid: {
             show: false,
             strokeDashArray: 4,
-            padding: { left: 2, right: 2, top: -14 },
+            padding: { left: 2, right: 2, top: -14, bottom: 30 },
         },
         dataLabels: { enabled: true },
         legend: { show: false },
         xaxis: {
             labels: {
                 show: true,
+                rotate: -90,
                 style: {
                     fontFamily: "Inter, sans-serif",
                     cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
@@ -88,9 +89,12 @@ export default function SubtiposPopularesChart({ mazos }: { mazos: Mazo[] }) {
     };
 
     const series: Serie[] = [{
-        data: Object.keys(subtiposPopulares).map((subtipo) => ({
-            x: subtipo, y: subtiposPopulares[subtipo]
-        }))
+        data: Object.keys(subtiposPopulares)
+            .sort((a, b) => subtiposPopulares[b] - subtiposPopulares[a]) // ordenar de mayor a menor
+            .map((subtipo) => ({
+                x: subtipo,
+                y: subtiposPopulares[subtipo]
+            }))
     }];
 
     return (
