@@ -1,6 +1,5 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
-import CombinacionesPopularesPieChart from "@/app/components/torneo/CombinacionesPopularesPieChart";
 import SubtiposPopularesChart from "@/app/components/torneo/SubtiposPopularesChart";
 import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
