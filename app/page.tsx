@@ -4,7 +4,6 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import CartasPopulares from "./components/carta/CartasPopulares";
 import CartaHeader from "./components/carta/CartaHeader";
 import CombinacionesPopularesChart from "./components/torneo/CombinacionesPopularesChart";
-import CombinacionesPopularesPieChart from "./components/torneo/CombinacionesPopularesPieChart";
 import SubtiposPopularesChart from "./components/torneo/SubtiposPopularesChart";
 
 export default async function Cartas() {
