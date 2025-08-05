@@ -34,7 +34,7 @@ export default async function Cartas() {
       <Suspense fallback={<LoadingSpinner />}>
         <CartaHeader cartas={cartas} />
       </Suspense >
-      <div className="relative bg-[#111827] mt-5 mb-5">
+      <div className="relative bg-[#111827] mt-5 mb-5 p-4">
         {/* Capa de fondo degradado que ocupa todo el ancho y altura */}
         <div className="absolute inset-0 z-0">
           <div className="w-full h-full bg-gradient-to-br from-[#641717] via-[#5f2a14] to-[#7d4a11] opacity-50 blur-2xl" />

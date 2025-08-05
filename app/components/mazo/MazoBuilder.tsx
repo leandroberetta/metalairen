@@ -573,7 +573,10 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     </h1>
                     <div className="ms-3">
                         {formato && formato === 'TRUE_ETHERNAL' &&
-                            <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">True Ethernal</span>
+                            <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">Eterno</span>
+                        }
+                        {formato && formato === 'GUARDIAN' &&
+                            <span className="bg-green-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-700 dark:text-green-300">Guardián</span>
                         }
                         {(!formato || formato === 'DOMINACION') &&
                             <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>}

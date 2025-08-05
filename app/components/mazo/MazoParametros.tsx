@@ -15,7 +15,8 @@ export default function MazoParameros({ nombre, onCambiarNombre, publico, onCamb
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Formato</label>
                 <Select onChangeHandler={onCambiarFormato} allowMultipleSelections={false} options={{
                     "DOMINACION": "Dominación",
-                    "TRUE_ETHERNAL": "True Ethernal",
+                    "TRUE_ETHERNAL": "Eterno",
+                    "GUARDIAN": "Guardián",
                 }} label={"Formato"} parameter="formato" />
             </div>
             <div>
