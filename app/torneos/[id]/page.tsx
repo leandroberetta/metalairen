@@ -1,7 +1,6 @@
 import LoadingSpinner from "@/app/components/LoadingSpinner";
-import SearchBar from "@/app/components/SearchBar";
 import CombinacionesPopularesChart from "@/app/components/torneo/CombinacionesPopularesChart";
-import CombinacionesPopularesPieChart from "@/app/components/torneo/CombinacionesPopularesPieChart";
+import SubtiposPopularesChart from "@/app/components/torneo/SubtiposPopularesChart";
 import TorneoError from "@/app/components/torneo/TorneoError";
 import { prisma } from "@/app/db/prisma";
 import Link from "next/link";
@@ -12,9 +11,10 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
         where: { id: parseInt((await params).id) },
         include: {
             mazos: {
-                orderBy: {
-                    id: 'asc',
-                },
+                orderBy: [
+                    { orden: 'asc' },
+                    { id: 'asc' }
+                ],
                 include: {
                     mazo: true,
                 },
@@ -92,9 +92,6 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <div className="p-4 pt-0">
-                <div className="pb-4">
-                    <SearchBar />
-                </div>
                 <div className="">
                     <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">
                         <span
@@ -138,13 +135,22 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
-                                className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares</span>
-                            </h1>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
-                                <CombinacionesPopularesPieChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares de subtipos</span>
+                                </h1>
+                                <div className="">
+                                    <CombinacionesPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Subtipos populares</span>
+                                </h1>
+                                <div className="">
+                                    <SubtiposPopularesChart mazos={torneo.mazos.map((mazo) => mazo.mazo)} />
+                                </div>
                             </div>
                         </div>
                     </div>

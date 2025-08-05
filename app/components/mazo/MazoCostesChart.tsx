@@ -24,24 +24,26 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
 
     useEffect(() => {
         const conteos: Record<string, Record<string, number>> = {
-            "Unidades": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
-            "Acciones": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
-            "Acciones rápidas": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
-            "Armas": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
-            "Monumentos": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
+            "Unidades": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7+": 0 },
+            "Acciones": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7+": 0 },
+            "Acciones rápidas": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7+": 0 },
+            "Armas": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7+": 0 },
+            "Monumentos": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7+": 0 },
         };
 
         mazo.reino.forEach((carta) => {
+            const costeKey = carta.coste >= 7 ? "7+" : String(carta.coste);
+
             if (carta.tipo === 'UNIDAD') {
-                conteos["Unidades"][String(carta.coste)]++;
+                conteos["Unidades"][costeKey]++;
             } else if (carta.tipo === 'ACCION' && carta.subtipo3 === 'RAPIDA') {
-                conteos["Acciones rápidas"][String(carta.coste)]++;
+                conteos["Acciones rápidas"][costeKey]++;
             } else if (carta.tipo === 'ACCION') {
-                conteos["Acciones"][String(carta.coste)]++;
+                conteos["Acciones"][costeKey]++;
             } else if (carta.tipo === 'ARMA') {
-                conteos["Armas"][String(carta.coste)]++;
+                conteos["Armas"][costeKey]++;
             } else {
-                conteos["Monumentos"][String(carta.coste)]++;
+                conteos["Monumentos"][costeKey]++;
             }
         });
         setSeries((prevSeries) =>
@@ -91,20 +93,20 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
         grid: {
             show: false,
             strokeDashArray: 4,
-            padding: { left: 2, right: 2, top: -14 },
+            padding: { top: -30, left: 2, right: 2 },
         },
         dataLabels: { enabled: false },
         legend: { show: false },
         xaxis: {
             labels: {
-                show: false,
+                show: true,
                 style: {
                     fontFamily: "Inter, sans-serif",
                     cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
                 },
             },
             axisBorder: { show: false },
-            axisTicks: { show: true },
+            axisTicks: { show: false },
         },
         yaxis: { show: false },
         fill: { opacity: 1 },
@@ -115,7 +117,7 @@ export default function MazoCostesChart({ mazo, hideTitle = true }: { mazo: Mazo
             {!hideTitle && <div className="flex">
                 <h4 className="text-xl font-bold dark:text-white flex-grow">Composición del reino por costes</h4>
             </div>}
-            <ReactApexChart options={options} series={series} type="bar" height="auto"/>
+            <ReactApexChart options={options} series={series} type="bar" height="200" />
         </div>
     );
 }

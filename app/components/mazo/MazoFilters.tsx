@@ -10,6 +10,7 @@ export default function MazoFilters() {
                 <div className="">
                     <Select options={{
                         "ANIMAL": "Animal",
+                        "ARTIFICE": "Artífice",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
                         "DESERTOR": "Desertor",
@@ -23,13 +24,16 @@ export default function MazoFilters() {
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",
                         "MONJE": "Monje",
+                        "MONSTRUO": "Monstruo",
                         "PIRATA": "Pirata",
                         "SOLDADO": "Soldado",
+                        "TRITON": "Tritón",
                     }} label={"Subtipo"} parameter="subtipo1" allowMultipleSelections={false} />
                 </div>
                 <div className="">
                     <Select options={{
                         "ANIMAL": "Animal",
+                        "ARTIFICE": "Artífice",
                         "BRUJA": "Bruja",
                         "DEMONIO": "Demonio",
                         "DESERTOR": "Desertor",
@@ -43,8 +47,10 @@ export default function MazoFilters() {
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",
                         "MONJE": "Monje",
+                        "MONSTRUO": "Monstruo",
                         "PIRATA": "Pirata",
                         "SOLDADO": "Soldado",
+                        "TRITON": "Tritón",
                     }} label={"Subtipo"} parameter="subtipo2" allowMultipleSelections={false} />
                 </div>
                 <div className="">

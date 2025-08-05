@@ -12,7 +12,8 @@ interface Serie {
 
 export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }) {
     const combinacionesPopulares = mazos.reduce((acc: Record<string, number>, mazo) => {
-        const combinacion = mazo.subtipo1 + ' / ' + mazo.subtipo2;
+        const [sub1, sub2] = [mazo.subtipo1, mazo.subtipo2].sort();
+        const combinacion = sub1 + ' / ' + sub2;
         if (acc[combinacion]) {
             acc[combinacion]++;
         } else {
@@ -21,8 +22,12 @@ export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }
         return acc;
     }, {});
 
+
+
     const series: Serie[] = [{
-        data: Object.keys(combinacionesPopulares).map((combinacion) => ({
+        data: Object.keys(combinacionesPopulares)
+        .sort((a, b) => combinacionesPopulares[b] - combinacionesPopulares[a])
+        .map((combinacion) => ({
             x: combinacion,
             y: combinacionesPopulares[combinacion],
         })),
@@ -55,13 +60,14 @@ export default function CombinacionesPopularesChart({ mazos }: { mazos: Mazo[] }
         grid: {
             show: false,
             strokeDashArray: 4,
-            padding: { left: 2, right: 2, top: -14 },
+            padding: { left: 2, right: 2, top: -14, bottom: 30 },
         },
         dataLabels: { enabled: true },
         legend: { show: false },
         xaxis: {
             labels: {
                 show: true,
+                rotate: -90,
                 style: {
                     fontFamily: "Inter, sans-serif",
                     cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',

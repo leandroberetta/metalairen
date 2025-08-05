@@ -39,7 +39,7 @@ export default function MazoReinoCartaGrid({ cartas }: { cartas: (Carta & { cant
                             ))}
                     </div>
                 ))}
-                <div style={{ height: `${cartas.filter((_, index) => index % 4 === 1).length * 80}px` }} />
+                <div style={{ height: `${cartas.filter((_, index) => index % 4 === 1).length * 50}px` }} />
 
             </div>
             {selectedCard && (
