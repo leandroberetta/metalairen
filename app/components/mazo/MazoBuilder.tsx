@@ -656,7 +656,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     </div>
                     {mostrarParametros && (
                         <div className="mt-4">
-                            <MazoParametros nombre={nombre || ""} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} formato={formato} onCambiarFormato={setFormato} />
+                            <MazoParametros nombre={nombre || ""} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} onCambiarFormato={setFormato} />
                         </div>
                     )}
                     {mostrarChart && (

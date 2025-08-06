@@ -44,7 +44,9 @@ const Select = ({ options, label, parameter, allowMultipleSelections = true, set
       window.history.replaceState(null, '', `?${queryString.toString()}`);
     }
 
-    onChangeHandler && onChangeHandler(updatedSelections.length > 0 ? updatedSelections[0] : null);
+    if (onChangeHandler) {
+      onChangeHandler(updatedSelections.length > 0 ? updatedSelections[0] : null);
+    }
   };
 
   useEffect(() => {

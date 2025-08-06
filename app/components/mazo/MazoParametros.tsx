@@ -1,6 +1,6 @@
 import Select from "../Select";
 
-export default function MazoParameros({ nombre, onCambiarNombre, publico, onCambiarPublico, formato, onCambiarFormato }: { nombre: string, onCambiarNombre: (nombre: string) => void, publico: boolean, onCambiarPublico: (publico: boolean) => void, formato: string | null, onCambiarFormato: (option: string | null) => void }) {
+export default function MazoParametros({ nombre, onCambiarNombre, publico, onCambiarPublico, onCambiarFormato }: { nombre: string, onCambiarNombre: (nombre: string) => void, publico: boolean, onCambiarPublico: (publico: boolean) => void, onCambiarFormato: (option: string | null) => void }) {
     return (
         <div className="">
             <h4 className="text-xl font-bold dark:text-white flex-grow mb-4">Configuración del mazo</h4>
