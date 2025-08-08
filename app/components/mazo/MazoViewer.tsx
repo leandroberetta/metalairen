@@ -8,19 +8,21 @@ import { useSearchParams } from "next/navigation";
 import MazoListView from "./MazoListView";
 import { calcularPuntosBoveda, crearMazoQueryParams, exportarListaMazo, getFormattedDate, validateMazo } from "@/app/util/mazoUtil";
 
-export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, videosGuardado }: {
+export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, videosGuardado, formatoGuardado }: {
     cartas?: Carta[],
     mazoGuardado?: MazoTemporal,
     subtipo1Guardado?: string | null,
     subtipo2Guardado?: string | null,
     nombreGuardado?: string | null,
     videosGuardado?: string | null,
+    formatoGuardado?: string | null
 }) {
     const [mazo, setMazo] = useState<MazoTemporal>(mazoGuardado || { reino: [], boveda: [], sideboard: [] });
     const [bovedaPuntos, setBovedaPuntos] = useState(mazoGuardado ? calcularPuntosBoveda(mazoGuardado.boveda) : 0);
     const [subtipo1, setSubtipo1] = useState<string | null>(subtipo1Guardado || null);
     const [subtipo2, setSubtipo2] = useState<string | null>(subtipo2Guardado || null);
     const [nombre, setNombre] = useState<string | null>(nombreGuardado || "Mazo");
+    const [formato, setFormato] = useState<string | null>(formatoGuardado || null);
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -33,7 +35,7 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
         setMazo(mazoQueryParams);
         setSubtipo1(searchParams.get('subtipo1'));
         setSubtipo2(searchParams.get('subtipo2'));
-
+        setFormato(searchParams.get('formato') || null);
         const nombre = searchParams.get('nombre');
         if (nombre) {
             setNombre(searchParams.get('nombre'));
@@ -52,8 +54,12 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
         }
     }
     const handleDownloadClick = () => {
-        const errors = validateMazo(mazo, subtipo1 || '', subtipo2 || '');
-        if (errors.length === 0) {
+        let errors = [];
+        if (!formato || formato === 'DOMINACION') {
+            errors = validateMazo(mazo, subtipo1 || '', subtipo2 || '');
+        }
+
+        if (errors.length === 0 || formato === 'TRUE_ETHERNAL' || formato === 'GUARDIAN') {
             const mazoString = exportarListaMazo(mazo);
             const blob = new Blob([mazoString], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -83,10 +89,10 @@ export default function MazoViewer({ cartas, mazoGuardado, subtipo1Guardado, sub
     return (
         <div className="p-4 pt-0">
             <div className="hidden lg:block">
-                <MazoGridView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} />
+                <MazoGridView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} formato={formato} />
             </div>
             <div className="block lg:hidden">
-                <MazoListView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} />
+                <MazoListView mazo={mazo} subtipo1={subtipo1} subtipo2={subtipo2} nombre={nombre} bovedaPuntos={bovedaPuntos} onExportClick={handleExportClick} onDownloadClick={handleDownloadClick} formato={formato}/>
             </div>
             {videosGuardado && (
                 <>

@@ -5,14 +5,15 @@ import { MazoTemporal } from "./MazoBuilder";
 import MazoCostesChart from "./MazoCostesChart";
 import { Tooltip } from "flowbite-react";
 
-export default function MazoListView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos, onDownloadClick, onExportClick }: {
+export default function MazoListView({ mazo, subtipo1, subtipo2, nombre, bovedaPuntos, onDownloadClick, onExportClick, formato }: {
     mazo: MazoTemporal,
     subtipo1?: string | null,
     subtipo2?: string | null,
     nombre?: string | null,
     bovedaPuntos?: number,
     onDownloadClick?: () => void,
-    onExportClick?: () => void
+    onExportClick?: () => void,
+    formato?: string | null
 }) {
     return (
         <div>
@@ -30,7 +31,14 @@ export default function MazoListView({ mazo, subtipo1, subtipo2, nombre, bovedaP
                             </h2>
                         </div>
                         <div className="my-4">
-                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>
+                            {formato && formato === 'TRUE_ETHERNAL' &&
+                                <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">Eterno</span>
+                            }
+                            {formato && formato === 'GUARDIAN' &&
+                                <span className="bg-green-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-700 dark:text-green-300">Guardián</span>
+                            }
+                            {(!formato || formato === 'DOMINACION') &&
+                                <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>}
                         </div>
                     </div>
                 </div>
