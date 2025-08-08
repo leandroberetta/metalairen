@@ -34,7 +34,7 @@ export default async function MazoId({ params }: { params: Promise<{ id: string 
 
     return (
         <Suspense fallback={<LoadingSpinner />}>
-            <MazoViewer mazoGuardado={mazoTmp} nombreGuardado={mazo.nombre} subtipo1Guardado={mazo.subtipo1} subtipo2Guardado={mazo.subtipo2} />
+            <MazoViewer mazoGuardado={mazoTmp} nombreGuardado={mazo.nombre} subtipo1Guardado={mazo.subtipo1} subtipo2Guardado={mazo.subtipo2} formatoGuardado={mazo.formato} />
         </Suspense>
     );
 }
