@@ -81,7 +81,7 @@ schema-rebuild: format generate db-push ## Formatea, regenera cliente y actualiz
 
 db-up: ## Levanta Postgres (monta dump si está disponible)
 	@{ \
-	  set -euo pipefail; \
+	  set -e; \
 	  echo ">> Usando engine: $(CONTAINER_ENGINE)"; \
 	  if $(CONTAINER_ENGINE) container inspect $(DB_CONTAINER) >/dev/null 2>&1; then \
 	    state=$$($(CONTAINER_ENGINE) inspect -f '{{.State.Status}}' $(DB_CONTAINER)); \
