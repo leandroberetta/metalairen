@@ -43,12 +43,13 @@ export default function CardFilters() {
                         "IMPERIO": "Imperio",
                         "ANCESTROS": "Ancestros",
                         "PROFUNDIDADES": "Profundidades",
+                        "HERMANDAD EN BERIN": "Hermandad en Berin"
                     }} label={"Expansiones"} parameter={filtros[0]} />
                 </div>
                 <div className="">
                     <Select options={{
                         "DOMINACION": "Dominación",
-                        "ETHERNAL": "Ethernal",
+                        "ETHERNAL": "Eterno",
                     }} label={"Formatos"} parameter={filtros[1]} />
                 </div>
                 <div className="">
@@ -71,10 +72,12 @@ export default function CardFilters() {
                         "DESERTOR": "Desertor",
                         "DJINN": "Djinn",
                         "DRAGON": "Dragón",
+                        "DROW": "Drow",
                         "ELEMENTAL": "Elemental",
                         "ENANO": "Enano",
                         "ETERNO": "Eterno",
                         "GIGANTE": "Gigante",
+                        "JAKARI": "Jakari",
                         "INSECTO": "Insecto",
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",
@@ -95,10 +98,12 @@ export default function CardFilters() {
                         "DESERTOR": "Desertor",
                         "DJINN": "Djinn",
                         "DRAGON": "Dragón",
+                        "DROW": "Drow",
                         "ELEMENTAL": "Elemental",
                         "ENANO": "Enano",
                         "ETERNO": "Eterno",
                         "GIGANTE": "Gigante",
+                        "JAKARI": "Jakari",
                         "INSECTO": "Insecto",
                         "MAGO": "Mago",
                         "MIMETICO": "Mimético",

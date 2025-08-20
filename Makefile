@@ -180,6 +180,39 @@ endif
 	@test -f "$(DUMP_SQL)" || (echo "No existe $(DUMP_SQL)"; exit 1)
 	$(CONTAINER_ENGINE) exec -i $(DB_CONTAINER) pg_restore -U $(DB_USER) -d $(DB_NAME) --clean --if-exists < "$(DUMP_SQL)"
 
-db-backup: ## Crea backup.sql de la DB actual
-	$(CONTAINER_ENGINE) exec -i $(DB_CONTAINER) pg_dump -U $(DB_USER) -d $(DB_NAME) > backup.sql
-	@echo "Backup escrito en ./backup.sql"
+db-backup: ## Crea backup-{fecha-hora}.sql de la DB actual
+	@TS=$$(date +'%Y%m%d-%H%M%S'); \
+	FILENAME="backup-$${TS}.sql"; \
+	echo ">> Creando $$FILENAME ..."; \
+	$(CONTAINER_ENGINE) exec -i $(DB_CONTAINER) pg_dump -U $(DB_USER) -d $(DB_NAME) > "$$FILENAME"; \
+	echo ">> Backup escrito en ./$$FILENAME"
+
+# ===== Importer =====
+PYTHON          ?= python3
+VENV_DIR        ?= .venv
+PIP             := $(VENV_DIR)/bin/pip
+PYTHON_BIN      := $(VENV_DIR)/bin/python
+REQUIREMENTS    ?= importer/requirements.txt
+IMPORT_SCRIPT   ?= importer/importer.py
+
+.PHONY: py-venv py-install py-freeze py-run py-clean py-shell env-check
+
+py-venv: ## Crea el virtualenv (si no existe) y actualiza pip
+	@test -d $(VENV_DIR) || $(PYTHON) -m venv $(VENV_DIR)
+	@$(PYTHON_BIN) -m pip install --upgrade pip
+
+py-install: py-venv ## Instala dependencias desde requirements.txt
+	@$(PIP) install -r $(REQUIREMENTS)
+
+py-freeze: ## Congela dependencias actuales al requirements.txt
+	@$(PIP) freeze > $(REQUIREMENTS)
+
+env-check: ## Verifica variables requeridas en el entorno o .env
+	@test -n "$$POSTGRESQL_DATABASE_URL" || { echo "Falta POSTGRESQL_DATABASE_URL en entorno o .env"; exit 1; }
+	@test -n "$$LAIREN_API_URL" || { echo "Falta LAIREN_API_URL en entorno o .env"; exit 1; }
+
+py-run-importer: env-check py-install ## Ejecuta el importador con el virtualenv
+	@$(PYTHON_BIN) $(IMPORT_SCRIPT)
+
+py-clean: ## Elimina el virtualenv
+	@rm -rf $(VENV_DIR)
