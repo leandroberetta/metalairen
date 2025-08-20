@@ -35,7 +35,7 @@ export default async function EditarMazo({ params }: { params: Promise<{ id: str
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
-        <MazoBuilder id={parseInt((await params).id)} cartas={cartas} mazoGuardado={mazoTmp} subtipo1Guardado={mazo.subtipo1} subtipo2Guardado={mazo.subtipo2} nombreGuardado={mazo.nombre} publicoGuardado={mazo.publico} onGuardarMazo={handleGuardarMazo} onEliminarMazo={handleEliminarMazo} />
+        <MazoBuilder id={parseInt((await params).id)} cartas={cartas} mazoGuardado={mazoTmp} subtipo1Guardado={mazo.subtipo1} subtipo2Guardado={mazo.subtipo2} nombreGuardado={mazo.nombre} publicoGuardado={mazo.publico} formatoGuardado={mazo.formato} onGuardarMazo={handleGuardarMazo} onEliminarMazo={handleEliminarMazo} />
       </Suspense>
     </>
   );

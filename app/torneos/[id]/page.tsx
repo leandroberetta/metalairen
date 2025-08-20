@@ -203,6 +203,20 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                         </div>
                     </div>
                 </div>
+                {torneo.informe && (
+                    <>
+                        <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-2xl mt-4"><span
+                            className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Informe extendido (aporte de Tomás Fabbrini)</span>
+                        </h1>
+                        <div className=" ">
+                            <iframe
+                                src={torneo.informe}
+                                style={{ width: '100%', height: '500px', border: 0 }}
+                                title="Slides"
+                            ></iframe>
+                        </div>
+                    </>
+                )}
             </div >
         </Suspense >
     );

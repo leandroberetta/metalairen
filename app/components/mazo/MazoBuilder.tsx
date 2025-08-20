@@ -28,25 +28,27 @@ export interface MazoTemporal {
     sideboard: Carta[];
 }
 
-export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, publicoGuardado, id, onGuardarMazo, onEliminarMazo }: {
+export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, subtipo2Guardado, nombreGuardado, publicoGuardado, id, onGuardarMazo, onEliminarMazo, formatoGuardado }: {
     cartas: Carta[],
     mazoGuardado?: MazoTemporal,
     subtipo1Guardado?: string | null,
     subtipo2Guardado?: string | null,
     nombreGuardado?: string | null,
     publicoGuardado?: boolean,
+    formatoGuardado?: string | null,
     id?: number,
-    onGuardarMazo: (mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean, id?: number) => Promise<{ mazoId?: number; error?: string }>,
+    onGuardarMazo: (mazo: MazoTemporal, nombre: string, subtipo1: string, subtipo2: string, publico: boolean, formato: string, id?: number) => Promise<{ mazoId?: number; error?: string }>,
     onEliminarMazo: (id: number) => Promise<{ error?: string }>
 }) {
+    const searchParams = useSearchParams();
     const [mazo, setMazo] = useState<MazoTemporal>(mazoGuardado || { reino: [], boveda: [], sideboard: [] });
     const [bovedaPuntos, setBovedaPuntos] = useState(mazoGuardado ? calcularPuntosBoveda(mazoGuardado.boveda) : 0);
     const [nombre, setNombre] = useState<string | null>(nombreGuardado || "Mazo");
     const [publico, setPublico] = useState<boolean>((publicoGuardado !== undefined) ? publicoGuardado : false);
+    const [formato, setFormato] = useState<string | null>(formatoGuardado || searchParams.get('formato') || null);
     const [errors, setErrors] = useState<string[]>([]);
     const [mostrarChart, setMostrarChart] = useState(false);
     const [mostrarParametros, setMostrarParametros] = useState(false);
-    const searchParams = useSearchParams();
     const router = useRouter();
     const { toast, showToast, hideToast } = useToast();
     const session = useSession();
@@ -54,7 +56,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     
     useEffect(() => {
         if (mazoGuardado) {
-            agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado);
+            agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado, formatoGuardado);
         } else {
             const mazoQueryParams = crearMazoQueryParams(searchParams, cartas);
 
@@ -77,9 +79,8 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
         console.log("Guardando mazo...");
         const subtipo1 = searchParams.get("subtipo1") || subtipo1Guardado || "";
         const subtipo2 = searchParams.get("subtipo2") || subtipo2Guardado || "";
-        console.log(id);
-        const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, id);
-        console.log(`Mazo guardado con ID: ${mazoId}`);
+        const formato = searchParams.get("formato") || formatoGuardado || "DOMINACION";
+        const { mazoId, error } = await onGuardarMazo(mazo, nombre || "Mazo", subtipo1, subtipo2, publico, formato, id);
         if (mazoId) {
             router.replace(`/mazo/editar/${mazoId}?${searchParams.toString()}`);
             showToast("Mazo guardado correctamente.", "success");
@@ -262,8 +263,10 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     };
 
     const handleExportClick = () => {
-        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-        setErrors(errors);
+        if (formato === 'DOMINACION' || !formato) {
+            const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+            setErrors(errors);
+        }
         if (errors.length === 0) {
             const mazoString = exportarListaMazo(mazo);
             navigator.clipboard.writeText(mazoString);
@@ -286,8 +289,10 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     };
 
     const handleDownloadClick = () => {
-        const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
-        setErrors(errors);
+        if (formato === 'DOMINACION' || !formato) {
+            const errors = validateMazo(mazo, searchParams.get('subtipo1') || '', searchParams.get('subtipo2') || '');
+            setErrors(errors);
+        }
         if (errors.length === 0) {
             const mazoString = exportarListaMazo(mazo);
             const blob = new Blob([mazoString], { type: 'text/plain' });
@@ -562,10 +567,20 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
             )}
             <SearchBar filters={CartaFilters()} />
             <div className="flex flex-col md:flex-row mt-4">
-                <div className="flex flex-row grow">
+                <div className="flex flex-row grow items-center">
                     <h1 className="text-3xl font-extrabold dark:text-white">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r dark:from-white dark:to-yellow-300">{nombre}</span>
                     </h1>
+                    <div className="ms-3">
+                        {formato && formato === 'TRUE_ETHERNAL' &&
+                            <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">Eterno</span>
+                        }
+                        {formato && formato === 'GUARDIAN' &&
+                            <span className="bg-green-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-700 dark:text-green-300">Guardián</span>
+                        }
+                        {(!formato || formato === 'DOMINACION') &&
+                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dominación</span>}
+                    </div>
                     {session.data?.user && (
                         <Tooltip content="Editar información del mazo" placement="right" arrow={false}>
                             <button onClick={() => setMostrarParametros(!mostrarParametros)} type="button" className={clsx("focus:outline-none dark:bg-gray-900 font-medium rounded text-sm px-2.5 py-2.5 me-2", { "dark:text-yellow-400": mostrarParametros })}>
@@ -641,7 +656,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                     </div>
                     {mostrarParametros && (
                         <div className="mt-4">
-                            <MazoParametros nombre={nombre || ""} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} />
+                            <MazoParametros nombre={nombre || ""} onCambiarNombre={setNombre} publico={publico} onCambiarPublico={setPublico} onCambiarFormato={setFormato} />
                         </div>
                     )}
                     {mostrarChart && (

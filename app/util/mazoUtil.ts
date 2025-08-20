@@ -69,7 +69,7 @@ export const addBulkCartaQueryParams = (searchParams: URLSearchParams, mazo: Maz
     window.history.replaceState(null, '', `?${params.toString()}`);
 }
 
-export const agregarMazoQueryParams = (searchParams: URLSearchParams, mazo: MazoTemporal, subtipo1: string | null | undefined, subtipo2: string | null | undefined) => {
+export const agregarMazoQueryParams = (searchParams: URLSearchParams, mazo: MazoTemporal, subtipo1: string | null | undefined, subtipo2: string | null | undefined, formatoGuardado: string | null | undefined) => {
     const params = new URLSearchParams(searchParams?.toString() || '');
     params.delete('reino');
     params.delete('sideboard');
@@ -97,6 +97,13 @@ export const agregarMazoQueryParams = (searchParams: URLSearchParams, mazo: Mazo
     }
     if (subtipo2) {
         params.set("subtipo2", subtipo2);
+    }
+
+    params.delete("formato");
+    if (formatoGuardado) {
+        params.set("formato", formatoGuardado);
+    } else {
+        params.set("formato", "DOMINACION");
     }
 
     const ordenarReino = searchParams.get('ordenarReino');
