@@ -53,7 +53,7 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
     const { toast, showToast, hideToast } = useToast();
     const session = useSession();
     const [cantidad, setCantidad] = useState(0);
-    
+
     useEffect(() => {
         if (mazoGuardado) {
             agregarMazoQueryParams(searchParams, mazo, subtipo1Guardado, subtipo2Guardado, formatoGuardado);
@@ -616,10 +616,12 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                                 "DESERTOR": "Desertor",
                                 "DJINN": "Djinn",
                                 "DRAGON": "Dragón",
+                                "DROW": "Drow",
                                 "ELEMENTAL": "Elemental",
                                 "ENANO": "Enano",
                                 "ETERNO": "Eterno",
                                 "GIGANTE": "Gigante",
+                                "JAKARI": "Jakari",
                                 "INSECTO": "Insecto",
                                 "MAGO": "Mago",
                                 "MIMETICO": "Mimético",
@@ -639,10 +641,12 @@ export default function MazoBuilder({ cartas, mazoGuardado, subtipo1Guardado, su
                                 "DESERTOR": "Desertor",
                                 "DJINN": "Djinn",
                                 "DRAGON": "Dragón",
+                                "DROW": "Drow",
                                 "ELEMENTAL": "Elemental",
                                 "ENANO": "Enano",
                                 "ETERNO": "Eterno",
                                 "GIGANTE": "Gigante",
+                                "JAKARI": "Jakari",
                                 "INSECTO": "Insecto",
                                 "MAGO": "Mago",
                                 "MIMETICO": "Mimético",
