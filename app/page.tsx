@@ -34,7 +34,7 @@ export default async function Cartas() {
       <Suspense fallback={<LoadingSpinner />}>
         <CartaHeader cartas={cartas} />
       </Suspense >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 pt-0">
         <div>
           <h1 className="mb-4 text-xl md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl"><span
             className="text-transparent bg-clip-text bg-gradient-to-r from-black dark:from-white to-yellow-300 dark:to-yellow-300">Combinaciones populares de subtipos</span>

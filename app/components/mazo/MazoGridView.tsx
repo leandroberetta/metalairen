@@ -74,7 +74,7 @@ export default function MazoGridView({ mazo, subtipo1, subtipo2, nombre, bovedaP
     
     return (
         <div className="bg-gray-900" id="capture">
-            <div className="flex flex-col sm:flex-row items-center">
+            <div className="flex flex-col sm:flex-row">
                 <div className="grow">
                     <div className="flex">
                         <h1 className="grow mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
