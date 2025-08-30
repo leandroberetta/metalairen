@@ -211,7 +211,7 @@ export default function MazoList({
                 disabled={clampedPage === 1}
                 className={`${edgeBtn} ${clampedPage === 1 ? disabled : ""}`}
               >
-                « Primero
+                «
               </button>
             </li>
             <li>
@@ -220,7 +220,7 @@ export default function MazoList({
                 disabled={clampedPage === 1}
                 className={`${numBtn} ${clampedPage === 1 ? disabled : ""}`}
               >
-                ‹ Anterior
+                ‹
               </button>
             </li>
 
@@ -248,7 +248,7 @@ export default function MazoList({
                 disabled={clampedPage === totalPages}
                 className={`${numBtn} ${clampedPage === totalPages ? disabled : ""}`}
               >
-                Siguiente ›
+                ›
               </button>
             </li>
             <li>
@@ -257,7 +257,7 @@ export default function MazoList({
                 disabled={clampedPage === totalPages}
                 className={`${edgeBtnRight} ${clampedPage === totalPages ? disabled : ""}`}
               >
-                Último »
+                »
               </button>
             </li>
           </ul>
