@@ -78,8 +78,8 @@ export default function MazoList({
     "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white";
   const activeBtn =
     baseBtn +
-    " z-10 text-white border border-yellow-400 bg-yellow-400 hover:bg-yellow-500 hover:border-yellow-500 " +
-    "dark:bg-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-500";
+    " z-10 text-white border border-yellow-400 bg-yellow-400 hover:bg-yellow-500 " +
+    "dark:bg-yellow-400 dark:border-yellow-400";
   const edgeBtn =
     baseBtn +
     " ms-0 rounded-s-lg bg-white border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 " +
@@ -96,31 +96,6 @@ export default function MazoList({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Mostrando <span className="font-medium">{from}</span>–<span className="font-medium">{to}</span> de{" "}
-          <span className="font-medium">{mazos.length}</span>
-        </p>
-        <div className="flex items-center gap-2">
-          <label htmlFor="pageSize" className="text-xs text-gray-500 dark:text-gray-400">
-            Filas por página
-          </label>
-          <select
-            id="pageSize"
-            className="block w-24 rounded-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900
-                       focus:border-yellow-400 focus:ring-yellow-400
-                       dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            value={rowsPerPage}
-            onChange={(e) => onChangePageSize(Number(e.target.value))}
-          >
-            {(pageSizeOptions ?? [10, 25, 50]).map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
 
       <div className="relative overflow-x-auto shadow dark:shadow dark:shadow-gray-800 rounded">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -202,7 +177,7 @@ export default function MazoList({
         </table>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center">
         <nav aria-label="Pagination">
           <ul className="inline-flex -space-x-px text-sm">
             <li>
@@ -262,11 +237,6 @@ export default function MazoList({
             </li>
           </ul>
         </nav>
-
-        <p className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
-          Página <span className="font-medium">{clampedPage}</span> de{" "}
-          <span className="font-medium">{totalPages}</span>
-        </p>
       </div>
     </div>
   );

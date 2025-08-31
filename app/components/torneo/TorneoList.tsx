@@ -103,32 +103,6 @@ export default function TorneoList({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Mostrando <span className="font-medium">{from}</span>–<span className="font-medium">{to}</span> de{" "}
-          <span className="font-medium">{torneos.length}</span>
-        </p>
-        <div className="flex items-center gap-2">
-          <label htmlFor="pageSize" className="text-xs text-gray-500 dark:text-gray-400">
-            Filas por página
-          </label>
-          <select
-            id="pageSize"
-            className="block w-24 rounded-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900
-                       focus:border-yellow-400 focus:ring-yellow-400
-                       dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            value={rowsPerPage}
-            onChange={(e) => onChangePageSize(Number(e.target.value))}
-          >
-            {(pageSizeOptions ?? [10, 25, 50]).map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <div className="relative overflow-x-auto shadow dark:shadow dark:shadow-gray-800 rounded">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -170,7 +144,7 @@ export default function TorneoList({
         </table>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center">
         <nav aria-label="Pagination">
           <ul className="inline-flex -space-x-px text-sm">
             <li>
@@ -230,11 +204,6 @@ export default function TorneoList({
             </li>
           </ul>
         </nav>
-
-        <p className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
-          Página <span className="font-medium">{clampedPage}</span> de{" "}
-          <span className="font-medium">{totalPages}</span>
-        </p>
       </div>
     </div>
   );
