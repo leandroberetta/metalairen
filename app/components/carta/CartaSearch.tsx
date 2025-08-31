@@ -56,7 +56,7 @@ export default function CartaSearch({ cartas, onCartaClick, setCantidad }: { car
                 .filter((card) => {
                     return formatos === '' || formatos.split(',').includes('ETHERNAL') || (formatos.split(',').includes('DOMINACION') && (card.prohibida == false && card.expansion !== 'FUNDAMENTOS'));
                 })
-                .sort((a, b) => a.nombre.localeCompare(b.nombre));
+                .sort((a, b) => a.coste - b.coste);
                 
     useEffect(() => {
         if (setCantidad) {
