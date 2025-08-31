@@ -16,7 +16,6 @@ export default function MazoList({
   mazos,
   linkEdit = false,
   pageSize = 10,
-  pageSizeOptions = [10, 25, 50],
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -41,19 +40,11 @@ export default function MazoList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalPages]);
 
-  const onChangePageSize = (v: number) => {
-    setRowsPerPage(v);
-    setCurrentPage(1);
-  };
-
   const paginated = useMemo(() => {
     const start = (clampedPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     return mazos.slice(start, end);
   }, [mazos, clampedPage, rowsPerPage]);
-
-  const from = mazos.length === 0 ? 0 : (clampedPage - 1) * rowsPerPage + 1;
-  const to = Math.min(clampedPage * rowsPerPage, mazos.length);
 
   const pagesToRender = useMemo(() => {
     const sib = 1;

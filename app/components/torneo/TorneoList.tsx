@@ -14,7 +14,6 @@ type Props = {
 export default function TorneoList({
   torneos,
   pageSize = 10,
-  pageSizeOptions = [10, 25, 50],
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,19 +38,11 @@ export default function TorneoList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalPages]);
 
-  const onChangePageSize = (v: number) => {
-    setRowsPerPage(v);
-    setCurrentPage(1);
-  };
-
   const paginated = useMemo(() => {
     const start = (clampedPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     return torneos.slice(start, end);
   }, [torneos, clampedPage, rowsPerPage]);
-
-  const from = torneos.length === 0 ? 0 : (clampedPage - 1) * rowsPerPage + 1;
-  const to = Math.min(clampedPage * rowsPerPage, torneos.length);
 
   const pagesToRender = useMemo(() => {
     const sib = 1;
