@@ -35,16 +35,17 @@ model Carta {
 model Mazo {
   id        Int          @id @default(autoincrement())
   nombre    String
-  cartas    MazoCarta[]
   createdAt DateTime     @default(now())
   updatedAt DateTime     @default(now())
-  torneos   TorneoMazo[]
   subtipo1  String?
   subtipo2  String?
   usuarioId Int
-  usuario   Usuario      @relation(fields: [usuarioId], references: [id])
   publico   Boolean      @default(false)
   formato   String?
+  usuario   Usuario      @relation(fields: [usuarioId], references: [id])
+  cartas    MazoCarta[]
+  torneos   TorneoMazo[]
+  torneo    Boolean      @default(false)
 
   @@map("mazos")
 }
@@ -57,8 +58,8 @@ model MazoCarta {
   cantidad  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  mazo      Mazo     @relation(fields: [mazoId], references: [id])
   carta     Carta    @relation(fields: [cartaId], references: [id])
+  mazo      Mazo     @relation(fields: [mazoId], references: [id])
 
   @@map("mazos_cartas")
 }
@@ -71,8 +72,8 @@ model Torneo {
   updatedAt DateTime     @default(now())
   provincia String
   sede      String
-  mazos     TorneoMazo[]
   informe   String?      @default("")
+  mazos     TorneoMazo[]
 
   @@map("torneos")
 }
@@ -85,11 +86,10 @@ model TorneoMazo {
   updatedAt    DateTime @default(now())
   participante String
   puesto       String
-  orden        Int?
   videos       String   @default("")
-
-  torneo Torneo @relation(fields: [torneoId], references: [id])
-  mazo   Mazo   @relation(fields: [mazoId], references: [id])
+  orden        Int?
+  mazo         Mazo     @relation(fields: [mazoId], references: [id])
+  torneo       Torneo   @relation(fields: [torneoId], references: [id])
 
   @@map("torneos_mazos")
 }
