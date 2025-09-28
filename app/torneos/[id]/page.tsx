@@ -217,8 +217,8 @@ export default async function Torneo({ params }: { params: Promise<{ id: string 
                         </div>
                     </>
                 )}
+                <p className="text-sm text-gray-900 dark:text-white mt-4">Data provided by <a href="https://topdeck.gg" target="_blank">TopDeck.gg</a></p>
             </div >
-            <p>Data provided by <a href="https://topdeck.gg" target="_blank">TopDeck.gg</a></p>
         </Suspense >
     );
 }
